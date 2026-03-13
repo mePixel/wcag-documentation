@@ -1,0 +1,299 @@
+---
+title: "Manual Testing Best Practices"
+description: "Best practices for manual accessibility testing including regular testing, multiple tools, documentation, user scenarios, and collaboration"
+---
+
+# Manual Testing Best Practices
+
+Effective manual accessibility testing requires following best practices to ensure comprehensive coverage and accurate identification of issues.
+
+## Overview
+
+Manual testing best practices provide guidelines for conducting thorough, efficient, and effective accessibility testing throughout the development lifecycle.
+
+### Why Best Practices Matter
+
+- **Consistency**: Ensure testing is thorough and repeatable
+- **Efficiency**: Streamline testing process
+- **Coverage**: Ensure all aspects are tested
+- **Quality**: Improve overall accessibility quality
+
+## Best Practices
+
+### 1. Test Regularly
+
+Perform manual testing regularly throughout development.
+
+**When to Test:**
+- **During development**: Test as you build features
+- **Before deployment**: Test before releasing to production
+- **After changes**: Test after making changes
+- **Periodically**: Test on a regular schedule
+
+**Benefits:**
+- Catch issues early
+- Prevent regressions
+- Maintain accessibility standards
+- Reduce technical debt
+
+**Implementation:**
+```javascript
+// Good: Regular testing
+// - Test during development
+// - Test before deployment
+// - Test after changes
+// - Test periodically
+```
+
+### 2. Test with Multiple Tools
+
+Use different screen readers and browsers.
+
+**Screen Readers to Test:**
+- **NVDA** (Windows, free)
+- **JAWS** (Windows, commercial)
+- **VoiceOver** (macOS/iOS, built-in)
+- **TalkBack** (Android, built-in)
+
+**Browsers to Test:**
+- **Chrome**
+- **Firefox**
+- **Safari**
+- **Edge**
+
+**Devices to Test:**
+- **Desktop computers**
+- **Laptops**
+- **Tablets**
+- **Mobile phones**
+
+**Benefits:**
+- Comprehensive coverage
+- Identify platform-specific issues
+- Ensure cross-browser compatibility
+- Catch device-specific problems
+
+**Implementation:**
+```javascript
+// Good: Multiple tools
+// - Test with NVDA, JAWS, VoiceOver
+// - Test with Chrome, Firefox, Safari
+// - Test on different devices
+// - Test with different configurations
+```
+
+### 3. Document Findings
+
+Keep detailed records of issues and fixes.
+
+**What to Document:**
+- **Issue description**: Clear description of the problem
+- **Severity**: Impact on users (critical, serious, moderate, minor)
+- **Location**: Where the issue occurs (page, component, element)
+- **Steps to reproduce**: How to reproduce the issue
+- **Expected behavior**: What should happen
+- **Actual behavior**: What actually happens
+- **Fix applied**: How the issue was fixed
+- **Date found**: When the issue was discovered
+- **Date fixed**: When the issue was resolved
+
+**Benefits:**
+- Track progress over time
+- Share findings with team
+- Prevent regression
+- Maintain accessibility knowledge base
+- Demonstrate due diligence
+
+**Implementation:**
+```javascript
+// Good: Documentation
+// - Document all issues found
+// - Track issue resolution
+// - Maintain testing reports
+// - Share findings with team
+```
+
+### 4. Test Real User Scenarios
+
+Test actual user tasks and workflows.
+
+**Types of Scenarios:**
+- **Common user tasks**: Typical user workflows
+- **Critical workflows**: Essential user paths
+- **Edge cases**: Unusual but possible scenarios
+- **Error scenarios**: What happens when things go wrong
+
+**Benefits:**
+- Test real-world usage
+- Identify workflow issues
+- Discover edge case problems
+- Validate design decisions
+- Improve user experience
+
+**Implementation:**
+```javascript
+// Good: Real scenarios
+// - Test common user tasks
+// - Test critical workflows
+// - Test edge cases
+// - Test error scenarios
+```
+
+### 5. Collaborate with Users
+
+Test with actual users with disabilities.
+
+**Types of Users:**
+- **Visual disabilities**: Blindness, low vision, color blindness
+- **Hearing disabilities**: Deafness, hard of hearing
+- **Motor disabilities**: Limited mobility, tremors, paralysis
+- **Cognitive disabilities**: Learning disabilities, attention deficits, memory issues
+
+**Benefits:**
+- Most accurate feedback
+- Reveals issues automated tools miss
+- Helps understand real-world usage patterns
+- Validates design decisions
+- Builds empathy and understanding
+
+**Implementation:**
+```javascript
+// Good: User collaboration
+// - Recruit users with disabilities
+// - Test real tasks
+// - Gather feedback
+// - Iterate based on results
+```
+
+## Testing Workflow
+
+### Before Testing
+
+**Preparation:**
+- [ ] Understand testing objectives
+- [ ] Prepare testing environment
+- [ ] Gather testing tools
+- [ ] Review WCAG requirements
+- [ ] Plan testing approach
+
+**Setup:**
+- [ ] Configure screen reader settings
+- [ ] Set up browser profiles
+- [ ] Prepare test scenarios
+- [ ] Create testing checklist
+- [ ] Schedule testing time
+
+### During Testing
+
+**Execution:**
+- [ ] Follow testing procedures
+- [ ] Document all findings
+- [ ] Take screenshots/videos
+- [ ] Note severity of issues
+- [ ] Suggest fixes
+- [ ] Test systematically
+
+**Recording:**
+- [ ] Use consistent format
+- [ ] Include all relevant details
+- [ ] Note environment details
+- [ ] Record steps to reproduce
+- [ ] Capture evidence
+
+### After Testing
+
+**Analysis:**
+- [ ] Compile test report
+- [ ] Prioritize issues
+- [ ] Share findings with team
+- [ ] Plan fixes
+- [ ] Schedule re-testing
+
+**Follow-up:**
+- [ ] Implement fixes
+- [ ] Verify fixes work
+- [ ] Update documentation
+- [ ] Retest fixed issues
+- [ ] Close resolved issues
+
+## Testing Checklist Summary
+
+### Before Testing
+
+- [ ] Understand testing objectives
+- [ ] Prepare testing environment
+- [ ] Gather testing tools
+- [ ] Review WCAG requirements
+- [ ] Plan testing approach
+
+### During Testing
+
+- [ ] Follow testing procedures
+- [ ] Document all findings
+- [ ] Take screenshots/videos
+- [ ] Note severity of issues
+- [ ] Suggest fixes
+
+### After Testing
+
+- [ ] Compile test report
+- [ ] Prioritize issues
+- [ ] Share findings with team
+- [ ] Plan fixes
+- [ ] Schedule re-testing
+
+## Common Mistakes to Avoid
+
+### 1. Testing Only with Automated Tools
+
+**Problem**: Relying solely on automated testing.
+
+**Solution**: Combine automated, manual, and user testing.
+
+### 2. Testing Only One Screen Reader
+
+**Problem**: Testing with only one screen reader.
+
+**Solution**: Test with multiple screen readers (NVDA, JAWS, VoiceOver, TalkBack).
+
+### 3. Testing Only One Browser
+
+**Problem**: Testing with only one browser.
+
+**Solution**: Test with multiple browsers (Chrome, Firefox, Safari, Edge).
+
+### 4. Not Documenting Findings
+
+**Problem**: Not keeping records of issues found.
+
+**Solution**: Document all findings with details and severity.
+
+### 5. Not Testing Real Scenarios
+
+**Problem**: Testing only technical aspects, not real user workflows.
+
+**Solution**: Test actual user tasks and workflows.
+
+### 6. Not Collaborating with Users
+
+**Problem**: Never testing with actual users with disabilities.
+
+**Solution**: Recruit users with disabilities for testing.
+
+## Key Takeaways
+
+1. **Regular Testing**: Test throughout development lifecycle
+2. **Multiple Tools**: Test with various screen readers and browsers
+3. **Documentation**: Keep detailed records of findings
+4. **Real Scenarios**: Test actual user workflows
+5. **User Collaboration**: Test with users who have disabilities
+6. **Continuous Improvement**: Iterate based on findings
+
+## Related Resources
+
+- [Manual Testing Checklists](./manual-testing-checklists.mdx)
+- [Manual Testing Procedures](./manual-testing-procedures.mdx)
+- [WAI Evaluation Resources](https://www.w3.org/WAI/test-evaluate/)
+- [WebAIM Evaluation Resources](https://webaim.org/resources/eval/)
+- [NVDA Screen Reader](https://www.nvaccess.org/)
+- [JAWS Screen Reader](https://www.freedomscientific.com/products/software/jaws/)

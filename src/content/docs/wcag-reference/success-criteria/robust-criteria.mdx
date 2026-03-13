@@ -1,0 +1,94 @@
+---
+title: "Robust Success Criteria"
+description: "Complete reference for all WCAG 2.1 AA robust success criteria"
+---
+
+# Robust Success Criteria
+
+Content must be robust enough that it can be interpreted reliably by a wide variety of user agents, including assistive technologies. This means that users must be able to access the content as technologies advance.
+
+## Overview
+
+The Robust principle includes 2 success criteria, all at Level A:
+
+- **Level A**: 2 criteria
+- **Level AA**: 0 criteria
+- **Level AAA**: 0 criteria
+
+This reference covers all 2 Level A criteria, which are essential for ensuring compatibility with assistive technologies.
+
+## Success Criteria
+
+### 4.1 Compatible
+
+#### 4.1.1 Parsing (Level A)
+
+Ensures that content implemented using markup languages has complete start and end tags, elements are nested according to their specifications, elements do not contain duplicate attributes, and any IDs are unique.
+
+**Key Requirements:**
+- Use valid HTML with proper DOCTYPE
+- Close all tags properly
+- Nest elements correctly
+- Avoid duplicate attributes
+- Ensure unique IDs
+
+**Learn more:** [4.1.1 Parsing](./robust-parsing.mdx)
+
+#### 4.1.2 Name, Role, Value (Level A)
+
+Ensures that for all user interface components, the name and role can be programmatically determined; states, properties, and values that can be set by the user can be programmatically set; and notification of changes to these items is available to user agents, including assistive technologies.
+
+**Key Requirements:**
+- Provide accessible names for all interactive elements
+- Use appropriate roles for custom components
+- Manage states and properties correctly
+- Ensure dynamic updates are announced
+
+**Learn more:** [4.1.2 Name, Role, Value](./robust-name-role-value.mdx)
+
+## Key Principles for Robust Content
+
+### 1. Use Valid HTML
+
+Ensure your HTML is well-formed and follows the HTML specification:
+
+- Use proper DOCTYPE declaration
+- Close all tags properly
+- Nest elements correctly
+- Avoid duplicate attributes
+- Ensure unique IDs
+
+### 2. Use Semantic HTML
+
+Use appropriate HTML elements for their intended purpose:
+
+- Use `<button>` for buttons, not `<div>` with click handlers
+- Use `<a>` for links, not `<span>` with click handlers
+- Use `<input>`, `<select>`, `<textarea>` for form controls
+- Use proper heading levels (`<h1>` through `<h6>`)
+
+### 3. Use ARIA Appropriately
+
+ARIA should be used to enhance accessibility, not replace semantic HTML:
+
+- Use native HTML elements when possible
+- Use ARIA roles when HTML doesn't provide the needed semantics
+- Use ARIA states and properties to convey dynamic information
+- Ensure ARIA attributes are used correctly
+
+### 4. Test with Assistive Technologies
+
+Verify your content works with various assistive technologies:
+
+- Screen readers (NVDA, JAWS, VoiceOver, TalkBack)
+- Screen magnifiers
+- Voice recognition software
+- Alternative input devices
+
+## Related Resources
+
+- [WCAG 2.1 Robust Guidelines](https://www.w3.org/WAI/WCAG21/quickref/#robust)
+- [Understanding Robust](https://www.w3.org/WAI/WCAG21/Understanding/robust)
+- [Robust Techniques](https://www.w3.org/WAI/WCAG21/Techniques/#robust)
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [HTML5 Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)

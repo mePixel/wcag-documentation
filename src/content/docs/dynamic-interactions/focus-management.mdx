@@ -1,0 +1,240 @@
+---
+title: "Focus Management"
+description: "Managing focus for accessible custom components"
+---
+
+# Focus Management
+
+Proper focus management is essential for keyboard accessibility. Custom components must manage focus correctly to ensure all users can interact with them.
+
+## Overview
+
+Focus management involves controlling which element has keyboard focus and ensuring focus moves logically through interactive elements.
+
+### Why Focus Management Matters
+
+- **Keyboard Users**: Rely on focus to navigate
+- **Screen Reader Users**: Need focus to understand context
+- **Motor Impaired Users**: Use keyboard for navigation
+- **All Users**: Benefit from clear focus indicators
+
+## Focus Management Topics
+
+### Core Principles
+
+Understanding the fundamental principles of focus management.
+
+- [Focus Management Principles](./focus-principles.mdx) - Core principles for managing focus in accessible web applications
+
+**Key Topics:**
+- Maintaining logical focus order
+- Trapping focus in modals
+- Restoring focus after closing
+- Moving focus to dynamic content
+- Focusable elements
+- Focus indicators
+
+### Component-Specific Focus Management
+
+Implementing focus management for specific component types.
+
+#### Modal Dialogs
+
+- [Modal Focus Management](./modal-focus.mdx) - Managing focus in modal dialogs for accessibility
+
+**Key Topics:**
+- Focus trap implementation
+- Focus restoration
+- Escape key support
+- Common mistakes and best practices
+
+#### Dropdown Menus
+
+- [Dropdown Focus Management](./dropdown-focus.mdx) - Managing focus in dropdown menus for accessibility
+
+**Key Topics:**
+- Arrow key navigation
+- Focus management
+- Nested menus
+- Common mistakes and best practices
+
+#### Tabs
+
+- [Tabs Focus Management](./tabs-focus.mdx) - Managing focus in tab interfaces for accessibility
+
+**Key Topics:**
+- Tab activation
+- Keyboard navigation
+- Vertical tabs
+- Nested tabs
+- Common mistakes and best practices
+
+#### Custom Buttons
+
+- [Custom Button Focus Management](./custom-button-focus.mdx) - Managing focus in custom button components for accessibility
+
+**Key Topics:**
+- Keyboard activation
+- Focus management
+- ARIA attributes
+- Visual feedback
+- Common mistakes and best practices
+
+### Best Practices
+
+Following best practices ensures your focus management is accessible and maintainable.
+
+- [Focus Management Best Practices](./focus-best-practices.mdx) - Best practices for managing focus in accessible web applications
+
+**Key Topics:**
+- Core principles
+- Focus order
+- Focus indicators
+- Keyboard support
+- ARIA attributes
+- Common mistakes to avoid
+
+### Testing
+
+Testing ensures your focus management works correctly for all users.
+
+- [Focus Management Testing Checklist](./focus-testing.mdx) - Testing checklist for focus management in accessible web applications
+
+**Key Topics:**
+- Keyboard testing
+- Screen reader testing
+- Visual testing
+- Cross-browser testing
+- Edge cases
+- Testing tools
+
+## Quick Reference
+
+### Focus Management Checklist
+
+- [ ] Maintain logical focus order
+- [ ] Trap focus in modals
+- [ ] Restore focus after closing
+- [ ] Move focus to dynamic content
+- [ ] Provide clear focus indicators
+- [ ] Support standard keyboard interactions
+- [ ] Use appropriate ARIA roles
+- [ ] Update ARIA states and properties
+- [ ] Test with keyboard navigation
+- [ ] Test with screen readers
+
+### Common Keyboard Interactions
+
+| Key | Action | Component |
+|-----|--------|-----------|
+| Tab | Move to next focusable element | All |
+| Shift+Tab | Move to previous focusable element | All |
+| Enter | Activate button/link | Buttons, Links |
+| Space | Activate button | Buttons |
+| Escape | Close modal/menu | Modals, Menus |
+| Arrow Down | Move to next item | Menus, Tabs |
+| Arrow Up | Move to previous item | Menus, Tabs |
+| Arrow Right | Move to next item | Tabs |
+| Arrow Left | Move to previous item | Tabs |
+| Home | Move to first item | Menus, Tabs |
+| End | Move to last item | Menus, Tabs |
+
+### Focusable Elements
+
+By default, these elements can receive focus:
+- `<a>` with `href` attribute
+- `<button>`
+- `<input>` (except `type="hidden"`)
+- `<select>`
+- `<textarea>`
+- Elements with `tabindex="0"` or positive value
+
+### Making Elements Focusable
+
+```javascript
+// Make an element focusable
+element.setAttribute('tabindex', '0');
+
+// Make an element not focusable
+element.setAttribute('tabindex', '-1');
+
+// Set custom tab order (use sparingly)
+element.setAttribute('tabindex', '5');
+```
+
+## Common Mistakes
+
+### 1. Not Managing Focus in Modals
+
+```javascript
+// Bad: Not managing focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Managing focus
+function openModal(modalId) {
+  previousFocus = document.activeElement;
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+```
+
+### 2. Not Restoring Focus
+
+```javascript
+// Bad: Not restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Good: Restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+### 3. Not Trapping Focus
+
+```javascript
+// Bad: Not trapping focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Trapping focus
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  trapFocus(modal);
+}
+```
+
+### 4. Not Moving Focus to New Content
+
+```javascript
+// Bad: Not moving focus
+function showContent(contentId) {
+  document.getElementById(contentId).style.display = 'block';
+}
+
+// Good: Moving focus
+function showContent(contentId) {
+  const content = document.getElementById(contentId);
+  content.style.display = 'block';
+  content.focus();
+}
+```
+
+## Related Resources
+
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN Focus Management](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets)
+- [WebAIM Keyboard Accessibility](https://webaim.org/techniques/keyboard/)

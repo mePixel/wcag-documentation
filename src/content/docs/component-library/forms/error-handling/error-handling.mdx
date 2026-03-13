@@ -1,0 +1,261 @@
+---
+title: "Error Handling"
+description: "Accessible error message patterns and recovery strategies"
+contentType: "component-guide"
+category: "form"
+wcagLevel: "AA"
+pourPrinciples: ["understandable", "robust"]
+successCriteria: ["3.3.1", "3.3.3", "3.3.4"]
+techniques: ["G83", "G84", "G85", "G138", "G139", "G177"]
+difficulty: "intermediate"
+estimatedTime: "30 minutes"
+relatedComponents: ["accessible-inputs", "form-validation"]
+tags: ["forms", "errors", "messages", "intermediate"]
+codeExamples: true
+livePreview: true
+antiPatterns: true
+lastReviewed: "2026-03-10"
+reviewers: ["Kilo Code"]
+---
+
+# Error Handling
+
+Effective error handling helps users understand what went wrong and how to fix it. Accessible error handling ensures all users can identify, understand, and recover from errors.
+
+## Component Overview
+
+Accessible error handling provides clear, specific error messages that are programmatically associated with their related elements. Errors should be announced to screen readers and visually distinct.
+
+### Why Accessible Error Handling Matters
+
+- **Screen Reader Users**: Need error messages announced and associated with problematic elements
+- **Keyboard Users**: Must be able to navigate to and correct errors efficiently
+- **Cognitive Users**: Benefit from clear, specific error messages
+- **Low Vision Users**: Need visually distinct error indicators
+- **All Users**: Benefit from helpful error messages and easy recovery
+
+## WCAG Requirements
+
+### Understandable
+- **3.3.1 Error Identification**: Errors must be identified and described in text
+- **3.3.3 Error Suggestion**: Provide suggestions for correcting errors when possible
+- **3.3.4 Error Prevention**: For critical forms, provide review/confirmation
+
+## Error Message Patterns
+
+### [Inline Error Messages](./inline-errors.mdx)
+
+Display errors directly below problematic fields. This is the most common and effective way to display form errors.
+
+**When to use:**
+- Simple forms with few fields
+- When errors are specific to individual fields
+- When you want immediate feedback
+
+**Key features:**
+- Errors appear directly below the field
+- Uses `aria-invalid` and `aria-describedby`
+- Uses `role="alert"` for screen reader announcement
+
+### [Error Summary](./error-summary.mdx)
+
+Display all errors at the top of the form with links to problematic fields.
+
+**When to use:**
+- Long forms with multiple errors
+- When users need to see all errors at once
+- When you want to provide quick navigation to errors
+
+**Key features:**
+- Lists all errors at the top of the form
+- Provides links to jump to each error
+- Uses `role="alert"` for screen reader announcement
+- Can include error count
+
+### [Toast Notifications](./toast-notifications.mdx)
+
+Display errors in temporary notifications that appear on screen.
+
+**When to use:**
+- For form submission feedback
+- For API call results
+- For non-critical notifications
+
+**Key features:**
+- Appears temporarily on screen
+- Can be dismissed by user
+- Uses `role="alert"` or `aria-live`
+- Can include action buttons
+
+### [Validation Feedback](./validation-feedback.mdx)
+
+Provide immediate feedback as users type to help them understand requirements.
+
+**When to use:**
+- For complex password requirements
+- For real-time validation
+- When you want to guide users as they type
+
+**Key features:**
+- Updates as user types
+- Shows which requirements are met
+- Can be debounced to avoid excessive feedback
+- Uses visual indicators (icons, colors)
+
+## Common Pitfalls
+
+### 1. Vague Error Messages
+
+```html
+<!-- Bad: Vague error -->
+<span class="error">Invalid input</span>
+
+<!-- Good: Specific error -->
+<span class="error">Please enter a valid email address (e.g., user@example.com)</span>
+```
+
+### 2. Not Associating Errors with Fields
+
+```html
+<!-- Bad: Error not associated -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: Error associated -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+### 3. Using Color Alone for Errors
+
+```css
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+### 4. Auto-Dismissing Critical Errors
+
+```javascript
+// Bad: Auto-dismisses critical error
+setTimeout(() => {
+  hideError();
+}, 3000);
+
+// Good: Requires user action
+function showError(message) {
+  const error = document.getElementById('error');
+  error.textContent = message;
+  error.classList.add('visible');
+}
+
+function hideError() {
+  const error = document.getElementById('error');
+  error.classList.remove('visible');
+}
+```
+
+## Testing Checklist
+
+### Error Identification
+- [ ] Errors are clearly identified
+- [ ] Error messages are specific and helpful
+- [ ] Errors are associated with problematic fields
+- [ ] Error indicators are visually distinct
+
+### Screen Reader Testing
+- [ ] Error messages are announced
+- [ ] Error messages are associated with fields
+- [ ] Error summary is announced (if used)
+- [ ] Users can navigate to errors
+
+### Keyboard Testing
+- [ ] Can navigate to error fields
+- [ ] Can correct errors
+- [ ] Can dismiss error notifications
+- [ ] Focus moves to first error
+
+### Visual Testing
+- [ ] Error messages are clearly visible
+- [ ] Error fields are visually indicated
+- [ ] Color contrast is sufficient
+- [ ] Errors are not indicated by color alone
+
+## Best Practices
+
+### 1. Provide Specific, Actionable Messages
+
+Tell users exactly what's wrong and how to fix it.
+
+```javascript
+// Bad: Vague
+emailError.textContent = 'Invalid email';
+
+// Good: Specific and actionable
+emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+```
+
+### 2. Associate Errors with Fields
+
+Use ARIA to link errors to their fields.
+
+```html
+<input 
+  type="email" 
+  id="email" 
+  aria-invalid="true"
+  aria-describedby="email-error"
+>
+<span id="email-error" class="error" role="alert">
+  Please enter a valid email address
+</span>
+```
+
+### 3. Use Multiple Indicators
+
+Don't rely on color alone to indicate errors.
+
+```css
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+  border-left: 3px solid #d32f2f;
+  padding-left: 0.5rem;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+### 4. Provide Recovery Options
+
+Help users recover from errors.
+
+```html
+<div class="error-message">
+  <p>Failed to submit form. Please check your errors.</p>
+  <button onclick="scrollToErrors()">View Errors</button>
+  <button onclick="resetForm()">Start Over</button>
+</div>
+```
+
+## Related Components
+
+- [Accessible Inputs](./accessible-inputs.mdx) - Form input types
+- [Form Validation](./form-validation.mdx) - Validation patterns
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Forms](https://www.w3.org/WAI/ARIA/apg/patterns/form/)
+- [WebAIM Form Accessibility](https://webaim.org/techniques/forms/)
+- [MDN Form Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)

@@ -1,0 +1,516 @@
+---
+title: "Toast Notifications"
+description: "Displaying temporary error and success notifications"
+---
+
+# Toast Notifications
+
+Toast notifications display temporary error and success messages that appear on screen and can be dismissed by users.
+
+## Overview
+
+Toast notifications are useful for providing feedback about form submissions, API calls, or other actions. They appear temporarily and can be dismissed by users or auto-dismissed after a set time.
+
+## Basic Toast Notification
+
+Display errors in temporary notifications.
+
+```html
+<div id="toast" class="toast" role="alert" aria-live="polite">
+  <span id="toast-message"></span>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+
+<script>
+function showToast(message, type = 'error') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} visible`;
+  
+  setTimeout(() => {
+    hideToast();
+  }, 5000);
+}
+
+function hideToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.remove('visible');
+}
+
+// Example usage
+showToast('Failed to submit form. Please check your errors.', 'error');
+</script>
+
+<style>
+  .toast {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: #323232;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(120%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .toast.visible {
+    transform: translateX(0);
+  }
+  
+  .toast.error {
+    background-color: #d32f2f;
+  }
+  
+  .toast.success {
+    background-color: #388e3c;
+  }
+  
+  .toast.warning {
+    background-color: #f57c00;
+  }
+  
+  .toast button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+</style>
+```
+
+### Key Attributes
+
+- `role="alert"`: Announces important errors to screen readers
+- `aria-live="polite"`: Announces less urgent messages
+- Close button: Allows users to dismiss the notification
+
+## Toast with Icon
+
+Include icons to indicate the type of notification.
+
+```html
+<div id="toast" class="toast" role="alert" aria-live="polite">
+  <span id="toast-icon" class="toast-icon"></span>
+  <span id="toast-message"></span>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+
+<script>
+function showToast(message, type = 'error') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  const toastIcon = document.getElementById('toast-icon');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} visible`;
+  
+  // Set icon based on type
+  const icons = {
+    error: '⚠',
+    success: '✓',
+    warning: '⚡',
+    info: 'ℹ'
+  };
+  toastIcon.textContent = icons[type] || icons.info;
+  
+  setTimeout(() => {
+    hideToast();
+  }, 5000);
+}
+</script>
+
+<style>
+  .toast-icon {
+    font-size: 1.25rem;
+  }
+</style>
+```
+
+## Toast with Action Button
+
+Include an action button in the toast notification.
+
+```html
+<div id="toast" class="toast" role="alert" aria-live="polite">
+  <span id="toast-icon" class="toast-icon"></span>
+  <span id="toast-message"></span>
+  <button id="toast-action" class="toast-action"></button>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+
+<script>
+function showToast(message, type = 'error', actionText = null, actionCallback = null) {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  const toastIcon = document.getElementById('toast-icon');
+  const toastAction = document.getElementById('toast-action');
+  
+  toastMessage.textContent = message;
+  toast.className = `toast ${type} visible`;
+  
+  // Set icon based on type
+  const icons = {
+    error: '⚠',
+    success: '✓',
+    warning: '⚡',
+    info: 'ℹ'
+  };
+  toastIcon.textContent = icons[type] || icons.info;
+  
+  // Set action button
+  if (actionText && actionCallback) {
+    toastAction.textContent = actionText;
+    toastAction.style.display = 'inline-block';
+    toastAction.onclick = () => {
+      actionCallback();
+      hideToast();
+    };
+  } else {
+    toastAction.style.display = 'none';
+  }
+  
+  setTimeout(() => {
+    hideToast();
+  }, 5000);
+}
+
+// Example usage
+showToast(
+  'Failed to submit form. Please check your errors.',
+  'error',
+  'View Errors',
+  () => {
+    document.getElementById('error-summary').scrollIntoView();
+  }
+);
+</script>
+
+<style>
+  .toast-action {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  
+  .toast-action:hover,
+  .toast-action:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+</style>
+```
+
+## Toast Stack
+
+Display multiple toast notifications in a stack.
+
+```html
+<div id="toast-container" class="toast-container"></div>
+
+<script>
+let toastId = 0;
+
+function showToast(message, type = 'error') {
+  const container = document.getElementById('toast-container');
+  const id = `toast-${toastId++}`;
+  
+  const toast = document.createElement('div');
+  toast.id = id;
+  toast.className = `toast ${type}`;
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  
+  toast.innerHTML = `
+    <span class="toast-icon">${getIcon(type)}</span>
+    <span class="toast-message">${message}</span>
+    <button onclick="hideToast('${id}')" aria-label="Close notification">×</button>
+  `;
+  
+  container.appendChild(toast);
+  
+  // Trigger animation
+  requestAnimationFrame(() => {
+    toast.classList.add('visible');
+  });
+  
+  // Auto-dismiss
+  setTimeout(() => {
+    hideToast(id);
+  }, 5000);
+}
+
+function hideToast(id) {
+  const toast = document.getElementById(id);
+  if (toast) {
+    toast.classList.remove('visible');
+    setTimeout(() => {
+      toast.remove();
+    }, 300);
+  }
+}
+
+function getIcon(type) {
+  const icons = {
+    error: '⚠',
+    success: '✓',
+    warning: '⚡',
+    info: 'ℹ'
+  };
+  return icons[type] || icons.info;
+}
+</script>
+
+<style>
+  .toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .toast {
+    background-color: #323232;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transform: translateX(120%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 300px;
+  }
+  
+  .toast.visible {
+    transform: translateX(0);
+  }
+  
+  .toast.error {
+    background-color: #d32f2f;
+  }
+  
+  .toast.success {
+    background-color: #388e3c;
+  }
+  
+  .toast.warning {
+    background-color: #f57c00;
+  }
+  
+  .toast-icon {
+    font-size: 1.25rem;
+  }
+  
+  .toast button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    margin-left: auto;
+  }
+</style>
+```
+
+## Common Mistakes
+
+### 1. Auto-Dismissing Critical Errors
+
+```javascript
+// Bad: Auto-dismisses critical error
+setTimeout(() => {
+  hideError();
+}, 3000);
+
+// Good: Requires user action for critical errors
+function showError(message) {
+  const error = document.getElementById('error');
+  error.textContent = message;
+  error.classList.add('visible');
+}
+
+function hideError() {
+  const error = document.getElementById('error');
+  error.classList.remove('visible');
+}
+```
+
+### 2. Not Using role="alert"
+
+```html
+<!-- Bad: No role="alert" -->
+<div class="toast">
+  <span>Failed to submit form</span>
+</div>
+
+<!-- Good: With role="alert" -->
+<div class="toast" role="alert" aria-live="polite">
+  <span>Failed to submit form</span>
+</div>
+```
+
+### 3. Not Providing Close Button
+
+```html
+<!-- Bad: No close button -->
+<div class="toast" role="alert">
+  <span>Failed to submit form</span>
+</div>
+
+<!-- Good: With close button -->
+<div class="toast" role="alert">
+  <span>Failed to submit form</span>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+```
+
+### 4. Using aria-live="assertive" for Non-Critical Messages
+
+```html
+<!-- Bad: Using assertive for non-critical message -->
+<div class="toast" role="alert" aria-live="assertive">
+  <span>Form submitted successfully</span>
+</div>
+
+<!-- Good: Using polite for non-critical message -->
+<div class="toast" role="alert" aria-live="polite">
+  <span>Form submitted successfully</span>
+</div>
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Toast notifications appear in the correct position
+- [ ] Toast notifications are clearly visible
+- [ ] Toast notifications have appropriate colors
+- [ ] Toast notifications animate smoothly
+
+### Screen Reader Testing
+- [ ] Toast notifications are announced
+- [ ] Toast messages are clear and specific
+- [ ] Close button is announced
+- [ ] Action buttons are announced (if present)
+
+### Keyboard Testing
+- [ ] Can navigate to toast notifications
+- [ ] Can activate close button
+- [ ] Can activate action buttons (if present)
+- [ ] Focus management is correct
+
+### Functional Testing
+- [ ] Toast notifications appear when triggered
+- [ ] Toast notifications dismiss when close button is clicked
+- [ ] Toast notifications auto-dismiss after set time (if applicable)
+- [ ] Multiple toasts stack correctly
+
+## Best Practices
+
+### 1. Use role="alert" for Important Errors
+
+Ensure important errors are announced to screen readers.
+
+```html
+<div class="toast" role="alert" aria-live="assertive">
+  <span>Failed to submit form. Please check your errors.</span>
+</div>
+```
+
+### 2. Use aria-live="polite" for Less Urgent Messages
+
+Use polite for success messages and less urgent notifications.
+
+```html
+<div class="toast" role="alert" aria-live="polite">
+  <span>Form submitted successfully</span>
+</div>
+```
+
+### 3. Provide Close Button
+
+Allow users to dismiss notifications.
+
+```html
+<div class="toast" role="alert">
+  <span>Failed to submit form</span>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+```
+
+### 4. Don't Auto-Dismiss Critical Errors
+
+Require user action for critical errors.
+
+```javascript
+// Bad: Auto-dismisses critical error
+setTimeout(() => {
+  hideError();
+}, 3000);
+
+// Good: Requires user action
+function showError(message) {
+  const error = document.getElementById('error');
+  error.textContent = message;
+  error.classList.add('visible');
+}
+```
+
+### 5. Use Appropriate Colors
+
+Use colors to indicate the type of notification.
+
+```css
+.toast.error {
+  background-color: #d32f2f;
+}
+
+.toast.success {
+  background-color: #388e3c;
+}
+
+.toast.warning {
+  background-color: #f57c00;
+}
+
+.toast.info {
+  background-color: #1976d2;
+}
+```
+
+### 6. Include Icons
+
+Use icons to reinforce the type of notification.
+
+```html
+<div class="toast" role="alert">
+  <span class="toast-icon">⚠</span>
+  <span class="toast-message">Failed to submit form</span>
+</div>
+```
+
+## Related Resources
+
+- [Error Handling Overview](./error-handling.mdx) - Complete error handling guide
+- [Inline Errors](./inline-errors.mdx) - Displaying errors below fields
+- [Error Summary](./error-summary.mdx) - Displaying all errors at the top of the form
+- [Validation Feedback](./validation-feedback.mdx) - Real-time validation feedback

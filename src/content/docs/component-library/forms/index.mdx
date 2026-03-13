@@ -1,0 +1,352 @@
+---
+title: "Forms Overview"
+description: "Introduction to accessible form components and best practices"
+---
+
+# Forms Overview
+
+Forms are one of the most critical components for web accessibility. They allow users to provide information, complete transactions, and interact with applications. Accessible forms ensure that all users, including those using assistive technologies, can successfully complete form interactions.
+
+## Component Overview
+
+Accessible forms provide clear labels, helpful instructions, meaningful error messages, and keyboard accessibility. They work seamlessly with screen readers, keyboard navigation, and other assistive technologies.
+
+### Why Accessible Forms Matter
+
+- **Screen Reader Users**: Need to understand form structure and input requirements
+- **Keyboard Users**: Must be able to navigate and complete forms without a mouse
+- **Cognitive Users**: Benefit from clear instructions and error messages
+- **Low Vision Users**: Need sufficient contrast and resizable text
+- **All Users**: Benefit from clear, well-organized forms
+
+## WCAG Requirements
+
+Forms must meet several WCAG 2.1 AA success criteria:
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Form structure must be programmatically determinable
+- **1.4.3 Contrast (Minimum)**: Form elements must have sufficient contrast
+
+### Operable
+- **2.1.1 Keyboard**: All form functionality must be keyboard accessible
+- **2.4.3 Focus Order**: Form elements must receive focus in logical order
+- **2.4.7 Focus Visible**: Focus indicators must be visible
+
+### Understandable
+- **3.3.1 Error Identification**: Errors must be identified and described
+- **3.3.2 Labels or Instructions**: All inputs must have labels or instructions
+- **3.3.3 Error Suggestion**: Provide suggestions for correcting errors
+- **3.3.4 Error Prevention**: For critical forms, provide review/confirmation
+
+### Robust
+- **4.1.2 Name, Role, Value**: Form controls must have proper name, role, and value
+
+## Core Form Components
+
+### 1. Labels
+
+Every form input must have an associated label.
+
+```html
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email">
+```
+
+### 2. Instructions
+
+Provide clear instructions for completing the form.
+
+```html
+<fieldset>
+  <legend>Personal Information</legend>
+  <p class="instructions">
+    Please provide your contact information. All fields marked with * are required.
+  </p>
+  
+  <label for="name">Full Name *</label>
+  <input type="text" id="name" name="name" required>
+</fieldset>
+```
+
+### 3. Error Messages
+
+Provide clear, specific error messages.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input type="email" id="email" name="email" required>
+  <span class="error-message" id="email-error" role="alert"></span>
+</div>
+```
+
+### 4. Validation
+
+Validate input and provide feedback.
+
+```html
+<form novalidate>
+  <label for="email">Email Address</label>
+  <input type="email" id="email" name="email" required>
+  <span class="error-message" id="email-error"></span>
+  
+  <button type="submit">Submit</button>
+</form>
+```
+
+## Implementation Pattern
+
+### Basic Accessible Form
+
+```html
+<form action="/submit" method="post" novalidate>
+  <fieldset>
+    <legend>Contact Information</legend>
+    
+    <div class="form-group">
+      <label for="name">
+        Full Name
+        <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="name" 
+        name="name" 
+        required
+        aria-required="true"
+        aria-invalid="false"
+        aria-describedby="name-help"
+      >
+      <span id="name-help" class="help-text">
+        Enter your first and last name
+      </span>
+    </div>
+    
+    <div class="form-group">
+      <label for="email">
+        Email Address
+        <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input 
+        type="email" 
+        id="email" 
+        name="email" 
+        required
+        aria-required="true"
+        aria-invalid="false"
+        aria-describedby="email-help email-error"
+      >
+      <span id="email-help" class="help-text">
+        We'll never share your email
+      </span>
+      <span id="email-error" class="error-message" role="alert"></span>
+    </div>
+    
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input 
+        type="tel" 
+        id="phone" 
+        name="phone"
+        aria-describedby="phone-help"
+      >
+      <span id="phone-help" class="help-text">
+        Optional: For order updates
+      </span>
+    </div>
+    
+    <div class="form-group">
+      <label for="message">Message</label>
+      <textarea 
+        id="message" 
+        name="message" 
+        rows="4"
+        aria-describedby="message-help"
+      ></textarea>
+      <span id="message-help" class="help-text">
+        Tell us how we can help
+      </span>
+    </div>
+    
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="subscribe" id="subscribe">
+        Subscribe to newsletter
+      </label>
+    </div>
+    
+    <button type="submit">Submit Form</button>
+  </fieldset>
+</form>
+```
+
+## Common Pitfalls
+
+### 1. Using Placeholder Text as Labels
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 2. Missing Required Indicators
+
+```html
+<!-- Bad: No required indicator -->
+<label for="email">Email Address</label>
+<input type="email" id="email" required>
+
+<!-- Good: Clear required indicator -->
+<label for="email">
+  Email Address
+  <span class="required" aria-hidden="true">*</span>
+</label>
+<input type="email" id="email" required aria-required="true">
+```
+
+### 3. Vague Error Messages
+
+```html
+<!-- Bad: Vague error -->
+<span class="error">Invalid input</span>
+
+<!-- Good: Specific error -->
+<span class="error">Please enter a valid email address (e.g., user@example.com)</span>
+```
+
+### 4. Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+input:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+input:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to all form fields using Tab
+- [ ] Focus order is logical
+- [ ] Can submit form using Enter
+- [ ] Can cancel form using Escape (if applicable)
+
+### Screen Reader Testing
+- [ ] All labels are announced
+- [ ] Required fields are identified
+- [ ] Help text is available
+- [ ] Error messages are announced
+- [ ] Form structure is clear
+
+### Visual Testing
+- [ ] Labels are visually associated with inputs
+- [ ] Focus indicators are visible
+- [ ] Error messages are clearly visible
+- [ ] Required fields are clearly marked
+- [ ] Color contrast is sufficient
+
+### Validation Testing
+- [ ] Client-side validation provides clear feedback
+- [ ] Server-side validation provides clear feedback
+- [ ] Error messages are specific and helpful
+- [ ] Users can correct errors easily
+
+## Related Components
+
+- [Accessible Inputs](./accessible-inputs.mdx) - Detailed guide for form input types
+- [Form Validation](./form-validation.mdx) - Client and server-side validation patterns
+- [Error Handling](./error-handling.mdx) - Error message patterns and recovery
+
+## Best Practices
+
+### 1. Use Semantic HTML
+
+Always use appropriate form elements:
+
+```html
+<!-- Good: Semantic form elements -->
+<form>
+  <label for="email">Email</label>
+  <input type="email" id="email">
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Bad: Non-semantic elements -->
+<div class="form">
+  <div class="label">Email</div>
+  <div class="input" onclick="focusInput()"></div>
+  <div class="button" onclick="submitForm()">Submit</div>
+</div>
+```
+
+### 2. Provide Complete Information
+
+Ensure all form elements have necessary attributes:
+
+```html
+<!-- Good: Complete attributes -->
+<label for="email">Email Address</label>
+<input 
+  type="email" 
+  id="email" 
+  name="email" 
+  required
+  aria-required="true"
+  aria-invalid="false"
+  aria-describedby="email-help"
+>
+<span id="email-help">We'll never share your email</span>
+
+<!-- Bad: Missing attributes -->
+<input type="email" placeholder="Email Address">
+```
+
+### 3. Group Related Elements
+
+Use fieldset and legend for related form elements:
+
+```html
+<fieldset>
+  <legend>Shipping Address</legend>
+  
+  <label for="address">Street Address</label>
+  <input type="text" id="address" name="address">
+  
+  <label for="city">City</label>
+  <input type="text" id="city" name="city">
+  
+  <label for="zip">ZIP Code</label>
+  <input type="text" id="zip" name="zip">
+</fieldset>
+```
+
+### 4. Provide Clear Instructions
+
+Give users clear guidance on how to complete the form:
+
+```html
+<form>
+  <p class="instructions">
+    Please complete all required fields marked with an asterisk (*).
+    Your information will be used to process your order.
+  </p>
+  
+  <!-- Form fields -->
+</form>
+```
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Forms](https://www.w3.org/WAI/ARIA/apg/patterns/form/)
+- [WebAIM Form Accessibility](https://webaim.org/techniques/forms/)
+- [MDN HTML Forms Guide](https://developer.mozilla.org/en-US/docs/Learn/Forms)

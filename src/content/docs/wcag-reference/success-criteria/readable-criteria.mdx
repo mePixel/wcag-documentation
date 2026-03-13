@@ -1,0 +1,185 @@
+---
+title: "Readable Success Criteria"
+description: "WCAG 2.1 AA readable success criteria (3.1)"
+---
+
+# Readable Success Criteria
+
+Information and user interface components must be readable. This means that users must be able to understand the information presented to them.
+
+## Overview
+
+The Readable guideline includes 2 success criteria across Level A and AA:
+
+- **Level A**: 1 criterion
+- **Level AA**: 1 criterion
+
+## 3.1.1 Language of Page (Level A)
+
+**Requirement**: The default human language of each Web page can be programmatically determined.
+
+**Understanding**: Screen readers need to know the language of the page to use the correct pronunciation and voice.
+
+**Sufficient Techniques**:
+- **H57**: Using language attributes on html element
+
+**Example**:
+```html
+<html lang="en">
+  <head>
+    <title>English Page</title>
+  </head>
+  <body>
+    <p>This page is in English.</p>
+  </body>
+</html>
+
+<html lang="es">
+  <head>
+    <title>Página en Español</title>
+  </head>
+  <body>
+    <p>Esta página está en español.</p>
+  </body>
+</html>
+```
+
+### Common Mistakes
+
+```html
+<!-- Bad: No language attribute -->
+<html>
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <p>Content here</p>
+  </body>
+</html>
+
+<!-- Good: With language attribute -->
+<html lang="en">
+  <head>
+    <title>My Page</title>
+  </head>
+  <body>
+    <p>Content here</p>
+  </body>
+</html>
+```
+
+## 3.1.2 Language of Parts (Level AA)
+
+**Requirement**: The human language of each passage or phrase in content can be programmatically determined except for proper names, technical terms, words of indeterminate language, and words or phrases that have become part of the vernacular of immediately surrounding text.
+
+**Understanding**: When content changes language within a page, identify the language change so screen readers can switch pronunciation.
+
+**Sufficient Techniques**:
+- **H58**: Using language attributes to identify changes in human language
+
+**Example**:
+```html
+<html lang="en">
+  <body>
+    <p>This paragraph is in English.</p>
+    
+    <p lang="es">Este párrafo está en español.</p>
+    
+    <p>
+      The phrase <span lang="es">"Hola mundo"</span> is Spanish for "Hello world".
+    </p>
+  </body>
+</html>
+```
+
+### Common Mistakes
+
+```html
+<!-- Bad: No language change identified -->
+<html lang="en">
+  <body>
+    <p>This is English.</p>
+    <p>Este es español.</p>
+  </body>
+</html>
+
+<!-- Good: Language change identified -->
+<html lang="en">
+  <body>
+    <p>This is English.</p>
+    <p lang="es">Este es español.</p>
+  </body>
+</html>
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Language is correctly set on html element
+- [ ] Language changes are visually indicated (if applicable)
+
+### Screen Reader Testing
+- [ ] Page language is announced correctly
+- [ ] Language changes are announced
+- [ ] Pronunciation is correct for each language
+
+### Code Testing
+- [ ] lang attribute is present on html element
+- [ ] lang attribute is used for language changes
+- [ ] Language codes are valid (e.g., en, es, fr)
+
+## Best Practices
+
+### 1. Always Set Language Attribute
+
+Set the language attribute on the html element.
+
+```html
+<html lang="en">
+  <!-- Page content -->
+</html>
+```
+
+### 2. Use Valid Language Codes
+
+Use ISO 639-1 language codes.
+
+```html
+<!-- Good: Valid language codes -->
+<html lang="en">    <!-- English -->
+<html lang="es">    <!-- Spanish -->
+<html lang="fr">    <!-- French -->
+<html lang="de">    <!-- German -->
+<html lang="ja">    <!-- Japanese -->
+
+<!-- Bad: Invalid language codes -->
+<html lang="english">
+<html lang="spanish">
+```
+
+### 3. Identify Language Changes
+
+Use the lang attribute when language changes within content.
+
+```html
+<p>This is English.</p>
+<p lang="es">Esto es español.</p>
+```
+
+### 4. Use Region Codes When Needed
+
+Include region codes for language variants.
+
+```html
+<html lang="en-US">    <!-- US English -->
+<html lang="en-GB">    <!-- British English -->
+<html lang="pt-BR">    <!-- Brazilian Portuguese -->
+<html lang="zh-CN">    <!-- Simplified Chinese -->
+```
+
+## Related Resources
+
+- [Understandable Criteria Overview](./understandable-criteria.mdx) - Complete understandable criteria guide
+- [Predictable Criteria](./predictable-criteria.mdx) - Predictable success criteria
+- [Input Assistance Criteria](./input-assistance-criteria.mdx) - Input assistance success criteria
+- [WCAG 2.1 Readable Guidelines](https://www.w3.org/WAI/WCAG21/quickref/#readable)

@@ -1,0 +1,94 @@
+---
+title: "Dynamic Content"
+description: "Managing dynamic content updates with ARIA live regions"
+---
+
+# Dynamic Content
+
+Dynamic content updates are common in modern web applications. ARIA live regions ensure screen reader users are notified of content changes.
+
+## Overview
+
+ARIA live regions allow you to announce dynamic content changes to screen reader users without requiring page reloads. This is essential for creating accessible single-page applications, real-time updates, and interactive components.
+
+### Why Dynamic Content Matters
+
+- **Single Page Applications**: Update content without page reloads
+- **Real-Time Updates**: Show live data and notifications
+- **Screen Reader Users**: Need to be informed of content changes
+- **All Users**: Benefit from clear feedback
+
+## Topics
+
+### Live Region Types
+
+Learn about the different types of ARIA live regions and when to use each one.
+
+- **Polite Live Regions**: Announce changes when user is idle
+- **Assertive Live Regions**: Announce changes immediately
+- **Status Regions**: For status messages and updates
+- **Alert Regions**: For important alerts and errors
+
+[Learn more about live region types →](./live-region-types.mdx)
+
+### Implementation Patterns
+
+Explore practical implementation patterns for common scenarios.
+
+- **Form Validation Messages**: Real-time form feedback
+- **Loading States**: Async operation feedback
+- **Chat Messages**: Real-time chat announcements
+- **Progress Updates**: Progress indicator feedback
+- **Notification System**: Temporary message announcements
+- **Auto-Complete Suggestions**: Search suggestions
+- **Real-Time Data Updates**: Live data feeds
+
+[Explore implementation patterns →](./live-region-patterns.mdx)
+
+### Best Practices
+
+Discover common mistakes to avoid and best practices to follow.
+
+- **Common Mistakes**: Pitfalls to avoid
+- **Best Practices**: Guidelines for success
+- **Testing Checklist**: Comprehensive testing guide
+
+[Learn best practices →](./live-region-best-practices.mdx)
+
+## Quick Start
+
+### Basic Live Region
+
+```html
+<div id="status" aria-live="polite" aria-atomic="true">
+  Status: Ready
+</div>
+```
+
+```javascript
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = `Status: ${message}`;
+}
+```
+
+### Alert Region
+
+```html
+<div id="alert" role="alert">
+  <!-- Alert messages -->
+</div>
+```
+
+```javascript
+function showAlert(message) {
+  const alert = document.getElementById('alert');
+  alert.textContent = message;
+}
+```
+
+## Related Resources
+
+- [ARIA Live Regions](https://www.w3.org/WAI/ARIA/apg/practices/live-regions/)
+- [MDN aria-live](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [WebAIM Dynamic Content](https://webaim.org/techniques/aria/)

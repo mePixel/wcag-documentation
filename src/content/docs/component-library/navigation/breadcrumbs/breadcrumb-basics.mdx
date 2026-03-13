@@ -1,0 +1,240 @@
+---
+title: "Breadcrumb Basics"
+description: "Basic implementation of accessible breadcrumb navigation"
+---
+
+# Breadcrumb Basics
+
+Breadcrumb navigation shows users their current location within a site's hierarchy and provides a way to navigate back to parent pages.
+
+## Component Overview
+
+Breadcrumbs are a secondary navigation scheme that reveals the user's location in a website or web application. They provide a hierarchical trail from the homepage to the current page.
+
+### Why Breadcrumbs Matter
+
+- **Screen Reader Users**: Understand their location in site hierarchy
+- **Keyboard Users**: Can navigate back to parent pages efficiently
+- **Cognitive Users**: Benefit from clear location indicators
+- **All Users**: Can easily navigate back to parent pages
+
+## WCAG Requirements
+
+### Operable
+- **2.4.1 Bypass Blocks**: Provide multiple ways to navigate
+- **2.4.4 Link Purpose (In Context)**: Links must have descriptive text
+
+### Understandable
+- **2.4.5 Multiple Ways**: Provide multiple navigation methods
+- **2.4.6 Headings and Labels**: Navigation must have descriptive labels
+
+## Basic Implementation
+
+### Simple Breadcrumb
+
+The most basic breadcrumb implementation uses semantic HTML with proper ARIA attributes.
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/products/electronics">Electronics</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### CSS Styling
+
+Style breadcrumbs to be visually clear and accessible.
+
+```css
+nav[aria-label="Breadcrumb"] {
+  padding: 1rem 0;
+}
+
+nav[aria-label="Breadcrumb"] ol {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+nav[aria-label="Breadcrumb"] li {
+  display: flex;
+  align-items: center;
+}
+
+nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: #666;
+}
+
+nav[aria-label="Breadcrumb"] a {
+  color: #005fcc;
+  text-decoration: none;
+}
+
+nav[aria-label="Breadcrumb"] a:hover,
+nav[aria-label="Breadcrumb"] a:focus {
+  text-decoration: underline;
+}
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: #333;
+  font-weight: 500;
+}
+```
+
+## Key Requirements
+
+### 1. Use Semantic HTML
+
+Use `<nav>`, `<ol>`, and `<li>` elements for proper structure.
+
+```html
+<!-- Good: Semantic HTML -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 2. Provide ARIA Label
+
+Use `aria-label` to describe the navigation.
+
+```html
+<!-- Good: ARIA label provided -->
+<nav aria-label="Breadcrumb">
+  <!-- Breadcrumb content -->
+</nav>
+```
+
+### 3. Indicate Current Page
+
+Use `aria-current="page"` for the current page item.
+
+```html
+<!-- Good: Current page indicated -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 4. Use Descriptive Link Text
+
+Make sure each link describes its destination.
+
+```html
+<!-- Good: Descriptive links -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/products/electronics">Electronics</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+## Complete Example
+
+Here's a complete working example of a basic breadcrumb:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessible Breadcrumb</title>
+  <style>
+    nav[aria-label="Breadcrumb"] {
+      padding: 1rem 0;
+    }
+    
+    nav[aria-label="Breadcrumb"] ol {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+    
+    nav[aria-label="Breadcrumb"] li {
+      display: flex;
+      align-items: center;
+    }
+    
+    nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+      content: "/";
+      margin-left: 0.5rem;
+      color: #666;
+    }
+    
+    nav[aria-label="Breadcrumb"] a {
+      color: #005fcc;
+      text-decoration: none;
+    }
+    
+    nav[aria-label="Breadcrumb"] a:hover,
+    nav[aria-label="Breadcrumb"] a:focus {
+      text-decoration: underline;
+    }
+    
+    nav[aria-label="Breadcrumb"] [aria-current="page"] {
+      color: #333;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/products/electronics">Electronics</a></li>
+      <li aria-current="page">Laptops</li>
+    </ol>
+  </nav>
+  
+  <main>
+    <h1>Laptops</h1>
+    <p>Browse our selection of laptops.</p>
+  </main>
+</body>
+</html>
+```
+
+## Testing
+
+### Keyboard Testing
+1. Press Tab to navigate through breadcrumb links
+2. Verify focus indicators are visible
+3. Press Enter to activate links
+4. Verify current page item is not focusable
+
+### Screen Reader Testing
+1. Navigate to page with a screen reader
+2. Verify breadcrumb is announced with label
+3. Verify hierarchy is clear
+4. Verify current page is identified
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Breadcrumb](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)
+- [WebAIM Breadcrumb Navigation](https://webaim.org/techniques/breadcrumb/)
+- [Schema.org BreadcrumbList](https://schema.org/BreadcrumbList)

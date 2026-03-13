@@ -1,0 +1,262 @@
+---
+title: "CSS & Styling"
+description: "Accessible CSS styling techniques for WCAG 2.1 AA compliance"
+---
+
+# CSS & Styling
+
+This section covers CSS styling techniques for meeting WCAG 2.1 Level AA requirements. Proper CSS ensures content is perceivable, operable, and understandable for all users.
+
+## Overview
+
+CSS styling plays a crucial role in web accessibility. From color contrast to focus indicators, from text resizing to responsive design, CSS choices directly impact how users perceive and interact with content.
+
+### Why Accessible CSS Matters
+
+- **Low Vision Users**: Need sufficient contrast and resizable text
+- **Color Blind Users**: Can't rely on color alone to convey information
+- **Keyboard Users**: Need visible focus indicators
+- **Cognitive Users**: Benefit from clear, consistent styling
+- **All Users**: Benefit from responsive, flexible layouts
+
+## CSS Accessibility Topics
+
+### Color Contrast
+
+Ensure text and background colors meet WCAG AA contrast requirements.
+
+- [Color Contrast](./color-contrast.mdx) - Understanding and implementing contrast requirements
+
+### Focus Indicators
+
+Make keyboard focus clearly visible.
+
+- [Focus Indicators](./focus-indicators.mdx) - Creating visible focus states
+
+### Text Resizing
+
+Allow text to be resized without loss of content.
+
+- [Text Resizing](./text-resizing.mdx) - Implementing flexible text sizing
+
+### Layout and Positioning
+
+Create layouts that work across devices and assistive technologies.
+
+### Responsive Design
+
+Ensure content works on all screen sizes.
+
+## Quick Reference
+
+### Color Contrast Requirements
+
+| Text Type | Minimum Contrast | WCAG Level |
+|-----------|------------------|-------------|
+| Normal text (under 18pt) | 4.5:1 | AA |
+| Large text (18pt and up) | 3:1 | AA |
+| Graphical objects | 3:1 | AA |
+| UI components | 3:1 | AA |
+
+### Focus Indicator Requirements
+
+- Must be visible when element has focus
+- Must have sufficient contrast with background
+- Should not rely on color alone
+- Should be clearly distinguishable from non-focused state
+
+### Text Resizing Requirements
+
+- Text must be resizable up to 200%
+- No loss of content or functionality
+- Layout must accommodate larger text
+- No horizontal scrolling at 320px width
+
+## Best Practices
+
+### 1. Use Relative Units
+
+Use relative units for flexible, scalable layouts.
+
+```css
+/* Good: Relative units */
+body {
+  font-size: 100%;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+.container {
+  max-width: 100%;
+  padding: 1rem;
+}
+
+/* Bad: Fixed units */
+body {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+.container {
+  width: 1200px;
+  padding: 16px;
+}
+```
+
+### 2. Ensure Sufficient Contrast
+
+Check color contrast ratios.
+
+```css
+/* Good: Sufficient contrast (4.5:1 or higher) */
+body {
+  color: #333333;
+  background-color: #ffffff;
+}
+
+/* Bad: Insufficient contrast */
+body {
+  color: #999999;
+  background-color: #ffffff;
+}
+```
+
+### 3. Provide Visible Focus Indicators
+
+Make focus states clearly visible.
+
+```css
+/* Good: Visible focus */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Bad: Hiding focus */
+button:focus,
+a:focus {
+  outline: none;
+}
+```
+
+### 4. Don't Rely on Color Alone
+
+Use additional indicators beyond color.
+
+```css
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+```
+
+## Common Mistakes
+
+### 1. Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+button:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### 2. Using Fixed Font Sizes
+
+```css
+/* Bad: Fixed font size */
+body {
+  font-size: 16px;
+}
+
+/* Good: Relative font size */
+body {
+  font-size: 100%;
+}
+```
+
+### 3. Insufficient Color Contrast
+
+```css
+/* Bad: Low contrast */
+body {
+  color: #999999;
+  background-color: #ffffff;
+}
+
+/* Good: Sufficient contrast */
+body {
+  color: #333333;
+  background-color: #ffffff;
+}
+```
+
+### 4. Using Color Alone
+
+```css
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+## Testing Tools
+
+### Color Contrast Checkers
+
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [Colour Contrast Analyser](https://www.tpgi.com/colour-contrast-analyser.html)
+- [Contrast Ratio](https://contrast-ratio.com/)
+
+### Browser DevTools
+
+- Chrome DevTools: Accessibility panel
+- Firefox DevTools: Accessibility inspector
+- Edge DevTools: Accessibility tools
+
+### Automated Tools
+
+- axe DevTools
+- WAVE Browser Extension
+- Lighthouse
+
+## Related Resources
+
+- [WCAG 2.1 Visual Presentation](https://www.w3.org/WAI/WCAG21/quickref/#visual-audio-contrast)
+- [WebAIM Color Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [MDN CSS Accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Accessibility)

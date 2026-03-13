@@ -1,0 +1,504 @@
+---
+title: "Client-Side Validation"
+description: "Implementing accessible client-side form validation"
+---
+
+# Client-Side Validation
+
+Client-side validation validates input in the browser before submission, providing immediate feedback to users and reducing server load.
+
+## Overview
+
+Client-side validation provides immediate feedback to users, helps them correct errors before submission, and reduces unnecessary server requests. It should always be complemented with server-side validation for security.
+
+## Basic Client-Side Validation
+
+Validate input in browser before submission.
+
+```html
+<form id="contactForm" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-help email-error"
+    >
+    <span id="email-help" class="help-text">
+      We'll never share your email
+    </span>
+    <span id="email-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      name="password"
+      required
+      minlength="8"
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="password-help password-error"
+    >
+    <span id="password-help" class="help-text">
+      Must be at least 8 characters
+    </span>
+    <span id="password-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const form = document.getElementById('contactForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const emailError = document.getElementById('email-error');
+const passwordError = document.getElementById('password-error');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let hasErrors = false;
+  
+  // Clear previous errors
+  emailError.textContent = '';
+  passwordError.textContent = '';
+  emailInput.setAttribute('aria-invalid', 'false');
+  passwordInput.setAttribute('aria-invalid', 'false');
+  
+  // Validate email
+  if (!emailInput.value) {
+    emailError.textContent = 'Email address is required';
+    emailInput.setAttribute('aria-invalid', 'true');
+    hasErrors = true;
+  } else if (!emailInput.value.includes('@')) {
+    emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+    emailInput.setAttribute('aria-invalid', 'true');
+    hasErrors = true;
+  } else if (!emailInput.value.includes('.')) {
+    emailError.textContent = 'Email must include a domain (e.g., .com, .org)';
+    emailInput.setAttribute('aria-invalid', 'true');
+    hasErrors = true;
+  }
+  
+  // Validate password
+  if (!passwordInput.value) {
+    passwordError.textContent = 'Password is required';
+    passwordInput.setAttribute('aria-invalid', 'true');
+    hasErrors = true;
+  } else if (passwordInput.value.length < 8) {
+    passwordError.textContent = 'Password must be at least 8 characters. Try adding more characters.';
+    passwordInput.setAttribute('aria-invalid', 'true');
+    hasErrors = true;
+  }
+  
+  // Focus first error if present
+  if (hasErrors) {
+    const firstError = form.querySelector('[aria-invalid="true"]');
+    if (firstError) {
+      firstError.focus();
+    }
+  } else {
+    form.submit();
+  }
+});
+
+// Clear errors on input
+emailInput.addEventListener('input', () => {
+  if (emailInput.getAttribute('aria-invalid') === 'true') {
+    emailError.textContent = '';
+    emailInput.setAttribute('aria-invalid', 'false');
+  }
+});
+
+passwordInput.addEventListener('input', () => {
+  if (passwordInput.getAttribute('aria-invalid') === 'true') {
+    passwordError.textContent = '';
+    passwordInput.setAttribute('aria-invalid', 'false');
+  }
+});
+</script>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .help-text {
+    font-size: 0.875rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  [aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+</style>
+```
+
+### Key Points
+
+- Use `novalidate` attribute to disable browser default validation
+- Use `aria-invalid` to indicate invalid fields
+- Use `aria-describedby` to associate error messages with inputs
+- Focus first error field after validation
+- Clear errors as user corrects them
+
+## HTML5 Validation Attributes
+
+Use built-in HTML5 validation attributes.
+
+```html
+<form id="myForm" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-error"
+    >
+    <span id="email-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      name="password"
+      required
+      minlength="8"
+      maxlength="128"
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="password-error"
+    >
+    <span id="password-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="age">Age</label>
+    <input 
+      type="number" 
+      id="age" 
+      name="age"
+      min="18"
+      max="120"
+      step="1"
+      aria-invalid="false"
+      aria-describedby="age-error"
+    >
+    <span id="age-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="website">Website</label>
+    <input 
+      type="url" 
+      id="website" 
+      name="website"
+      pattern="https?://.+"
+      aria-invalid="false"
+      aria-describedby="website-error"
+    >
+    <span id="website-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Common Validation Attributes
+
+- `required`: Field must be filled
+- `minlength`/`maxlength`: Minimum/maximum length
+- `min`/`max`: Minimum/maximum value
+- `step`: Valid step increments
+- `pattern`: Regular expression pattern
+- `type`: Input type (email, url, number, etc.)
+
+## Custom Validation Functions
+
+Create reusable validation functions.
+
+```html
+<form id="myForm" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-error"
+    >
+    <span id="email-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+// Validation functions
+const validators = {
+  required: (value) => ({
+    valid: value.trim() !== '',
+    message: 'This field is required'
+  }),
+  
+  email: (value) => ({
+    valid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+    message: 'Please enter a valid email address (e.g., user@example.com)'
+  }),
+  
+  minLength: (value, min) => ({
+    valid: value.length >= min,
+    message: `Must be at least ${min} characters`
+  }),
+  
+  maxLength: (value, max) => ({
+    valid: value.length <= max,
+    message: `Must be no more than ${max} characters`
+  }),
+  
+  pattern: (value, regex, message) => ({
+    valid: regex.test(value),
+    message: message || 'Invalid format'
+  })
+};
+
+// Validate field
+function validateField(input, rules) {
+  const errorElement = document.getElementById(`${input.id}-error`);
+  let isValid = true;
+  let errorMessage = '';
+  
+  for (const rule of rules) {
+    const result = rule.validator(input.value, ...rule.args);
+    if (!result.valid) {
+      isValid = false;
+      errorMessage = result.message;
+      break;
+    }
+  }
+  
+  if (!isValid) {
+    input.setAttribute('aria-invalid', 'true');
+    errorElement.textContent = errorMessage;
+  } else {
+    input.setAttribute('aria-invalid', 'false');
+    errorElement.textContent = '';
+  }
+  
+  return isValid;
+}
+
+// Validate form
+function validateForm(form) {
+  const inputs = form.querySelectorAll('input, select, textarea');
+  let isValid = true;
+  
+  inputs.forEach(input => {
+    const rules = input.dataset.validationRules ? JSON.parse(input.dataset.validationRules) : [];
+    if (rules.length > 0) {
+      const fieldValid = validateField(input, rules);
+      if (!fieldValid) {
+        isValid = false;
+      }
+    }
+  });
+  
+  return isValid;
+}
+
+// Example usage
+const emailInput = document.getElementById('email');
+emailInput.dataset.validationRules = JSON.stringify([
+  { validator: validators.required },
+  { validator: validators.email }
+]);
+
+document.getElementById('myForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  if (validateForm(e.target)) {
+    e.target.submit();
+  }
+});
+</script>
+```
+
+## Common Mistakes
+
+### 1. Not Using novalidate
+
+```html
+<!-- Bad: Browser default validation -->
+<form id="myForm">
+  <input type="email" required>
+</form>
+
+<!-- Good: Custom validation -->
+<form id="myForm" novalidate>
+  <input type="email" required aria-invalid="false">
+</form>
+```
+
+### 2. Not Focusing First Error
+
+```javascript
+// Bad: Doesn't focus error
+if (hasErrors) {
+  // Just show errors
+}
+
+// Good: Focuses first error
+if (hasErrors) {
+  const firstError = form.querySelector('[aria-invalid="true"]');
+  if (firstError) {
+    firstError.focus();
+  }
+}
+```
+
+### 3. Not Clearing Errors on Input
+
+```javascript
+// Bad: Errors persist
+input.addEventListener('input', () => {
+  // Doesn't clear errors
+});
+
+// Good: Clears errors
+input.addEventListener('input', () => {
+  if (input.getAttribute('aria-invalid') === 'true') {
+    errorElement.textContent = '';
+    input.setAttribute('aria-invalid', 'false');
+  }
+});
+```
+
+### 4. Not Using aria-invalid
+
+```html
+<!-- Bad: No aria-invalid -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: With aria-invalid -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Validation triggers at the right time
+- [ ] Error messages are clearly visible
+- [ ] Error fields are visually indicated
+- [ ] Color contrast is sufficient
+
+### Screen Reader Testing
+- [ ] Error messages are announced
+- [ ] aria-invalid state is announced
+- [ ] Error messages are associated with fields
+- [ ] First error receives focus
+
+### Keyboard Testing
+- [ ] Can navigate to error fields
+- [ ] Can correct errors
+- [ ] Can resubmit form after corrections
+- [ ] Focus moves to first error
+
+### Functional Testing
+- [ ] Validation works correctly
+- [ ] Error messages are accurate
+- [ ] Form submits when valid
+- [ ] Form doesn't submit when invalid
+
+## Best Practices
+
+### 1. Use novalidate Attribute
+
+Disable browser default validation for custom validation.
+
+```html
+<form id="myForm" novalidate>
+  <!-- Form fields -->
+</form>
+```
+
+### 2. Use aria-invalid
+
+Mark fields as invalid when they have errors.
+
+```javascript
+if (!isValid) {
+  input.setAttribute('aria-invalid', 'true');
+} else {
+  input.setAttribute('aria-invalid', 'false');
+}
+```
+
+### 3. Focus First Error
+
+Help users find and fix errors quickly.
+
+```javascript
+if (hasErrors) {
+  const firstError = form.querySelector('[aria-invalid="true"]');
+  if (firstError) {
+    firstError.focus();
+  }
+}
+```
+
+### 4. Clear Errors on Input
+
+Remove errors as users correct them.
+
+```javascript
+input.addEventListener('input', () => {
+  if (input.getAttribute('aria-invalid') === 'true') {
+    errorElement.textContent = '';
+    input.setAttribute('aria-invalid', 'false');
+  }
+});
+```
+
+### 5. Provide Specific Error Messages
+
+Tell users exactly what's wrong and how to fix it.
+
+```javascript
+if (!emailInput.value.includes('@')) {
+  emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+}
+```
+
+## Related Resources
+
+- [Form Validation Overview](./form-validation.mdx) - Complete form validation guide
+- [Server-Side Validation](./server-side-validation.mdx) - Server-side validation
+- [Real-Time Validation](./real-time-validation.mdx) - Real-time validation
+- [Error Handling](./error-handling.mdx) - Error message patterns

@@ -1,0 +1,435 @@
+---
+title: "Assistive Technologies"
+description: "Understanding assistive technologies and how they help users with disabilities access web content"
+---
+
+# Assistive Technologies
+
+Assistive technologies are tools that help people with disabilities interact with digital content. Understanding how these technologies work is essential for creating accessible web experiences.
+
+## Overview
+
+Assistive technologies bridge the gap between users with disabilities and digital content. They transform, modify, or augment the way information is presented and how users interact with interfaces.
+
+### Why Understanding AT Matters
+
+- **Testing**: You need to test with assistive technologies
+- **Design**: Understanding AT helps you design better interfaces
+- **Compatibility**: Your content must work with various AT
+- **User Experience**: AT users have unique needs and expectations
+
+## Screen Readers
+
+Screen readers are software that reads screen content aloud, allowing blind or low-vision users to navigate and interact with websites.
+
+### How Screen Readers Work
+
+Screen readers interpret the accessibility tree of a web page and announce content to users through speech or braille output.
+
+**Key Features:**
+- Announce page structure (headings, landmarks, lists)
+- Read text content
+- Announce interactive elements and their state
+- Allow navigation by element type
+- Provide shortcuts for common tasks
+- Follow keyboard focus
+- Announce changes to content
+
+### Popular Screen Readers
+
+#### NVDA (Windows, Free)
+
+**Features:**
+- Free and open source
+- Works with Firefox and Chrome
+- Supports braille displays
+- Extensive keyboard shortcuts
+- Active community support
+
+**Testing Tips:**
+- Test with NVDA and Firefox
+- Learn basic NVDA shortcuts
+- Use NVDA's object viewer to inspect accessibility tree
+- Test with different speech rates
+
+#### JAWS (Windows, Commercial)
+
+**Features:**
+- Commercial screen reader
+- Works with Internet Explorer and Edge
+- Advanced features for power users
+- Supports braille displays
+- Comprehensive documentation
+
+**Testing Tips:**
+- Test with JAWS and Internet Explorer/Edge
+- Learn JAWS-specific behaviors
+- Test with different JAWS versions
+- Consider JAWS market share
+
+#### VoiceOver (macOS/iOS, Built-in)
+
+**Features:**
+- Built into macOS and iOS
+- Works with Safari
+- Touch gestures for mobile
+- Rotor for quick navigation
+- Integrated with system accessibility
+
+**Testing Tips:**
+- Test with VoiceOver and Safari
+- Learn VoiceOver gestures
+- Test on both macOS and iOS
+- Use VoiceOver rotor for navigation
+
+#### TalkBack (Android, Built-in)
+
+**Features:**
+- Built into Android
+- Works with Chrome
+- Touch gestures for mobile
+- Explore by touch
+- Integrated with system accessibility
+
+**Testing Tips:**
+- Test with TalkBack and Chrome
+- Learn TalkBack gestures
+- Test on different Android versions
+- Use explore by touch feature
+
+### Screen Reader Navigation Patterns
+
+Screen readers use specific navigation patterns:
+
+**By Element Type:**
+- Headings (H, Shift+H)
+- Links (L, Shift+L)
+- Buttons (B, Shift+B)
+- Form fields (Tab, Shift+Tab)
+- Lists (I, Shift+I)
+
+**By Landmark:**
+- Main (1)
+- Navigation (2)
+- Search (3)
+- Footer (4)
+
+**By Character/Word/Line:**
+- Character (arrows)
+- Word (Ctrl+arrows)
+- Line (arrows)
+- Sentence (Alt+arrows)
+
+### Testing with Screen Readers
+
+**Best Practices:**
+- Test with multiple screen readers
+- Learn basic shortcuts
+- Test keyboard navigation
+- Verify announcements
+- Check reading order
+- Test with different speech rates
+
+**Common Issues:**
+- Missing alt text
+- Improper heading structure
+- Unlabeled form fields
+- Missing landmarks
+- Incorrect reading order
+- Dynamic content not announced
+
+## Screen Magnifiers
+
+Screen magnifiers are software that enlarges portions of the screen for users with low vision.
+
+### How Screen Magnifiers Work
+
+Screen magnifiers zoom in on portions of the screen, making content larger and easier to see.
+
+**Key Features:**
+- Enlarge screen content
+- Follow keyboard focus
+- Provide color inversion and contrast options
+- Allow panning around enlarged content
+- Maintain context with overview window
+- Smooth zoom transitions
+
+### Popular Screen Magnifiers
+
+#### ZoomText (Windows)
+
+**Features:**
+- Commercial magnification software
+- Up to 36x magnification
+- Color enhancement options
+- Speech output available
+- Works with Windows
+
+**Testing Tips:**
+- Test at different zoom levels
+- Verify content remains readable
+- Check for horizontal scrolling
+- Test keyboard navigation
+- Verify focus indicators
+
+#### MAGic (Windows)
+
+**Features:**
+- Commercial magnification software
+- Up to 32x magnification
+- Color enhancement options
+- Speech output available
+- Works with Windows
+
+**Testing Tips:**
+- Test at different zoom levels
+- Verify content remains readable
+- Check for horizontal scrolling
+- Test keyboard navigation
+- Verify focus indicators
+
+#### Built-in Magnifiers
+
+**Windows Magnifier:**
+- Built into Windows
+- Up to 1600% magnification
+- Color inversion options
+- Follows keyboard focus
+- Easy to enable
+
+**macOS Zoom:**
+- Built into macOS
+- Up to 40x magnification
+- Color inversion options
+- Follows keyboard focus
+- Gesture support
+
+**Testing Tips:**
+- Test with built-in magnifiers
+- Test at maximum zoom
+- Verify content remains usable
+- Check for horizontal scrolling
+- Test keyboard navigation
+
+### Testing with Screen Magnifiers
+
+**Best Practices:**
+- Test at different zoom levels (200%, 400%)
+- Verify content remains readable
+- Check for horizontal scrolling
+- Test keyboard navigation
+- Verify focus indicators
+- Test color inversion
+
+**Common Issues:**
+- Horizontal scrolling at high zoom
+- Content overflow
+- Small click targets
+- Poor focus indicators
+- Low contrast
+- Fixed-width layouts
+
+## Alternative Input Devices
+
+Alternative input devices are hardware or software that allow users with motor disabilities to interact with computers.
+
+### Types of Alternative Input Devices
+
+#### On-Screen Keyboards
+
+**Features:**
+- Virtual keyboard on screen
+- Mouse or touch input
+- Word prediction
+- Customizable layouts
+- Works with all applications
+
+**Testing Tips:**
+- Test with on-screen keyboard
+- Verify keyboard accessibility
+- Check for keyboard traps
+- Test form interactions
+- Verify focus management
+
+#### Eye-Tracking Devices
+
+**Features:**
+- Track eye movements
+- Control cursor with eyes
+- Dwell clicking
+- Calibrated for individual users
+- Works with compatible software
+
+**Testing Tips:**
+- Test with eye-tracking simulator
+- Verify large click targets
+- Check for dwell time
+- Test form interactions
+- Verify focus management
+
+#### Switch Devices
+
+**Features:**
+- Single or multiple switches
+- Scanning interfaces
+- Customizable scanning patterns
+- Works with switch-accessible software
+- Can be used with various body parts
+
+**Testing Tips:**
+- Test with switch simulator
+- Verify keyboard accessibility
+- Check for keyboard traps
+- Test form interactions
+- Verify focus management
+
+#### Voice Recognition Software
+
+**Features:**
+- Control computer with voice
+- Dictate text
+- Execute commands
+- Customizable vocabulary
+- Works with compatible software
+
+**Testing Tips:**
+- Test with voice recognition
+- Verify keyboard accessibility
+- Check for keyboard traps
+- Test form interactions
+- Verify focus management
+
+#### Head Pointers
+
+**Features:**
+- Track head movements
+- Control cursor with head
+- Dwell clicking
+- Calibrated for individual users
+- Works with compatible software
+
+**Testing Tips:**
+- Test with head pointer simulator
+- Verify large click targets
+- Check for dwell time
+- Test form interactions
+- Verify focus management
+
+### Testing with Alternative Input Devices
+
+**Best Practices:**
+- Test with multiple input methods
+- Verify keyboard accessibility
+- Ensure large click targets
+- Test form interactions
+- Verify focus management
+- Allow sufficient time for interactions
+
+**Common Issues:**
+- Keyboard traps
+- Small click targets
+- Time limits too short
+- No keyboard alternatives
+- Poor focus management
+- Inaccessible custom controls
+
+## Braille Displays
+
+Braille displays are hardware devices that translate screen content into braille for deaf-blind users.
+
+### How Braille Displays Work
+
+Braille displays work with screen readers to provide tactile output of screen content.
+
+**Key Features:**
+- Display braille characters line by line
+- Allow reading of text content
+- Provide navigation controls
+- Work with screen readers
+- Refreshable braille cells
+- Portable and battery-powered
+
+### Testing with Braille Displays
+
+**Best Practices:**
+- Test with screen reader and braille display
+- Verify text content is readable
+- Check navigation controls
+- Test form interactions
+- Verify announcements
+
+**Common Issues:**
+- Missing alt text
+- Unlabeled form fields
+- Dynamic content not announced
+- Poor heading structure
+- Missing landmarks
+- Incorrect reading order
+
+## Testing with Assistive Technologies
+
+### Comprehensive Testing Strategy
+
+**Test with Multiple AT:**
+- Screen readers (NVDA, JAWS, VoiceOver, TalkBack)
+- Screen magnifiers (ZoomText, MAGic, built-in)
+- Alternative input devices (on-screen keyboard, voice recognition)
+- Braille displays (with screen readers)
+
+**Test on Multiple Platforms:**
+- Windows (NVDA, JAWS, ZoomText)
+- macOS (VoiceOver, Zoom)
+- iOS (VoiceOver)
+- Android (TalkBack)
+
+**Test with Multiple Browsers:**
+- Chrome
+- Firefox
+- Safari
+- Edge
+
+### Testing Checklist
+
+**Screen Reader Testing:**
+- [ ] Test with NVDA and Firefox
+- [ ] Test with JAWS and Edge
+- [ ] Test with VoiceOver and Safari
+- [ ] Test with TalkBack and Chrome
+- [ ] Verify heading structure
+- [ ] Verify landmarks
+- [ ] Check alt text
+- [ ] Test form labels
+- [ ] Verify keyboard navigation
+- [ ] Check announcements
+
+**Screen Magnifier Testing:**
+- [ ] Test at 200% zoom
+- [ ] Test at 400% zoom
+- [ ] Verify no horizontal scrolling
+- [ ] Check focus indicators
+- [ ] Verify content remains readable
+- [ ] Test keyboard navigation
+
+**Alternative Input Testing:**
+- [ ] Test with on-screen keyboard
+- [ ] Verify keyboard accessibility
+- [ ] Check for keyboard traps
+- [ ] Test form interactions
+- [ ] Verify focus management
+- [ ] Allow sufficient time
+
+## Key Takeaways
+
+1. **Diverse Tools**: Users with disabilities use various assistive technologies
+2. **Testing Required**: Test with multiple AT to ensure compatibility
+3. **Platform Specific**: Different AT work on different platforms
+4. **User Preferences**: Users customize AT to their needs
+5. **Continuous Learning**: Stay updated on AT developments
+
+## Related Resources
+
+- [WAI Introduction to Assistive Technologies](https://www.w3.org/WAI/fundamentals/accessibility-intro/#assistive-technologies)
+- [WebAIM Screen Reader User Survey](https://webaim.org/projects/screenreadersurvey/)
+- [NVDA Screen Reader](https://www.nvaccess.org/)
+- [JAWS Screen Reader](https://www.freedomscientific.com/products/software/jaws/)
+- [VoiceOver User Guide](https://www.apple.com/accessibility/voiceover/)

@@ -1,0 +1,99 @@
+---
+title: "Skip Links"
+description: "Implementing skip links to bypass repeated content for keyboard users"
+---
+
+# Skip Links
+
+Skip links allow keyboard users to bypass repeated content like navigation menus and jump directly to main content. They're essential for efficient keyboard navigation.
+
+## Overview
+
+Skip links are hidden links that become visible when they receive keyboard focus. They provide a way for keyboard users to skip over repetitive navigation and go straight to main content.
+
+### Why Skip Links Matter
+
+- **Keyboard Users**: Don't have to tab through entire navigation on every page
+- **Screen Reader Users**: Can quickly jump to main content
+- **Motor Impaired Users**: Reduce the number of keystrokes needed to reach content
+- **All Users**: Provide faster navigation for experienced users
+
+## WCAG Requirements
+
+### Operable
+- **2.4.1 Bypass Blocks**: Provide a mechanism to bypass blocks of content that are repeated on multiple pages
+
+## Topics
+
+### Skip Link Basics
+
+Learn the fundamentals of implementing skip links, including basic HTML structure and CSS for hiding and showing links.
+
+[Learn skip link basics →](./skip-link-basics.mdx)
+
+### Skip Link Variations
+
+Explore advanced implementations including multiple skip links, custom visual designs, and mobile-optimized solutions.
+
+[Explore skip link variations →](./skip-link-variations.mdx)
+
+### Best Practices
+
+Discover common mistakes to avoid and best practices to follow when implementing skip links.
+
+[Learn best practices →](./skip-link-best-practices.mdx)
+
+## Quick Start
+
+### Basic Skip Link
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+## Key Requirements
+
+1. **First Focusable Element**: Skip link must be the first element that can receive keyboard focus
+2. **Target ID Required**: The target element must have an ID that matches the skip link's href
+3. **Descriptive Text**: The skip link text should clearly describe what it does
+4. **Visible on Focus**: The skip link must be visible when it receives keyboard focus
+
+## Related Components
+
+- [Breadcrumb Navigation](./breadcrumb-navigation.mdx) - Hierarchical navigation
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Skip Links](https://www.w3.org/WAI/WCAG21/Techniques/general/G1)
+- [WebAIM Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [MDN HTML Anchor Links](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)

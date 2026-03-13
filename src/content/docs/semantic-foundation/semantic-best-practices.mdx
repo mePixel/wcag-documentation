@@ -1,0 +1,341 @@
+---
+title: "Semantic HTML Best Practices"
+description: "Best practices and common mistakes for using semantic HTML"
+---
+
+# Semantic HTML Best Practices
+
+Following best practices for semantic HTML ensures your content is accessible, maintainable, and SEO-friendly.
+
+## Core Principles
+
+### 1. Choose Elements Based on Meaning
+
+Use elements that describe what content is, not how it should look.
+
+```html
+<!-- Good: Semantic HTML -->
+<button type="button">Submit</button>
+<a href="/about">About</a>
+<h1>Page Title</h1>
+
+<!-- Bad: Non-semantic HTML -->
+<div class="button" onclick="submitForm()">Submit</div>
+<div class="link" onclick="navigate('/about')">About</div>
+<div class="title">Page Title</div>
+```
+
+**Why it matters:**
+- Screen readers understand the purpose of elements
+- Keyboard users get appropriate default behavior
+- Search engines better understand your content
+- Code is more maintainable and easier to debug
+
+### 2. Maintain Proper Hierarchy
+
+Use elements in their proper order and nesting.
+
+```html
+<!-- Good: Proper hierarchy -->
+<h1>Main Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+
+<!-- Bad: Incorrect hierarchy -->
+<h1>Main Title</h1>
+<h3>Subsection Title</h3>
+```
+
+**Why it matters:**
+- Screen readers can navigate by heading levels
+- Content structure is clear and logical
+- SEO benefits from proper heading hierarchy
+- Users can understand content organization
+
+### 3. Provide Complete Information
+
+Ensure all elements have necessary attributes.
+
+```html
+<!-- Good: Complete attributes -->
+<img src="photo.jpg" alt="Sunset over the ocean">
+<label for="email">Email Address</label>
+<input type="email" id="email" required>
+
+<!-- Bad: Missing attributes -->
+<img src="photo.jpg">
+<input type="email" placeholder="Email Address">
+```
+
+**Why it matters:**
+- Screen readers can properly announce elements
+- Forms are accessible and usable
+- Images are understandable to all users
+- Content is complete and functional
+
+### 4. Use Landmarks Appropriately
+
+Use landmark elements to define page structure.
+
+```html
+<!-- Good: Proper landmarks -->
+<header>
+  <nav>
+    <!-- Navigation -->
+  </nav>
+</header>
+
+<main>
+  <article>
+    <!-- Main content -->
+  </article>
+  
+  <aside>
+    <!-- Sidebar content -->
+  </aside>
+</main>
+
+<footer>
+  <!-- Footer content -->
+</footer>
+```
+
+**Why it matters:**
+- Screen readers can navigate by landmarks
+- Users can quickly find specific content areas
+- Page structure is clear and organized
+- Improves overall accessibility
+
+## Common Mistakes
+
+### 1. Using Divs Instead of Semantic Elements
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+<div class="heading">Page Title</div>
+<div class="link" onclick="navigate('/about')">About</div>
+
+<!-- Good: Using semantic elements -->
+<button type="button">Submit</button>
+<h1>Page Title</h1>
+<a href="/about">About</a>
+```
+
+**Why it's a problem:**
+- Screen readers don't understand the purpose
+- Keyboard users don't get default behavior
+- Search engines can't properly index content
+- Code is harder to maintain
+
+### 2. Skipping Heading Levels
+
+```html
+<!-- Bad: Skipping levels -->
+<h1>Title</h1>
+<h3>Subtitle</h3>
+
+<!-- Good: Proper hierarchy -->
+<h1>Title</h1>
+<h2>Subtitle</h2>
+```
+
+**Why it's a problem:**
+- Screen reader users may be confused
+- Content structure is unclear
+- SEO is negatively impacted
+- Users can't navigate properly by headings
+
+### 3. Using Non-Descriptive Link Text
+
+```html
+<!-- Bad: Non-descriptive links -->
+<a href="/about">Click here</a>
+<a href="/products">Read more</a>
+<a href="/contact">Go</a>
+
+<!-- Good: Descriptive links -->
+<a href="/about">Learn about our company</a>
+<a href="/products">View our products</a>
+<a href="/contact">Contact our support team</a>
+```
+
+**Why it's a problem:**
+- Screen reader users can't understand link purpose
+- Links don't make sense out of context
+- Poor user experience for all users
+- SEO is negatively impacted
+
+### 4. Missing Alt Text
+
+```html
+<!-- Bad: No alt text -->
+<img src="chart.png">
+<img src="photo.jpg">
+
+<!-- Good: Descriptive alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+<img src="photo.jpg" alt="Sunset over the ocean">
+```
+
+**Why it's a problem:**
+- Screen reader users can't understand image content
+- Users with slow connections don't know what image is
+- Search engines can't index image content
+- Accessibility is severely compromised
+
+### 5. Using Placeholder as Label
+
+```html
+<!-- Bad: Using placeholder as label -->
+<input type="email" placeholder="Email Address">
+<input type="text" placeholder="Name">
+
+<!-- Good: Using proper labels -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+
+<label for="name">Name</label>
+<input type="text" id="name">
+```
+
+**Why it's a problem:**
+- Screen readers don't announce placeholder as label
+- Form is not accessible
+- Users can't understand what to enter
+- WCAG compliance is violated
+
+### 6. Using Tables for Layout
+
+```html
+<!-- Bad: Using tables for layout -->
+<table>
+  <tr>
+    <td>Navigation</td>
+    <td>Content</td>
+  </tr>
+</table>
+
+<!-- Good: Using CSS for layout -->
+<div class="container">
+  <nav>Navigation</nav>
+  <main>Content</main>
+</div>
+```
+
+**Why it's a problem:**
+- Screen readers announce content as a table
+- Content structure is confusing
+- Not responsive or flexible
+- Poor accessibility and user experience
+
+### 7. Multiple H1 Elements
+
+```html
+<!-- Bad: Multiple h1 elements -->
+<h1>Page Title</h1>
+<h2>Section Title</h2>
+<h1>Another Main Title</h1>
+
+<!-- Good: Single h1 element -->
+<h1>Page Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+```
+
+**Why it's a problem:**
+- Screen reader users can't understand page structure
+- SEO is negatively impacted
+- Content hierarchy is unclear
+- Confusing for all users
+
+### 8. Using Empty Links
+
+```html
+<!-- Bad: Empty link -->
+<a href="/about"></a>
+<a href="/products"><img src="icon.png" alt=""></a>
+
+<!-- Good: With descriptive text -->
+<a href="/about">About Us</a>
+<a href="/products"><img src="icon.png" alt="Products"></a>
+```
+
+**Why it's a problem:**
+- Screen reader users can't understand link purpose
+- Links are not accessible
+- Poor user experience
+- Accessibility is compromised
+
+## Best Practices by Element Type
+
+### Headings
+
+- Use only one `<h1>` per page
+- Don't skip heading levels (h1 → h2 → h3)
+- Use headings to create outline, not for styling
+- Make headings descriptive and meaningful
+
+### Links
+
+- Use descriptive link text
+- Don't use "click here" or "read more"
+- Include `rel="noopener noreferrer"` for external links with `target="_blank"`
+- Ensure link text makes sense out of context
+
+### Images
+
+- Always provide alt text for informative images
+- Use empty alt text (`alt=""`) for decorative images
+- Keep alt text descriptive but concise
+- Don't include "image of" or "picture of" in alt text
+
+### Forms
+
+- Always provide labels for form controls
+- Don't use placeholder text as a substitute for labels
+- Group related form controls with `<fieldset>` and `<legend>`
+- Use appropriate input types for better accessibility
+
+### Tables
+
+- Use tables only for tabular data, not for layout
+- Always include a `<caption>` for tables
+- Use `scope` attribute on header cells
+- Use proper table structure (`<thead>`, `<tbody>`, `<tfoot>`)
+
+### Landmarks
+
+- Use `<main>` for primary content (only one per page)
+- Use `<header>` and `<footer>` for page-level content
+- Use `<nav>` for major navigation blocks
+- Use `<aside>` for tangentially related content
+- Use `<article>` for self-contained content
+- Use `<section>` to group related content
+
+## Testing Semantic HTML
+
+### Automated Testing
+
+Use automated tools to check for semantic HTML issues:
+
+- **WAVE**: Web accessibility evaluation tool
+- **axe DevTools**: Browser extension for accessibility testing
+- **Lighthouse**: Built-in Chrome accessibility audit
+
+### Manual Testing
+
+Test your semantic HTML manually:
+
+1. **Navigate with screen reader**: Verify elements are announced correctly
+2. **Navigate with keyboard**: Verify all interactive elements are accessible
+3. **Check heading structure**: Verify proper heading hierarchy
+4. **Check landmarks**: Verify landmarks are properly used
+5. **Check forms**: Verify all form controls have labels
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Document Structure Elements](./document-structure.mdx) - HTML document structure
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

@@ -1,0 +1,328 @@
+---
+title: "Live Region Best Practices"
+description: "Common mistakes, best practices, and testing checklist for ARIA live regions"
+---
+
+# Live Region Best Practices
+
+Learn common mistakes to avoid and best practices to follow when implementing ARIA live regions.
+
+## Common Mistakes
+
+### 1. Not Using Live Regions
+
+Updating content without live regions means screen reader users won't be notified of changes.
+
+```javascript
+// Bad: Updating content without live region
+function updateStatus(message) {
+  document.getElementById('status').textContent = message;
+}
+
+// Good: Using live region
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.setAttribute('aria-live', 'polite');
+  status.textContent = message;
+}
+```
+
+### 2. Using Wrong Live Region Type
+
+Using assertive for non-critical updates can interrupt users unnecessarily.
+
+```html
+<!-- Bad: Using assertive for non-critical updates -->
+<div aria-live="assertive">
+  Status update
+</div>
+
+<!-- Good: Using polite for status updates -->
+<div aria-live="polite">
+  Status update
+</div>
+```
+
+### 3. Not Setting aria-atomic
+
+Not setting `aria-atomic` can lead to partial announcements that confuse users.
+
+```html
+<!-- Bad: Not setting aria-atomic -->
+<div aria-live="polite">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</div>
+
+<!-- Good: Setting aria-atomic -->
+<div aria-live="polite" aria-atomic="true">
+  <span>Item 1</span>
+  <span>Item 2</span>
+</div>
+```
+
+### 4. Overusing Live Regions
+
+Too many live regions can overwhelm users with announcements.
+
+```html
+<!-- Bad: Too many live regions -->
+<div aria-live="polite">Status 1</div>
+<div aria-live="polite">Status 2</div>
+<div aria-live="polite">Status 3</div>
+
+<!-- Good: Consolidated live region -->
+<div aria-live="polite" aria-atomic="true">
+  <div>Status 1</div>
+  <div>Status 2</div>
+  <div>Status 3</div>
+</div>
+```
+
+### 5. Not Testing with Screen Readers
+
+Assuming live regions work without testing can lead to inaccessible implementations.
+
+### 6. Using Live Regions for Static Content
+
+Live regions are for dynamic content only. Using them for static content is unnecessary.
+
+```html
+<!-- Bad: Live region for static content -->
+<div aria-live="polite">
+  This content never changes.
+</div>
+
+<!-- Good: No live region for static content -->
+<div>
+  This content never changes.
+</div>
+```
+
+### 7. Not Providing Context
+
+Announcements without context can be confusing to users.
+
+```javascript
+// Bad: Unclear message
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = message;
+}
+
+// Good: Clear message with context
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = `Status: ${message}`;
+}
+```
+
+## Best Practices
+
+### 1. Use Appropriate Live Region Type
+
+Choose the right live region type for your use case.
+
+```javascript
+// Good: Using appropriate types
+function showStatus(message) {
+  const status = document.getElementById('status');
+  status.setAttribute('aria-live', 'polite');
+  status.textContent = message;
+}
+
+function showAlert(message) {
+  const alert = document.getElementById('alert');
+  alert.setAttribute('role', 'alert');
+  alert.setAttribute('aria-live', 'assertive');
+  alert.textContent = message;
+}
+```
+
+**Guidelines:**
+- Use `role="alert"` (assertive) for critical errors and warnings
+- Use `role="status"` (polite) for status messages and updates
+- Use `aria-live="polite"` for general updates
+- Use `aria-live="assertive"` sparingly, only for truly critical information
+
+### 2. Set aria-atomic Correctly
+
+Determine if entire region should be announced.
+
+```html
+<!-- Good: Setting aria-atomic appropriately -->
+<!-- For complete updates -->
+<div aria-live="polite" aria-atomic="true">
+  Complete message
+</div>
+
+<!-- For incremental updates -->
+<div aria-live="polite" aria-atomic="false">
+  <div>Item 1</div>
+  <div>Item 2</div>
+</div>
+```
+
+**Guidelines:**
+- Use `aria-atomic="true"` when the entire message should be announced
+- Use `aria-atomic="false"` when only new content should be announced
+- Default is `false` if not specified
+- Consider user experience when choosing
+
+### 3. Test with Screen Readers
+
+Verify announcements work correctly across different screen readers.
+
+**Testing Checklist:**
+- Test with NVDA, JAWS, VoiceOver, and TalkBack
+- Verify announcements are timely
+- Verify announcements are clear
+- Verify announcements don't interrupt unnecessarily
+- Test on different browsers and platforms
+
+### 4. Provide Clear Messages
+
+Ensure messages are descriptive and helpful.
+
+```javascript
+// Good: Clear messages
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = `Status: ${message}`;
+}
+
+// Good: Actionable error messages
+function showError(message) {
+  const error = document.getElementById('error');
+  error.textContent = `Error: ${message}. Please try again.`;
+}
+```
+
+**Guidelines:**
+- Be specific and descriptive
+- Include context when necessary
+- Provide actionable guidance for errors
+- Keep messages concise but complete
+- Use plain language
+
+### 5. Manage Update Frequency
+
+Avoid overwhelming users with too many updates.
+
+```javascript
+// Good: Throttling updates
+let lastUpdate = 0;
+const UPDATE_INTERVAL = 1000;
+
+function updateStatus(message) {
+  const now = Date.now();
+  if (now - lastUpdate < UPDATE_INTERVAL) {
+    return; // Skip update if too recent
+  }
+  
+  const status = document.getElementById('status');
+  status.textContent = message;
+  lastUpdate = now;
+}
+```
+
+**Guidelines:**
+- Throttle rapid updates
+- Consider using `aria-busy` during batch updates
+- Provide controls to pause/resume updates
+- Group related updates together
+
+### 6. Use Semantic Roles
+
+Use semantic roles instead of generic `aria-live` attributes when appropriate.
+
+```html
+<!-- Good: Using semantic roles -->
+<div role="alert">Critical error message</div>
+<div role="status">Status update</div>
+<div role="log">Chat messages</div>
+
+<!-- Acceptable: Using aria-live -->
+<div aria-live="assertive">Critical error message</div>
+<div aria-live="polite">Status update</div>
+```
+
+**Guidelines:**
+- Use `role="alert"` for critical alerts
+- Use `role="status"` for status messages
+- Use `role="log"` for chat or log messages
+- Use `aria-live` when semantic roles don't fit
+
+### 7. Associate with Related Elements
+
+Associate live regions with related elements for better context.
+
+```html
+<!-- Good: Associating error with input -->
+<label for="email">Email:</label>
+<input type="email" id="email" aria-describedby="email-error">
+<div id="email-error" role="alert"></div>
+```
+
+**Guidelines:**
+- Use `aria-describedby` to associate errors with form fields
+- Use `aria-labelledby` to label live regions
+- Provide clear relationships between elements
+- Consider using `aria-controls` for interactive components
+
+## Testing Checklist
+
+### Visual Testing
+
+- [ ] Content updates are visible
+- [ ] Updates are clearly indicated
+- [ ] Multiple updates are handled correctly
+- [ ] Loading states are clear
+- [ ] Error messages are prominent
+- [ ] Success messages are distinguishable
+- [ ] Updates don't disrupt layout
+- [ ] Updates are properly styled
+
+### Screen Reader Testing
+
+- [ ] Updates are announced
+- [ ] Announcements are timely
+- [ ] Announcements are clear
+- [ ] Critical updates interrupt
+- [ ] Non-critical updates wait
+- [ ] Messages include context
+- [ ] Multiple updates are handled correctly
+- [ ] Announcements work across different screen readers
+
+### Keyboard Testing
+
+- [ ] Focus is managed correctly
+- [ ] Updates don't disrupt navigation
+- [ ] Can continue using keyboard
+- [ ] Focus returns appropriately
+- [ ] Tab order is maintained
+- [ ] Focus indicators are visible
+- [ ] Keyboard shortcuts work correctly
+
+### Cross-Browser Testing
+
+- [ ] Works in Chrome
+- [ ] Works in Firefox
+- [ ] Works in Safari
+- [ ] Works in Edge
+- [ ] Works on mobile browsers
+- [ ] Consistent behavior across browsers
+
+### Performance Testing
+
+- [ ] Updates don't cause lag
+- [ ] Multiple updates are handled efficiently
+- [ ] Memory usage is reasonable
+- [ ] No memory leaks from dynamic content
+- [ ] Updates don't block main thread
+
+## Related Resources
+
+- [ARIA Live Regions](https://www.w3.org/WAI/ARIA/apg/practices/live-regions/)
+- [MDN aria-live](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [WebAIM Dynamic Content](https://webaim.org/techniques/aria/)

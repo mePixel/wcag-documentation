@@ -1,0 +1,305 @@
+---
+title: "Breadcrumb Best Practices"
+description: "Common pitfalls, best practices, and testing checklist for breadcrumb navigation"
+---
+
+# Breadcrumb Best Practices
+
+Learn common mistakes to avoid and best practices to follow when implementing breadcrumb navigation.
+
+## Common Pitfalls
+
+### 1. Not Using Semantic HTML
+
+Using non-semantic elements makes breadcrumbs inaccessible.
+
+```html
+<!-- Bad: Non-semantic HTML -->
+<div class="breadcrumb">
+  <span><a href="/">Home</a> / </span>
+  <span><a href="/products">Products</a> / </span>
+  <span>Laptops</span>
+</div>
+
+<!-- Good: Semantic HTML -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 2. Not Indicating Current Page
+
+Failing to indicate the current page confuses users about their location.
+
+```html
+<!-- Bad: No current page indication -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/products/laptops">Laptops</a></li>
+  </ol>
+</nav>
+
+<!-- Good: Current page indicated -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 3. Using Non-Descriptive Link Text
+
+Vague link text doesn't help users understand where links lead.
+
+```html
+<!-- Bad: Non-descriptive links -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Back</a></li>
+    <li><a href="/products">Back</a></li>
+    <li>Current</li>
+  </ol>
+</nav>
+
+<!-- Good: Descriptive links -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 4. Missing ARIA Label
+
+Without an ARIA label, screen readers may not announce the breadcrumb properly.
+
+```html
+<!-- Bad: No ARIA label -->
+<nav>
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+
+<!-- Good: ARIA label provided -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 5. Making Current Page a Link
+
+The current page should not be a clickable link.
+
+```html
+<!-- Bad: Current page is a link -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/products/laptops">Laptops</a></li>
+  </ol>
+</nav>
+
+<!-- Good: Current page is not a link -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+## Best Practices
+
+### 1. Use Semantic HTML
+
+Use `<nav>`, `<ol>`, and `<li>` elements for proper structure.
+
+```html
+<!-- Good: Semantic HTML -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 2. Indicate Current Page
+
+Use `aria-current="page"` for the current page item.
+
+```html
+<!-- Good: Current page indicated -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 3. Provide ARIA Label
+
+Use `aria-label` to describe the navigation.
+
+```html
+<!-- Good: ARIA label provided -->
+<nav aria-label="Breadcrumb">
+  <!-- Breadcrumb content -->
+</nav>
+```
+
+### 4. Use Descriptive Link Text
+
+Make sure each link describes its destination.
+
+```html
+<!-- Good: Descriptive links -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li><a href="/products/electronics">Electronics</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### 5. Use Consistent Separators
+
+Use consistent separator characters between breadcrumb items.
+
+```css
+nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: #666;
+}
+```
+
+### 6. Ensure Sufficient Contrast
+
+Make sure breadcrumb links have good color contrast.
+
+```css
+nav[aria-label="Breadcrumb"] a {
+  color: #005fcc;
+  /* Contrast ratio: 7.5:1 (excellent) */
+}
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: #333;
+  /* Contrast ratio: 12.6:1 (excellent) */
+}
+```
+
+### 7. Make Current Page Visually Distinct
+
+Style the current page item differently from links.
+
+```css
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+}
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+
+- [ ] Can navigate all breadcrumb links using Tab
+- [ ] Can activate links using Enter
+- [ ] Focus indicators are visible
+- [ ] Current page is not focusable
+- [ ] Tab order is logical
+
+### Screen Reader Testing
+
+- [ ] Breadcrumb is announced with label
+- [ ] Hierarchy is clear
+- [ ] Current page is identified
+- [ ] Link purposes are understandable
+- [ ] Works with NVDA
+- [ ] Works with JAWS
+- [ ] Works with VoiceOver
+- [ ] Works with TalkBack
+
+### Visual Testing
+
+- [ ] Breadcrumb is visually organized
+- [ ] Current page is visually indicated
+- [ ] Separators are clear
+- [ ] Color contrast is sufficient
+- [ ] Focus indicators are visible
+- [ ] Works on mobile devices
+- [ ] Works on tablet devices
+
+### Cross-Browser Testing
+
+- [ ] Works in Chrome
+- [ ] Works in Firefox
+- [ ] Works in Safari
+- [ ] Works in Edge
+- [ ] Works on iOS Safari
+- [ ] Works on Android Chrome
+
+### Accessibility Testing
+
+- [ ] Passes WCAG 2.4.1 Bypass Blocks
+- [ ] Passes WCAG 2.4.4 Link Purpose
+- [ ] Passes WCAG 2.4.5 Multiple Ways
+- [ ] Passes WCAG 2.4.6 Headings and Labels
+- [ ] Passes automated accessibility tests
+- [ ] Works with keyboard-only navigation
+- [ ] Works with screen readers
+
+## Common Questions
+
+### Should breadcrumbs be on every page?
+
+No, breadcrumbs should only appear on pages that are part of a hierarchy. They're not needed on the homepage or standalone pages.
+
+### What separator should I use?
+
+Common separators include `/`, `>`, `›`, and `→`. Choose one that fits your design and use it consistently.
+
+### Should the current page be a link?
+
+No, the current page should not be a clickable link. It should be visually distinct and marked with `aria-current="page"`.
+
+### Can I use icons in breadcrumbs?
+
+Yes, you can use icons in breadcrumbs. Just make sure to hide them from screen readers using `aria-hidden="true"`.
+
+### Do breadcrumbs help with SEO?
+
+Yes, breadcrumbs can help with SEO by providing clear site structure and internal linking. Adding Schema.org markup can provide additional SEO benefits.
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Breadcrumb](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)
+- [WebAIM Breadcrumb Navigation](https://webaim.org/techniques/breadcrumb/)
+- [Schema.org BreadcrumbList](https://schema.org/BreadcrumbList)

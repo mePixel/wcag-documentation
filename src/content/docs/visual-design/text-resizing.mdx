@@ -1,0 +1,165 @@
+---
+title: "Text Resizing"
+description: "Implementing flexible text sizing for accessibility"
+---
+
+# Text Resizing
+
+Text resizing allows users to adjust text size to meet their needs. Flexible text sizing is essential for accessibility.
+
+## Overview
+
+WCAG 2.1 Level AA requires that text can be resized up to 200% without loss of content or functionality.
+
+### Why Text Resizing Matters
+
+- **Low Vision Users**: Need larger text to read comfortably
+- **Elderly Users**: Benefit from larger text sizes
+- **Cognitive Users**: May need larger text for better comprehension
+- **All Users**: Benefit from flexible text sizing
+
+## WCAG Requirements
+
+### 1.4.4 Resize Text (Level AA)
+
+Except for captions and images of text, text can be resized without assistive technology up to 200 percent without loss of content or functionality.
+
+### 1.4.10 Reflow (Level AA)
+
+Content can be presented without loss of information or functionality, and without requiring two-dimensional scrolling.
+
+## Implementation Guides
+
+### Text Resizing Units
+
+Learn about using relative units (rem, em, percentage) and fluid typography for flexible text sizing.
+
+**Topics covered:**
+- Using rem units for consistent sizing
+- Using em units for component-based sizing
+- Using percentage units
+- Fluid typography with clamp() and calc()
+- Choosing the right unit for your needs
+
+**Learn more:** [Text Resizing Units](./text-resizing-units.mdx)
+
+### Responsive Text Scaling
+
+Learn about implementing responsive text scaling with media queries and viewport-based sizing.
+
+**Topics covered:**
+- Viewport-based scaling (vw, vh, vmin, vmax)
+- Container-based scaling (cqw, cqh)
+- Text resizing with media queries
+- Component-specific text sizing
+- User preference media queries
+
+**Learn more:** [Responsive Text Scaling](./text-resizing-responsive.mdx)
+
+### Best Practices and Testing
+
+Learn about common mistakes, best practices, and testing for accessible text resizing.
+
+**Topics covered:**
+- Common mistakes to avoid
+- Best practices for text resizing
+- Testing checklist
+- Tools and resources
+- WCAG compliance testing
+
+**Learn more:** [Text Resizing Best Practices](./text-resizing-best-practices.mdx)
+
+## Quick Start
+
+### Basic Implementation
+
+```css
+/* Set root font size */
+html {
+  font-size: 100%;
+}
+
+/* Use relative units */
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+```
+
+### Fluid Typography
+
+```css
+/* Use clamp() for responsive headings */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+```
+
+### Responsive Scaling
+
+```css
+/* Use media queries for breakpoints */
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 120%;
+  }
+}
+```
+
+## Key Principles
+
+### 1. Use Relative Units
+
+Always use relative units (rem, em, percentage) for text sizing to ensure text scales with user preferences.
+
+### 2. Test Text Resizing
+
+Verify content works at 200% text size:
+- Set browser zoom to 200%
+- Verify all text is readable
+- Verify no horizontal scrolling
+- Verify all functionality works
+
+### 3. Ensure Flexible Layouts
+
+Layouts should accommodate text resizing:
+- Use max-width instead of fixed width
+- Use overflow: auto for containers
+- Ensure content doesn't overflow
+- Test at different text sizes
+
+### 4. Respect User Preferences
+
+Honor user's text size preferences:
+- Use 100% as root font size
+- Respect browser zoom settings
+- Use prefers-reduced-motion media query
+- Use prefers-contrast media query
+
+## Related Resources
+
+- [WCAG 2.1 Resize Text](https://www.w3.org/WAI/WCAG21/quickref/#resize-text)
+- [WCAG 2.1 Reflow](https://www.w3.org/WAI/WCAG21/quickref/#reflow)
+- [MDN CSS Units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [WebAIM Font Size](https://webaim.org/techniques/fonts/)

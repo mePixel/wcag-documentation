@@ -1,0 +1,290 @@
+---
+title: "Manual Testing Procedures"
+description: "Step-by-step procedures for manual accessibility testing and common issues found"
+---
+
+# Manual Testing Procedures
+
+Manual accessibility testing requires systematic procedures to ensure comprehensive coverage and accurate identification of issues. This guide provides step-by-step procedures for different types of accessibility testing.
+
+## Overview
+
+Manual testing procedures provide structured approaches to testing accessibility, ensuring consistent and thorough evaluation of web content.
+
+### Why Procedures Matter
+
+- **Consistency**: Ensure testing is thorough and repeatable
+- **Efficiency**: Streamline testing process
+- **Coverage**: Ensure all aspects are tested
+- **Documentation**: Maintain clear records of findings
+
+## Testing Procedures
+
+### Keyboard Navigation Testing
+
+**Step-by-Step Process:**
+
+1. **Open page in a browser**
+   - Launch your preferred browser
+   - Navigate to the page to test
+   - Ensure page loads completely
+
+2. **Press Tab to navigate through page**
+   - Start from top of page
+   - Press Tab repeatedly to navigate
+   - Observe focus movement
+   - Note any issues
+
+3. **Verify focus moves in logical order**
+   - Focus should follow visual order
+   - Check for unexpected focus jumps
+   - Note any focus traps
+   - Document any issues found
+
+4. **Verify all interactive elements receive focus**
+   - All buttons should receive focus
+   - All links should receive focus
+   - All form inputs should receive focus
+   - Note any elements that don't receive focus
+
+5. **Verify focus indicator is clearly visible**
+   - Focus should be clearly visible
+   - Focus indicator should have sufficient contrast
+   - Focus indicator should be consistent
+   - Note any visibility issues
+
+6. **Press Shift+Tab to navigate backwards**
+   - Focus should move in reverse order
+   - Focus should return to previous element
+   - Note any issues with reverse navigation
+
+7. **Test activating elements with Enter/Space**
+   - Buttons should activate with Enter or Space
+   - Links should activate with Enter
+   - Checkboxes/radios should toggle with Space
+   - Note any activation issues
+
+8. **Test form inputs with keyboard**
+   - All form inputs should be fillable
+   - Dropdowns should open/close with keyboard
+   - Textareas should be navigable
+   - Note any form input issues
+
+9. **Test dropdowns with keyboard**
+   - Dropdowns should open with Enter/Space
+   - Options should be navigable with arrows
+   - Selection should be confirmed with Enter
+   - Note any dropdown issues
+
+### Screen Reader Testing
+
+**Step-by-Step Process:**
+
+1. **Launch screen reader**
+   - Open your preferred screen reader
+   - Ensure screen reader is active
+   - Configure settings as needed
+
+2. **Navigate to page**
+   - Use screen reader navigation
+   - Navigate to the page to test
+   - Wait for page to load completely
+
+3. **Listen to page announcement**
+   - Page title should be announced
+   - Page structure should be announced
+   - Note any missing announcements
+
+4. **Navigate using screen reader shortcuts**
+   - Test navigation by headings (H key)
+   - Test navigation by landmarks (1-6 keys)
+   - Test navigation by links (L key)
+   - Note any navigation issues
+
+5. **Verify content is announced correctly**
+   - Headings should be announced with level
+   - Links should be announced with link text
+   - Buttons should be announced with button text
+   - Form labels should be announced
+   - Note any announcement issues
+
+6. **Test navigation by headings**
+   - Use heading navigation shortcut
+   - Verify all headings are announced
+   - Verify heading levels are correct
+   - Note any heading issues
+
+7. **Test navigation by landmarks**
+   - Use landmark navigation shortcut
+   - Verify all landmarks are announced
+   - Verify landmark types are correct
+   - Note any landmark issues
+
+8. **Test form interaction**
+   - Navigate to form fields
+   - Verify labels are announced
+   - Verify error messages are announced
+   - Note any form interaction issues
+
+9. **Test dynamic content**
+   - Trigger dynamic content updates
+   - Verify updates are announced
+   - Verify announcements are timely
+   - Note any dynamic content issues
+
+10. **Verify all functionality works**
+    - Test all interactive elements
+    - Verify all features are accessible
+    - Note any functionality issues
+    - Document all findings
+
+### Color Contrast Testing
+
+**Step-by-Step Process:**
+
+1. **Use color contrast checker tool**
+   - Open contrast checker tool
+   - Enter foreground and background colors
+   - Verify contrast meets WCAG requirements
+   - Note any contrast issues
+
+2. **Test normal text contrast**
+   - Test body text contrast
+   - Test heading text contrast
+   - Test link text contrast
+   - Verify all meet 4.5:1 ratio
+   - Note any contrast failures
+
+3. **Test large text contrast**
+   - Test large text (18pt+) contrast
+   - Verify meets 3:1 ratio
+   - Test UI components with large text
+   - Note any contrast failures
+
+4. **Test UI component contrast**
+   - Test button text contrast
+   - Test form input contrast
+   - Test focus indicator contrast
+   - Verify all meet 3:1 ratio
+   - Note any contrast failures
+
+5. **Test focus indicator contrast**
+   - Test focus indicator visibility
+   - Verify focus indicator has sufficient contrast
+   - Test on different backgrounds
+   - Note any contrast issues
+
+6. **Test error message contrast**
+   - Test error message visibility
+   - Verify error messages have sufficient contrast
+   - Test on different backgrounds
+   - Note any contrast issues
+
+7. **Test link contrast**
+   - Test link visibility
+   - Verify links are distinguishable from text
+   - Test visited link contrast
+   - Note any contrast issues
+
+8. **Verify all meet WCAG requirements**
+   - Ensure all text meets contrast requirements
+   - Document any failures
+   - Note severity of issues
+   - Suggest fixes for failures
+
+### Text Resizing Testing
+
+**Step-by-Step Process:**
+
+1. **Set browser zoom to 200%**
+   - Open browser zoom settings
+   - Set zoom to 200%
+   - Verify page zooms correctly
+
+2. **Verify all text is readable**
+   - Check all text remains readable
+   - Verify text doesn't overlap
+   - Check for text clipping
+   - Note any readability issues
+
+3. **Verify no horizontal scrolling**
+   - Check for horizontal scrollbar
+   - Verify content fits within viewport
+   - Test on different screen sizes
+   - Note any scrolling issues
+
+4. **Verify all content remains visible**
+   - Check for hidden content
+   - Verify no content is cut off
+   - Test all sections of page
+   - Note any visibility issues
+
+5. **Verify all functionality works**
+   - Test all interactive elements
+   - Verify forms still work
+   - Test navigation functionality
+   - Note any functionality issues
+
+6. **Test at different zoom levels**
+   - Test at 150% zoom
+   - Test at 200% zoom
+   - Test at 300% zoom
+   - Note any scaling issues
+
+7. **Verify layout adapts correctly**
+   - Check for layout breaks
+   - Verify content reflows correctly
+   - Test responsive behavior
+   - Note any layout issues
+
+## Common Issues Found
+
+### Keyboard Navigation Issues
+
+| Issue | Description | Fix |
+|-------|-------------|-----|
+| No focus indicator | Interactive elements don't show focus | Add visible focus styles |
+| Focus trap | Cannot navigate out of component | Implement proper focus management |
+| Skip link not working | Skip link doesn't work | Ensure skip link is first focusable element |
+| Custom component not keyboard accessible | Custom component doesn't work with keyboard | Add keyboard event handlers |
+| Incorrect tab order | Focus doesn't follow visual order | Reorganize DOM order or use tabindex |
+
+### Screen Reader Issues
+
+| Issue | Description | Fix |
+|-------|-------------|-----|
+| Missing alt text | Images don't have alt text | Add descriptive alt text |
+| Empty links | Links have no text content | Add link text or aria-label |
+| Missing form labels | Inputs don't have labels | Add associated labels |
+| Heading structure issues | Headings not in logical order | Reorganize heading structure |
+| Missing landmarks | No landmark regions defined | Add ARIA landmarks |
+| Dynamic content not announced | Updates not announced | Add aria-live regions |
+
+### Visual Issues
+
+| Issue | Description | Fix |
+|-------|-------------|-----|
+| Low color contrast | Text doesn't meet contrast requirements | Increase contrast |
+| No focus indicator | Focus not visible | Add visible focus styles |
+| Text overflow | Text overflows container | Implement flexible layout |
+| Layout breaks at 200% | Layout breaks when text resized | Use relative units |
+| Poor heading structure | Headings not in logical order | Reorganize heading hierarchy |
+
+### Form Issues
+
+| Issue | Description | Fix |
+|-------|-------------|-----|
+| Missing labels | Inputs don't have associated labels | Add label elements |
+| No error messages | Validation errors not announced | Add error announcements |
+| Poor error messages | Errors not descriptive | Improve error messages |
+| No validation feedback | Users don't know if input is valid | Add validation feedback |
+| Inaccessible custom controls | Custom form controls not accessible | Use native elements or add ARIA |
+
+## Related Resources
+
+- [Manual Testing Checklists](./manual-testing-checklists.mdx)
+- [Manual Testing Best Practices](./manual-testing-best-practices.mdx)
+- [WAI Evaluation Resources](https://www.w3.org/WAI/test-evaluate/)
+- [WebAIM Evaluation Resources](https://webaim.org/resources/eval/)
+- [NVDA Screen Reader](https://www.nvaccess.org/)
+- [JAWS Screen Reader](https://www.freedomscientific.com/products/software/jaws/)

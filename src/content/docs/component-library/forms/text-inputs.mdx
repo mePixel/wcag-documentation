@@ -1,0 +1,221 @@
+---
+title: "Text Inputs"
+description: "Creating accessible text inputs, email inputs, password inputs, and textareas"
+---
+
+# Text Inputs
+
+Text inputs collect single-line text from users. They are the most common form control and require proper accessibility implementation.
+
+## Overview
+
+Accessible text inputs have clear labels, proper semantic markup, and work seamlessly with assistive technologies.
+
+## Text Inputs
+
+Text inputs collect single-line text from users.
+
+```html
+<div class="form-group">
+  <label for="name">Full Name</label>
+  <input 
+    type="text" 
+    id="name" 
+    name="name"
+    autocomplete="name"
+    aria-describedby="name-help"
+  >
+  <span id="name-help" class="help-text">
+    Enter your first and last name
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `type="text"`: Specifies text input type
+- `id`: Unique identifier for label association
+- `name`: Form submission name
+- `autocomplete`: Helps with auto-fill
+- `aria-describedby`: Associates help text
+
+### Best Practices
+
+- Always provide a label for the input
+- Use `autocomplete` for common fields
+- Provide help text when needed
+- Use appropriate input types (email, tel, url, etc.)
+
+## Email Inputs
+
+Email inputs validate email format and provide appropriate keyboard on mobile devices.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    required
+    autocomplete="email"
+    aria-required="true"
+    aria-invalid="false"
+    aria-describedby="email-help"
+  >
+  <span id="email-help" class="help-text">
+    We'll never share your email
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `type="email"`: Specifies email input type
+- `required`: Indicates field is required
+- `autocomplete="email"`: Helps with auto-fill
+- `aria-required="true"`: Indicates required state to screen readers
+- `aria-invalid="false"`: Indicates current validity state
+
+### Best Practices
+
+- Use `type="email"` for email addresses
+- Provide clear validation feedback
+- Use `autocomplete="email"` for better UX
+- Indicate required fields clearly
+
+## Password Inputs
+
+Password inputs hide text and provide appropriate keyboard on mobile devices.
+
+```html
+<div class="form-group">
+  <label for="password">Password</label>
+  <input 
+    type="password" 
+    id="password" 
+    name="password"
+    required
+    minlength="8"
+    autocomplete="new-password"
+    aria-required="true"
+    aria-describedby="password-help"
+  >
+  <span id="password-help" class="help-text">
+    Must be at least 8 characters
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `type="password"`: Specifies password input type
+- `minlength`: Minimum password length
+- `autocomplete="new-password"`: Helps with password managers
+- `aria-required="true"`: Indicates required state
+
+### Best Practices
+
+- Use `type="password"` for password fields
+- Provide password requirements in help text
+- Use `autocomplete="new-password"` for new passwords
+- Use `autocomplete="current-password"` for existing passwords
+- Consider providing a "show password" toggle
+
+## Textareas
+
+Textareas collect multi-line text from users.
+
+```html
+<div class="form-group">
+  <label for="message">Message</label>
+  <textarea 
+    id="message" 
+    name="message"
+    rows="4"
+    cols="50"
+    aria-describedby="message-help"
+  ></textarea>
+  <span id="message-help" class="help-text">
+    Tell us how we can help
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `rows`: Number of visible text lines
+- `cols`: Visible width in average character widths
+- `aria-describedby`: Associates help text
+
+### Best Practices
+
+- Set appropriate `rows` and `cols` attributes
+- Provide help text for context
+- Consider using `maxlength` to limit input length
+- Ensure textarea is resizable when appropriate
+
+## Common Mistakes
+
+### 1. Using Placeholder Text as Labels
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 2. Missing Labels
+
+```html
+<!-- Bad: No label -->
+<input type="text" name="username">
+
+<!-- Good: With label -->
+<label for="username">Username</label>
+<input type="text" id="username">
+```
+
+### 3. Not Providing Help Text
+
+```html
+<!-- Bad: No help text -->
+<label for="password">Password</label>
+<input type="password" id="password">
+
+<!-- Good: With help text -->
+<label for="password">Password</label>
+<input type="password" id="password" aria-describedby="password-help">
+<span id="password-help" class="help-text">
+  Must be at least 8 characters
+</span>
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to all inputs using Tab
+- [ ] Can type in all inputs
+- [ ] Focus indicators are visible
+
+### Screen Reader Testing
+- [ ] All labels are announced
+- [ ] Required fields are identified
+- [ ] Help text is available
+- [ ] Input type is announced
+
+### Visual Testing
+- [ ] Labels are visually associated with inputs
+- [ ] Required fields are clearly marked
+- [ ] Focus indicators are visible
+- [ ] Color contrast is sufficient
+
+## Related Resources
+
+- [Accessible Inputs Overview](./accessible-inputs.mdx) - Complete accessible inputs guide
+- [Checkboxes and Radios](./checkboxes-radios.mdx) - Checkboxes and radio buttons
+- [Select Dropdowns](./select-dropdowns.mdx) - Select dropdowns
+- [Form Validation](./form-validation.mdx) - Validating input data

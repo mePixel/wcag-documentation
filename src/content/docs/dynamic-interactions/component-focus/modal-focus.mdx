@@ -1,0 +1,297 @@
+---
+title: "Modal Focus Management"
+description: "Managing focus in modal dialogs for accessibility"
+---
+
+# Modal Focus Management
+
+Modal dialogs require special focus management to ensure keyboard users can interact with them effectively and return to their previous context when closed.
+
+## Overview
+
+When a modal opens, focus must:
+1. Move to the modal
+2. Be trapped within the modal
+3. Return to the element that opened it when closed
+
+## Implementation
+
+### HTML Structure
+
+```html
+<!-- Good: Accessible modal -->
+<div id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" style="display: none;">
+  <h2 id="modal-title">Modal Title</h2>
+  <p id="modal-description">Modal description</p>
+  
+  <button id="close-modal">Close</button>
+</div>
+
+<button id="open-modal">Open Modal</button>
+```
+
+**Key Attributes:**
+- `role="dialog"` - Identifies the element as a dialog
+- `aria-modal="true"` - Indicates the modal is modal
+- `aria-labelledby` - References the modal title
+- `aria-describedby` - References the modal description
+
+### JavaScript Implementation
+
+```javascript
+// Modal focus management
+const modal = document.getElementById('modal');
+const openButton = document.getElementById('open-modal');
+const closeButton = document.getElementById('close-modal');
+let previousFocus = null;
+
+function openModal() {
+  previousFocus = document.activeElement;
+  modal.style.display = 'block';
+  modal.setAttribute('aria-hidden', 'false');
+  
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+  
+  trapFocus(modal);
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  element.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  });
+}
+
+openButton.addEventListener('click', openModal);
+closeButton.addEventListener('click', closeModal);
+```
+
+## Focus Trap Implementation
+
+### Understanding Focus Trapping
+
+Focus trapping ensures that when a user presses Tab at the last focusable element in the modal, focus returns to the first focusable element, and vice versa for Shift+Tab.
+
+```javascript
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  element.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        // Shift+Tab: Move to previous element
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        // Tab: Move to next element
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  });
+}
+```
+
+### Removing Focus Trap
+
+When the modal closes, remove the focus trap event listener:
+
+```javascript
+let focusTrapHandler = null;
+
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  focusTrapHandler = (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  };
+
+  element.addEventListener('keydown', focusTrapHandler);
+}
+
+function removeFocusTrap(element) {
+  if (focusTrapHandler) {
+    element.removeEventListener('keydown', focusTrapHandler);
+    focusTrapHandler = null;
+  }
+}
+```
+
+## Focus Restoration
+
+### Storing Previous Focus
+
+Always store the element that had focus before opening the modal:
+
+```javascript
+let previousFocus = null;
+
+function openModal() {
+  previousFocus = document.activeElement;
+  // ... rest of openModal logic
+}
+```
+
+### Restoring Focus
+
+When the modal closes, restore focus to the previously focused element:
+
+```javascript
+function closeModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+### Handling Removed Elements
+
+If the previously focused element was removed from the DOM, provide a fallback:
+
+```javascript
+function closeModal() {
+  modal.style.display = 'none';
+  modal.setAttribute('aria-hidden', 'true');
+  
+  if (previousFocus && document.body.contains(previousFocus)) {
+    previousFocus.focus();
+  } else {
+    // Fallback to the open button
+    openButton.focus();
+  }
+}
+```
+
+## Escape Key Support
+
+Always allow users to close the modal with the Escape key:
+
+```javascript
+modal.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeModal();
+  }
+});
+```
+
+## Common Mistakes
+
+### 1. Not Managing Focus
+
+```javascript
+// Bad: Not managing focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Managing focus
+function openModal(modalId) {
+  previousFocus = document.activeElement;
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+```
+
+### 2. Not Restoring Focus
+
+```javascript
+// Bad: Not restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Good: Restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+### 3. Not Trapping Focus
+
+```javascript
+// Bad: Not trapping focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Trapping focus
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  trapFocus(modal);
+}
+```
+
+## Best Practices
+
+1. **Always trap focus** in modal dialogs
+2. **Always restore focus** to the element that opened the modal
+3. **Support Escape key** for closing the modal
+4. **Move focus to the first focusable element** when opening
+5. **Handle edge cases** like removed elements
+6. **Test with keyboard navigation** to verify focus behavior
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

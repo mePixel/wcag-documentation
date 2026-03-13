@@ -1,0 +1,218 @@
+---
+title: "HTML Techniques"
+description: "Using HTML to meet WCAG 2.1 AA requirements"
+---
+
+# HTML Techniques for WCAG 2.1 AA
+
+This guide covers HTML techniques for meeting WCAG 2.1 Level AA requirements. Using semantic HTML is the foundation of web accessibility and often the most effective way to meet WCAG criteria.
+
+## Overview
+
+HTML provides built-in accessibility features that work with assistive technologies. Using the right HTML elements for the right purpose provides meaning and structure that assistive technologies can understand.
+
+### Key Principles
+
+1. **Use Semantic HTML**: Choose elements based on their meaning, not their appearance
+2. **Follow HTML Specification**: Use elements according to their intended purpose
+3. **Provide Complete Information**: Ensure all elements have necessary attributes
+4. **Maintain Structure**: Use proper nesting and hierarchy
+
+## Technique Categories
+
+### Document Structure
+
+HTML techniques for document structure and metadata.
+
+- [Document Structure Techniques](./document-structure.mdx) - Language declaration, page titles, DOCTYPE, and meta tags
+
+**Key Topics:**
+- Language declaration for screen readers
+- Page titles for navigation
+- Document type declaration
+- Meta tags for accessibility
+
+### Text Alternatives
+
+HTML techniques for providing text alternatives to non-text content.
+
+- [Text Alternatives Techniques](./text-alternatives.mdx) - Alt text for images and other non-text content
+
+**Key Topics:**
+- Image alt text
+- Image buttons
+- Decorative images
+- Complex images
+- SVG graphics
+
+### Forms
+
+HTML techniques for creating accessible forms.
+
+- [Forms Techniques](./forms.mdx) - Form labels, required fields, and validation
+
+**Key Topics:**
+- Form labels and associations
+- Required field indicators
+- Form validation and error messages
+- Fieldset and legend for grouping
+- Appropriate form controls
+
+### Navigation
+
+HTML techniques for accessible navigation.
+
+- [Navigation Techniques](./navigation.mdx) - Skip links, descriptive links, and navigation landmarks
+
+**Key Topics:**
+- Skip links for bypassing repeated content
+- Descriptive link text
+- Navigation landmarks
+- Breadcrumb navigation
+
+### Content Structure
+
+HTML techniques for structuring content with headings, lists, and tables.
+
+- [Content Structure Techniques](./content-structure.mdx) - Headings, lists, tables, and semantic sections
+
+**Key Topics:**
+- Proper heading hierarchy
+- Lists (ordered, unordered, definition)
+- Data tables with headers
+- Semantic sections and articles
+
+## Best Practices
+
+### 1. Use Semantic HTML
+
+Choose elements based on meaning, not appearance:
+
+```html
+<!-- Good: Semantic HTML -->
+<button type="button">Submit</button>
+<a href="/about">About</a>
+<h1>Page Title</h1>
+
+<!-- Bad: Non-semantic HTML -->
+<div onclick="submitForm()">Submit</div>
+<div onclick="navigate('/about')">About</div>
+<div class="title">Page Title</div>
+```
+
+### 2. Provide Complete Information
+
+Ensure all elements have necessary attributes:
+
+```html
+<!-- Good: Complete attributes -->
+<img src="photo.jpg" alt="Sunset over the ocean">
+<input type="email" id="email" name="email" required>
+<a href="/about" aria-label="Learn about our company">About</a>
+
+<!-- Bad: Missing attributes -->
+<img src="photo.jpg">
+<input type="email">
+<a href="/about">About</a>
+```
+
+### 3. Maintain Proper Structure
+
+Ensure proper nesting and hierarchy:
+
+```html
+<!-- Good: Proper structure -->
+<header>
+  <nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <h1>Page Title</h1>
+  <h2>Section Title</h2>
+  <p>Content...</p>
+</main>
+
+<!-- Bad: Improper structure -->
+<div>
+  <nav>
+    <div>
+      <a href="/">Home</a>
+    </div>
+  </nav>
+</div>
+```
+
+### 4. Test with Assistive Technologies
+
+Verify your HTML works with assistive technologies:
+
+- Screen readers (NVDA, JAWS, VoiceOver, TalkBack)
+- Screen magnifiers
+- Voice recognition software
+
+## Common Mistakes
+
+### 1. Using Divs Instead of Semantic Elements
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+
+<!-- Good: Using button element -->
+<button type="button">Submit</button>
+```
+
+### 2. Missing Alt Text
+
+```html
+<!-- Bad: No alt text -->
+<img src="chart.png">
+
+<!-- Good: Descriptive alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+```
+
+### 3. Using Placeholder Text as Labels
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 4. Skipping Heading Levels
+
+```html
+<!-- Bad: Skipping levels -->
+<h1>Title</h1>
+<h3>Subtitle</h3>
+
+<!-- Good: Proper hierarchy -->
+<h1>Title</h1>
+<h2>Subtitle</h2>
+```
+
+## Quick Reference
+
+| Category | Purpose | Key Techniques |
+|-----------|---------|----------------|
+| Document Structure | Page metadata and language | H57, H25 |
+| Text Alternatives | Alt text for images | H37, H36, H67 |
+| Forms | Accessible form controls | H44, H90, G84 |
+| Navigation | Skip links and landmarks | G1, G53 |
+| Content Structure | Headings, lists, tables | H42, H48, H51 |
+
+## Related Resources
+
+- [HTML5 Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
+- [HTML5 Specification](https://html.spec.whatwg.org/)
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [WebAIM HTML Techniques](https://webaim.org/techniques/html/)

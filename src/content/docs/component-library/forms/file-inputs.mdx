@@ -1,0 +1,352 @@
+---
+title: "File Inputs"
+description: "Creating accessible file upload controls"
+---
+
+# File Inputs
+
+File inputs allow users to upload files. They require clear instructions and proper accessibility implementation.
+
+## Overview
+
+Accessible file inputs have clear labels, proper file type restrictions, and provide helpful instructions about file requirements.
+
+## Basic File Input
+
+File inputs allow users to upload files.
+
+```html
+<div class="form-group">
+  <label for="resume">Resume</label>
+  <input 
+    type="file" 
+    id="resume" 
+    name="resume"
+    accept=".pdf,.doc,.docx"
+    aria-describedby="resume-help"
+  >
+  <span id="resume-help" class="help-text">
+    Accepted formats: PDF, DOC, DOCX (max 5MB)
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `type="file"`: Specifies file input type
+- `id`: Unique identifier for label association
+- `name`: Form submission name
+- `accept`: Specifies allowed file types
+- `aria-describedby`: Associates help text
+
+## File Type Restrictions
+
+Use the `accept` attribute to specify allowed file types.
+
+```html
+<!-- Accept specific file types -->
+<input type="file" accept=".pdf,.doc,.docx">
+
+<!-- Accept image files -->
+<input type="file" accept="image/*">
+
+<!-- Accept specific image formats -->
+<input type="file" accept="image/png,image/jpeg,image/gif">
+
+<!-- Accept multiple types -->
+<input type="file" accept=".pdf,.doc,.docx,.txt">
+```
+
+### MIME Types
+
+You can also use MIME types instead of file extensions:
+
+```html
+<!-- Using MIME types -->
+<input type="file" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+```
+
+## Multiple File Upload
+
+Allow users to upload multiple files at once.
+
+```html
+<div class="form-group">
+  <label for="documents">Documents</label>
+  <input 
+    type="file" 
+    id="documents" 
+    name="documents"
+    multiple
+    accept=".pdf,.doc,.docx"
+    aria-describedby="documents-help"
+  >
+  <span id="documents-help" class="help-text">
+    You can upload up to 5 documents at once
+  </span>
+</div>
+```
+
+### Key Attributes
+
+- `multiple`: Allows multiple file selection
+- Consider providing a file count limit
+
+## File Size Limits
+
+Inform users about file size limits.
+
+```html
+<div class="form-group">
+  <label for="photo">Profile Photo</label>
+  <input 
+    type="file" 
+    id="photo" 
+    name="photo"
+    accept="image/*"
+    aria-describedby="photo-help"
+  >
+  <span id="photo-help" class="help-text">
+    Maximum file size: 2MB
+  </span>
+</div>
+```
+
+### Best Practices
+
+- Clearly state file size limits
+- Provide file format requirements
+- Consider client-side validation for file size
+- Provide feedback on upload progress
+
+## File Input with Preview
+
+Show a preview of selected files when appropriate.
+
+```html
+<div class="form-group">
+  <label for="avatar">Avatar</label>
+  <input 
+    type="file" 
+    id="avatar" 
+    name="avatar"
+    accept="image/*"
+    aria-describedby="avatar-help"
+    onchange="previewFile(this)"
+  >
+  <span id="avatar-help" class="help-text">
+    Upload a square image (recommended 200x200px)
+  </span>
+  <div id="avatar-preview" class="file-preview"></div>
+</div>
+
+<script>
+function previewFile(input) {
+  const preview = document.getElementById('avatar-preview');
+  const file = input.files[0];
+  
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.innerHTML = '<img src="' + e.target.result + '" alt="Avatar preview">';
+    };
+    reader.readAsDataURL(file);
+  }
+}
+</script>
+```
+
+## Drag and Drop
+
+Enhance file inputs with drag and drop functionality.
+
+```html
+<div class="form-group">
+  <label for="file-upload">Upload Files</label>
+  <div 
+    id="drop-zone"
+    class="drop-zone"
+    ondrop="handleDrop(event)"
+    ondragover="handleDragOver(event)"
+    ondragleave="handleDragLeave(event)"
+  >
+    <input 
+      type="file" 
+      id="file-upload" 
+      name="file-upload"
+      multiple
+      aria-describedby="file-help"
+    >
+    <p>Drag and drop files here or click to browse</p>
+  </div>
+  <span id="file-help" class="help-text">
+    Accepted formats: PDF, DOC, DOCX (max 10MB each)
+  </span>
+</div>
+
+<style>
+.drop-zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.drop-zone.dragover {
+  background-color: #e0e0e0;
+  border-color: #005fcc;
+}
+</style>
+
+<script>
+function handleDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+  e.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  
+  const files = e.dataTransfer.files;
+  const input = document.getElementById('file-upload');
+  input.files = files;
+}
+</script>
+```
+
+## Common Mistakes
+
+### 1. Not Providing File Requirements
+
+```html
+<!-- Bad: No file requirements -->
+<label for="resume">Resume</label>
+<input type="file" id="resume">
+
+<!-- Good: With file requirements -->
+<label for="resume">Resume</label>
+<input type="file" id="resume" accept=".pdf,.doc,.docx" aria-describedby="resume-help">
+<span id="resume-help" class="help-text">
+  Accepted formats: PDF, DOC, DOCX (max 5MB)
+</span>
+```
+
+### 2. Not Using Accept Attribute
+
+```html
+<!-- Bad: No file type restriction -->
+<input type="file" id="resume">
+
+<!-- Good: With accept attribute -->
+<input type="file" id="resume" accept=".pdf,.doc,.docx">
+```
+
+### 3. Not Providing Help Text
+
+```html
+<!-- Bad: No help text -->
+<label for="photo">Profile Photo</label>
+<input type="file" id="photo">
+
+<!-- Good: With help text -->
+<label for="photo">Profile Photo</label>
+<input type="file" id="photo" aria-describedby="photo-help">
+<span id="photo-help" class="help-text">
+  Maximum file size: 2MB
+</span>
+```
+
+### 4. Not Indicating Multiple File Support
+
+```html
+<!-- Bad: No indication of multiple files -->
+<label for="documents">Documents</label>
+<input type="file" id="documents" multiple>
+
+<!-- Good: With help text -->
+<label for="documents">Documents</label>
+<input type="file" id="documents" multiple aria-describedby="documents-help">
+<span id="documents-help" class="help-text">
+  You can upload up to 5 documents at once
+</span>
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to file input using Tab
+- [ ] Can activate file input using Enter or Space
+- [ ] Focus indicators are visible
+
+### Screen Reader Testing
+- [ ] Label is announced
+- [ ] File type restrictions are announced
+- [ ] Help text is available
+- [ ] Selected files are announced
+
+### Visual Testing
+- [ ] Label is visually associated with input
+- [ ] File requirements are clearly visible
+- [ ] Focus indicator is visible
+- [ ] Drag and drop zone is clearly indicated
+
+## Best Practices
+
+### 1. Specify File Types
+
+Always specify allowed file types using the `accept` attribute.
+
+```html
+<!-- Good: Specifying file types -->
+<input type="file" accept=".pdf,.doc,.docx">
+```
+
+### 2. Provide Clear Instructions
+
+Give users clear instructions about file requirements.
+
+```html
+<!-- Good: Clear instructions -->
+<label for="resume">Resume</label>
+<input type="file" id="resume" accept=".pdf,.doc,.docx" aria-describedby="resume-help">
+<span id="resume-help" class="help-text">
+  Accepted formats: PDF, DOC, DOCX (max 5MB)
+</span>
+```
+
+### 3. Use ARIA for Help Text
+
+Associate help text with the file input using `aria-describedby`.
+
+```html
+<!-- Good: Using aria-describedby -->
+<input type="file" id="resume" aria-describedby="resume-help">
+<span id="resume-help" class="help-text">
+  Accepted formats: PDF, DOC, DOCX (max 5MB)
+</span>
+```
+
+### 4. Consider File Size Limits
+
+Inform users about file size limits and consider client-side validation.
+
+```html
+<!-- Good: File size limit -->
+<label for="photo">Profile Photo</label>
+<input type="file" id="photo" accept="image/*" aria-describedby="photo-help">
+<span id="photo-help" class="help-text">
+  Maximum file size: 2MB
+</span>
+```
+
+## Related Resources
+
+- [Accessible Inputs Overview](./accessible-inputs.mdx) - Complete accessible inputs guide
+- [Text Inputs](./text-inputs.mdx) - Text inputs, email, password, textareas
+- [Checkboxes and Radios](./checkboxes-radios.mdx) - Checkboxes and radio buttons
+- [Form Validation](./form-validation.mdx) - Validating input data

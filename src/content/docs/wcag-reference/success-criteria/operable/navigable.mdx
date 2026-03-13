@@ -1,0 +1,248 @@
+---
+title: "2.4 Navigable"
+description: "WCAG 2.1 AA success criteria for navigable content"
+---
+
+# 2.4 Navigable
+
+Provide ways to help users navigate, find content, and determine where they are.
+
+## 2.4.1 Bypass Blocks (Level A)
+
+**Requirement**: A mechanism is available to bypass blocks of content that are repeated on multiple Web pages.
+
+**Understanding**: Users navigating by keyboard must tab through repeated navigation on every page. Provide a skip link to jump to main content.
+
+**Sufficient Techniques**:
+- **G1**: Adding a link at the top of each page that goes directly to the main content area
+- **H69**: Providing heading elements at the beginning of each section of content
+
+**Example**:
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #000;
+    color: #fff;
+    padding: 8px;
+    z-index: 100;
+  }
+  
+  .skip-link:focus {
+    top: 0;
+  }
+</style>
+```
+
+## 2.4.2 Page Titled (Level A)
+
+**Requirement**: Web pages have titles that describe topic or purpose.
+
+**Understanding**: Page titles help users understand where they are and navigate between pages, especially screen reader users.
+
+**Sufficient Techniques**:
+- **H25**: Providing a title using the title element
+
+**Example**:
+```html
+<head>
+  <title>About Us - Company Name</title>
+</head>
+```
+
+## 2.4.3 Focus Order (Level A)
+
+**Requirement**: If a Web page can be navigated sequentially and the navigation sequences affect meaning or operation, focusable components receive focus in an order that preserves meaning and operability.
+
+**Understanding**: The order in which elements receive focus should match the logical reading order of the page.
+
+**Sufficient Techniques**:
+- **G59**: Placing the interactive elements in an order that follows sequences and relationships within the content
+- **H4**: Creating a logical tab order through links, form controls, and objects
+
+**Example**:
+```html
+<!-- Good: Logical focus order -->
+<form>
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name">
+  
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email">
+  
+  <label for="message">Message</label>
+  <textarea id="message" name="message"></textarea>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Bad: Incorrect tabindex breaks logical order -->
+<form>
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" tabindex="3">
+  
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" tabindex="1">
+  
+  <label for="message">Message</label>
+  <textarea id="message" name="message" tabindex="2"></textarea>
+  
+  <button type="submit" tabindex="4">Submit</button>
+</form>
+```
+
+## 2.4.4 Link Purpose (In Context) (Level A)
+
+**Requirement**: The purpose of each link can be determined from the link text alone or from the link text together with its programmatically determined link context, except where the purpose of the link would be ambiguous to users in general.
+
+**Understanding**: Link text should be descriptive enough to understand the destination without additional context.
+
+**Sufficient Techniques**:
+- **G53**: Using the link text to describe the purpose of a link
+- **H30**: Providing link text that describes the purpose of a link for anchor elements
+
+**Example**:
+```html
+<!-- Bad: Non-descriptive link text -->
+<a href="/about">Click here</a> to learn about our company.
+<a href="/article">Read more</a>
+
+<!-- Good: Descriptive link text -->
+<a href="/about">Learn about our company</a>
+<a href="/article">Read the full article about accessibility</a>
+
+<!-- For icon links, add aria-label -->
+<a href="/settings" aria-label="Settings">
+  <svg aria-hidden="true">...</svg>
+</a>
+```
+
+## 2.4.5 Multiple Ways (Level AA)
+
+**Requirement**: More than one way is available to locate a Web page within a set of Web pages except where the Web page is the result of, or a step in, a process.
+
+**Understanding**: Provide multiple navigation methods to help users find content.
+
+**Sufficient Techniques**:
+- **G63**: Providing a site map
+- **G64**: Providing a Table of Contents
+- **G125**: Providing links to navigate to related Web pages
+
+**Example**:
+```html
+<!-- Provide multiple navigation methods -->
+<header>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<aside>
+  <nav aria-label="Site map">
+    <h2>Site Map</h2>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<footer>
+  <nav aria-label="Footer navigation">
+    <a href="/sitemap">Full Site Map</a>
+    <a href="/search">Search</a>
+  </nav>
+</footer>
+```
+
+## 2.4.6 Headings and Labels (Level AA)
+
+**Requirement**: Headings and labels describe topic or purpose.
+
+**Understanding**: Headings and labels should be descriptive and help users understand the content structure.
+
+**Sufficient Techniques**:
+- **G130**: Providing descriptive headings
+- **G131**: Providing descriptive labels
+
+**Example**:
+```html
+<!-- Good: Descriptive headings -->
+<h1>Annual Sales Report 2024</h1>
+<h2>Q1 Performance</h2>
+<h2>Q2 Performance</h2>
+
+<!-- Good: Descriptive labels -->
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email">
+
+<!-- Bad: Non-descriptive headings -->
+<h1>Report</h1>
+<h2>Section 1</h2>
+<h2>Section 2</h2>
+```
+
+## 2.4.7 Focus Visible (Level AA)
+
+**Requirement**: Any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.
+
+**Understanding**: Users navigating by keyboard need to see which element has focus. Ensure focus indicators are visible.
+
+**Sufficient Techniques**:
+- **G165**: Using the default focus indicator for the platform so that high visibility default focus indicators will be used
+- **G195**: Using an author-supplied, highly visible focus indicator
+
+**Example**:
+```css
+/* Good: Visible focus indicator */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Bad: Hiding focus indicator */
+button:focus {
+  outline: none;
+}
+
+/* Alternative: Custom focus indicator */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #005fcc;
+}
+```
+
+## Related Resources
+
+- [WCAG 2.1 Navigable Guidelines](https://www.w3.org/WAI/WCAG21/quickref/#navigable)
+- [Understanding Navigable](https://www.w3.org/WAI/WCAG21/Understanding/navigable)
+- [Navigable Techniques](https://www.w3.org/WAI/WCAG21/Techniques/#navigable)

@@ -1,0 +1,238 @@
+---
+title: "Manual Testing Checklists"
+description: "Comprehensive checklists for manual accessibility testing including keyboard, screen reader, visual, form, image, and dynamic content testing"
+---
+
+# Manual Testing Checklists
+
+Manual accessibility testing involves human inspection and interaction with web content to identify issues that require judgment or cannot be detected by automated tools. These checklists provide comprehensive coverage for manual testing.
+
+## Overview
+
+Manual testing is essential for detecting accessibility issues that automated tools cannot identify. Human testers can understand context, evaluate user experience, and detect complex issues that require judgment.
+
+### Why Manual Testing Matters
+
+- **Context Understanding**: Humans can understand context and appropriateness
+- **User Experience**: Test from user perspective
+- **Complex Issues**: Detect issues automated tools miss
+- **Quality Assurance**: Ensure comprehensive coverage
+
+## Keyboard Navigation Checklist
+
+### Basic Navigation
+
+- [ ] Can navigate entire page using Tab key
+- [ ] Focus moves in logical order
+- [ ] All interactive elements receive focus
+- [ ] Focus indicator is clearly visible
+- [ ] Can navigate backwards using Shift+Tab
+
+### Interactive Elements
+
+- [ ] Buttons can be activated with Enter/Space
+- [ ] Links can be activated with Enter
+- [ ] Form inputs can be filled using keyboard
+- [ ] Dropdowns can be opened/closed with keyboard
+- [ ] Checkboxes/radios can be toggled with Space
+
+### Focus Management
+
+- [ ] Focus is trapped in modals
+- [ ] Focus returns to triggering element after closing
+- [ ] Focus moves to new content when revealed
+- [ ] Focus is not lost during interactions
+- [ ] Focus order matches visual order
+
+### Keyboard Shortcuts
+
+- [ ] Custom keyboard shortcuts are documented
+- [ ] Keyboard shortcuts don't conflict with browser shortcuts
+- [ ] Keyboard shortcuts can be disabled
+- [ ] Keyboard shortcuts work consistently
+
+## Screen Reader Testing Checklist
+
+### NVDA (Windows)
+
+- [ ] Page title is announced
+- [ ] Headings are announced correctly
+- [ ] Links are announced with link text
+- [ ] Buttons are announced with button text
+- [ ] Form labels are announced
+- [ ] Error messages are announced
+- [ ] Dynamic content updates are announced
+- [ ] Lists are announced correctly
+- [ ] Tables are announced correctly
+- [ ] ARIA landmarks are announced
+
+### JAWS (Windows)
+
+- [ ] Page title is announced
+- [ ] Headings are announced correctly
+- [ ] Links are announced with link text
+- [ ] Buttons are announced with button text
+- [ ] Form labels are announced
+- [ ] Error messages are announced
+- [ ] Dynamic content updates are announced
+- [ ] Lists are announced correctly
+- [ ] Tables are announced correctly
+- [ ] ARIA landmarks are announced
+
+### VoiceOver (macOS/iOS)
+
+- [ ] Page title is announced
+- [ ] Headings are announced correctly
+- [ ] Links are announced with link text
+- [ ] Buttons are announced with button text
+- [ ] Form labels are announced
+- [ ] Error messages are announced
+- [ ] Dynamic content updates are announced
+- [ ] Lists are announced correctly
+- [ ] Tables are announced correctly
+- [ ] ARIA landmarks are announced
+
+### TalkBack (Android)
+
+- [ ] Page title is announced
+- [ ] Headings are announced correctly
+- [ ] Links are announced with link text
+- [ ] Buttons are announced with button text
+- [ ] Form labels are announced
+- [ ] Error messages are announced
+- [ ] Dynamic content updates are announced
+- [ ] Lists are announced correctly
+- [ ] Tables are announced correctly
+- [ ] ARIA landmarks are announced
+
+## Visual Testing Checklist
+
+### Color Contrast
+
+- [ ] Normal text meets 4.5:1 contrast ratio
+- [ ] Large text (18pt+) meets 3:1 contrast ratio
+- [ ] UI components meet 3:1 contrast ratio
+- [ ] Focus indicators have sufficient contrast
+- [ ] Error messages have sufficient contrast
+- [ ] Links are distinguishable from text
+
+### Text Resizing
+
+- [ ] Text can be resized to 200%
+- [ ] No horizontal scrolling at 200%
+- [ ] All content remains visible at 200%
+- [ ] All functionality works at 200%
+- [ ] Layout adapts to text resizing
+
+### Focus Indicators
+
+- [ ] Focus indicator appears on all interactive elements
+- [ ] Focus indicator is clearly visible
+- [ ] Focus indicator has sufficient contrast
+- [ ] Focus indicator is distinguishable from non-focused state
+- [ ] Focus indicator works on all interactive elements
+
+### Layout and Structure
+
+- [ ] Page has logical heading structure
+- [ ] Content is organized logically
+- [ ] Layout is responsive
+- [ ] Content is readable
+- [ ] Images are appropriate size
+
+## Form Testing Checklist
+
+### Form Labels
+
+- [ ] All inputs have associated labels
+- [ ] Labels are descriptive
+- [ ] Required fields are indicated
+- [ ] Instructions are clear
+- [ ] Error messages are associated with inputs
+
+### Form Validation
+
+- [ ] Validation errors are announced
+- [ ] Error messages are descriptive
+- [ ] Error messages indicate location
+- [ ] Success messages are announced
+- [ ] Validation happens at appropriate time
+
+### Form Submission
+
+- [ ] Form can be submitted with keyboard
+- [ ] Submit button is clearly labeled
+- [ ] Form submission is announced
+- [ ] Confirmation is provided
+- [ ] Form can be resubmitted if needed
+
+## Image Testing Checklist
+
+### Alt Text
+
+- [ ] All images have alt text
+- [ ] Alt text is descriptive
+- [ ] Decorative images have empty alt text
+- [ ] Complex images have long descriptions
+- [ ] Alt text is appropriate for context
+
+### Image Quality
+
+- [ ] Images are clear and readable
+- [ ] Images are appropriate size
+- [ ] Images load quickly
+- [ ] Images don't interfere with text
+- [ ] Images are accessible
+
+## Dynamic Content Testing Checklist
+
+### Content Updates
+
+- [ ] Dynamic content updates are announced
+- [ ] Updates are announced at appropriate time
+- [ ] Updates are clear and descriptive
+- [ ] Multiple updates are handled correctly
+- [ ] Updates don't interrupt unnecessarily
+
+### Live Regions
+
+- [ ] Live regions are used appropriately
+- [ ] Live region type is correct
+- [ ] Live region announcements are timely
+- [ ] Live region announcements are clear
+- [ ] Live regions don't over-announce
+
+## Testing Checklist Summary
+
+### Before Testing
+
+- [ ] Understand testing objectives
+- [ ] Prepare testing environment
+- [ ] Gather testing tools
+- [ ] Review WCAG requirements
+- [ ] Plan testing approach
+
+### During Testing
+
+- [ ] Follow testing procedures
+- [ ] Document all findings
+- [ ] Take screenshots/videos
+- [ ] Note severity of issues
+- [ ] Suggest fixes
+
+### After Testing
+
+- [ ] Compile test report
+- [ ] Prioritize issues
+- [ ] Share findings with team
+- [ ] Plan fixes
+- [ ] Schedule re-testing
+
+## Related Resources
+
+- [Manual Testing Procedures](./manual-testing-procedures.mdx)
+- [Manual Testing Best Practices](./manual-testing-best-practices.mdx)
+- [WAI Evaluation Resources](https://www.w3.org/WAI/test-evaluate/)
+- [WebAIM Evaluation Resources](https://webaim.org/resources/eval/)
+- [NVDA Screen Reader](https://www.nvaccess.org/)
+- [JAWS Screen Reader](https://www.freedomscientific.com/products/software/jaws/)

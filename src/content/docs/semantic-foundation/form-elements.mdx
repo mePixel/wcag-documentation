@@ -1,0 +1,413 @@
+---
+title: "Form Elements"
+description: "HTML elements for creating accessible forms"
+---
+
+# Form Elements
+
+Form elements enable users to input and submit data. Proper form structure is essential for accessibility.
+
+## Form (form)
+
+The `<form>` element contains form controls and defines how data is submitted.
+
+```html
+<form action="/submit" method="post">
+  <!-- Form controls -->
+</form>
+```
+
+### Key Attributes
+
+- `action`: URL where form data is sent
+- `method`: HTTP method for submitting form (`get` or `post`)
+- `enctype`: Encoding type for form data
+- `autocomplete`: Enables or disables autocomplete
+- `novalidate`: Disables browser validation
+
+### Best Practices
+
+- Use appropriate `method` attribute (`get` for search, `post` for data submission)
+- Provide clear submit and cancel buttons
+- Ensure form has a clear purpose
+- Use semantic form elements
+
+## Label (label)
+
+The `<label>` element associates text with a form control, making it accessible.
+
+### Explicit Labeling
+
+Use the `for` attribute to associate a label with a form control.
+
+```html
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email">
+```
+
+The `for` attribute value must match the `id` attribute of the form control.
+
+### Implicit Labeling
+
+Wrap the form control within the label element.
+
+```html
+<label>
+  Email Address
+  <input type="email" name="email">
+</label>
+```
+
+### Why Labels Matter
+
+- **Screen Reader Users**: Hear the label when focusing on the form control
+- **Keyboard Users**: Can click the label to focus the form control
+- **All Users**: Benefit from clear, descriptive labels
+- **WCAG Compliance**: Required for accessibility
+
+### Best Practices
+
+- Always provide labels for form controls
+- Make labels descriptive and clear
+- Place labels close to their associated controls
+- Don't use placeholder text as a substitute for labels
+
+```html
+<!-- Good: With labels -->
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email">
+
+<!-- Bad: Using placeholder as label -->
+<input type="email" placeholder="Email Address">
+```
+
+## Input (input)
+
+The `<input>` element creates various form controls.
+
+### Input Types
+
+#### Text Input
+
+```html
+<input type="text" name="username" id="username">
+```
+
+#### Email Input
+
+```html
+<input type="email" name="email" id="email">
+```
+
+#### Password Input
+
+```html
+<input type="password" name="password" id="password">
+```
+
+#### Number Input
+
+```html
+<input type="number" name="age" id="age" min="0" max="120">
+```
+
+#### Date Input
+
+```html
+<input type="date" name="birthdate" id="birthdate">
+```
+
+#### Checkbox
+
+```html
+<input type="checkbox" name="subscribe" id="subscribe">
+<label for="subscribe">Subscribe to newsletter</label>
+```
+
+#### Radio Button
+
+```html
+<input type="radio" name="preference" id="pref1" value="option1">
+<label for="pref1">Option 1</label>
+
+<input type="radio" name="preference" id="pref2" value="option2">
+<label for="pref2">Option 2</label>
+```
+
+#### File Input
+
+```html
+<input type="file" name="file" id="file">
+```
+
+#### Search Input
+
+```html
+<input type="search" name="search" id="search">
+```
+
+### Input Attributes
+
+#### Required
+
+```html
+<input type="email" id="email" required>
+```
+
+Indicates that the field must be filled out before submitting the form.
+
+#### Placeholder
+
+```html
+<input type="text" id="name" placeholder="Enter your name">
+```
+
+Provides a hint about what to enter. **Note:** Placeholder is not a substitute for a label.
+
+#### Autocomplete
+
+```html
+<input type="email" id="email" autocomplete="email">
+```
+
+Enables browser autocomplete for the field.
+
+#### Pattern
+
+```html
+<input type="text" id="zip" pattern="[0-9]{5}" title="5-digit zip code">
+```
+
+Specifies a regular expression that the input value must match.
+
+#### Min and Max
+
+```html
+<input type="number" id="age" min="0" max="120">
+```
+
+Specifies minimum and maximum values for numeric inputs.
+
+#### Step
+
+```html
+<input type="number" id="quantity" min="0" max="100" step="1">
+```
+
+Specifies the legal number intervals for numeric inputs.
+
+### Best Practices
+
+- Use appropriate input types for better accessibility and mobile support
+- Always provide labels for inputs
+- Use `required` attribute for required fields
+- Provide helpful placeholder text (in addition to labels)
+- Use `autocomplete` for common fields
+- Provide validation feedback
+
+## Button (button)
+
+The `<button>` element creates clickable buttons.
+
+### Button Types
+
+```html
+<button type="button">Cancel</button>
+<button type="submit">Submit</button>
+<button type="reset">Reset</button>
+```
+
+- `type="button"`: Standard button with no default behavior
+- `type="submit"`: Submits the form
+- `type="reset"`: Resets the form to default values
+
+### Best Practices
+
+- Always specify the `type` attribute
+- Use descriptive button text
+- Use `<button>` instead of `<input type="button">`
+- Ensure buttons are keyboard accessible
+
+```html
+<!-- Good: Using button element -->
+<button type="submit">Submit Form</button>
+
+<!-- Bad: Using input element -->
+<input type="submit" value="Submit Form">
+```
+
+## Fieldset and Legend
+
+The `<fieldset>` and `<legend>` elements group related form controls.
+
+### Grouping Form Controls
+
+```html
+<fieldset>
+  <legend>Contact Information</legend>
+  
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name">
+  
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email">
+  
+  <label for="phone">Phone</label>
+  <input type="tel" id="phone" name="phone">
+</fieldset>
+```
+
+### Why Fieldset and Legend Matter
+
+- **Screen Reader Users**: Hear the legend when entering the fieldset
+- **All Users**: Benefit from clear grouping of related controls
+- **Accessibility**: Required for grouping radio buttons and checkboxes
+
+### Best Practices
+
+- Use `<fieldset>` to group related form controls
+- Use `<legend>` to provide a caption for the group
+- Group radio buttons and checkboxes with fieldset
+- Keep legends concise and descriptive
+
+```html
+<!-- Good: Grouping radio buttons -->
+<fieldset>
+  <legend>Preferred Contact Method</legend>
+  
+  <input type="radio" name="contact" id="email" value="email">
+  <label for="email">Email</label>
+  
+  <input type="radio" name="contact" id="phone" value="phone">
+  <label for="phone">Phone</label>
+  
+  <input type="radio" name="contact" id="mail" value="mail">
+  <label for="mail">Mail</label>
+</fieldset>
+
+<!-- Bad: Not grouping radio buttons -->
+<input type="radio" name="contact" id="email" value="email">
+<label for="email">Email</label>
+
+<input type="radio" name="contact" id="phone" value="phone">
+<label for="phone">Phone</label>
+
+<input type="radio" name="contact" id="mail" value="mail">
+<label for="mail">Mail</label>
+```
+
+## Select (select)
+
+The `<select>` element creates a dropdown list.
+
+```html
+<label for="country">Country</label>
+<select id="country" name="country">
+  <option value="">Select a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+</select>
+```
+
+### Best Practices
+
+- Always provide a label for select elements
+- Include a default option (often with empty value)
+- Use descriptive option text
+- Consider using `<optgroup>` for long lists
+
+```html
+<!-- Good: With optgroups -->
+<label for="state">State</label>
+<select id="state" name="state">
+  <option value="">Select a state</option>
+  <optgroup label="East Coast">
+    <option value="ny">New York</option>
+    <option value="ma">Massachusetts</option>
+  </optgroup>
+  <optgroup label="West Coast">
+    <option value="ca">California</option>
+    <option value="wa">Washington</option>
+  </optgroup>
+</select>
+```
+
+## Textarea (textarea)
+
+The `<textarea>` element creates a multi-line text input.
+
+```html
+<label for="message">Message</label>
+<textarea id="message" name="message" rows="5" cols="40"></textarea>
+```
+
+### Key Attributes
+
+- `rows`: Number of visible text lines
+- `cols`: Visible width in average character widths
+- `maxlength`: Maximum number of characters allowed
+- `placeholder`: Hint about what to enter
+
+### Best Practices
+
+- Always provide a label for textarea elements
+- Set appropriate `rows` and `cols` attributes
+- Use `maxlength` to limit input length if necessary
+- Provide helpful placeholder text
+
+## Common Mistakes
+
+### 1. Missing Labels
+
+```html
+<!-- Bad: No label -->
+<input type="email" id="email">
+
+<!-- Good: With label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 2. Using Placeholder as Label
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: With label -->
+<label for="email">Email Address</label>
+<input type="email" id="email" placeholder="example@domain.com">
+```
+
+### 3. Not Grouping Radio Buttons
+
+```html
+<!-- Bad: Not grouping -->
+<input type="radio" name="contact" id="email" value="email">
+<label for="email">Email</label>
+
+<!-- Good: Grouping with fieldset -->
+<fieldset>
+  <legend>Contact Method</legend>
+  <input type="radio" name="contact" id="email" value="email">
+  <label for="email">Email</label>
+</fieldset>
+```
+
+### 4. Using Divs Instead of Buttons
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+
+<!-- Good: Using button element -->
+<button type="submit">Submit</button>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Links and Navigation Elements](./links-navigation.mdx) - Links and navigation
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

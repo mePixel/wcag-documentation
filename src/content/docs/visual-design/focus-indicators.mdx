@@ -1,0 +1,298 @@
+---
+title: "Focus Indicators"
+description: "Creating visible focus indicators for keyboard navigation"
+---
+
+# Focus Indicators
+
+Focus indicators show keyboard users which element currently has focus. Visible focus indicators are essential for keyboard accessibility.
+
+## Overview
+
+WCAG 2.1 Level AA requires that any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.
+
+### Why Focus Indicators Matter
+
+- **Keyboard Users**: Need to see which element has focus
+- **Screen Reader Users**: Benefit from visual confirmation of focus
+- **Motor Impaired Users**: Rely on keyboard navigation
+- **All Users**: Benefit from clear visual feedback
+
+## WCAG Requirements
+
+### 2.4.7 Focus Visible (Level AA)
+
+Any keyboard operable user interface has a mode of operation where the keyboard focus indicator is visible.
+
+## Implementation Patterns
+
+### Basic Focus Indicator
+
+```css
+/* Good: Visible focus indicator */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### Custom Focus Indicator
+
+```css
+/* Good: Custom focus indicator */
+button:focus,
+a:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #005fcc;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### Focus with Background Change
+
+```css
+/* Good: Focus with background change */
+button:focus,
+a:focus {
+  background-color: #e6f0ff;
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### Focus with Text Change
+
+```css
+/* Good: Focus with text change */
+button:focus,
+a:focus {
+  color: #005fcc;
+  text-decoration: underline;
+}
+```
+
+## Focus-Visible Pseudo-Class
+
+The `:focus-visible` pseudo-class matches elements that have focus and should have a visible focus indicator.
+
+```css
+/* Only show focus indicator for keyboard navigation */
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Component-Specific Focus
+
+### Buttons
+
+```css
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.3);
+}
+```
+
+### Links
+
+```css
+a:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  text-decoration: underline;
+}
+```
+
+### Form Inputs
+
+```css
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.3);
+}
+```
+
+### Custom Components
+
+```css
+.custom-button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+.custom-button:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  background-color: #e6f0ff;
+}
+```
+
+## Common Mistakes
+
+### 1. Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+button:focus,
+a:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+button:focus,
+a:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### 2. Insufficient Contrast
+
+```css
+/* Bad: Low contrast focus */
+button:focus {
+  outline: 1px solid #cccccc;
+}
+
+/* Good: Sufficient contrast focus */
+button:focus {
+  outline: 3px solid #005fcc;
+}
+```
+
+### 3. Focus Indicator Too Subtle
+
+```css
+/* Bad: Too subtle */
+button:focus {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* Good: Clearly visible */
+button:focus {
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.3);
+}
+```
+
+### 4. Not Testing All Interactive Elements
+
+```css
+/* Bad: Only styling buttons */
+button:focus {
+  outline: 3px solid #005fcc;
+}
+
+/* Good: Styling all interactive elements */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+}
+```
+
+## Best Practices
+
+### 1. Make Focus Indicators Clearly Visible
+
+Ensure focus indicators are easily seen.
+
+```css
+/* Good: Clearly visible */
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.3);
+}
+```
+
+### 2. Ensure Sufficient Contrast
+
+Focus indicators must have good contrast with background.
+
+```css
+/* Good: Sufficient contrast */
+button:focus {
+  outline: 3px solid #005fcc;
+  /* Contrast ratio: 4.5:1 (excellent) */
+}
+```
+
+### 3. Use Multiple Indicators
+
+Combine outline with other visual changes.
+
+```css
+/* Good: Multiple indicators */
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+  background-color: #e6f0ff;
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.3);
+}
+```
+
+### 4. Test with Keyboard Navigation
+
+Verify focus indicators work with Tab key.
+
+- Press Tab to navigate through page
+- Verify focus indicator appears on each element
+- Verify focus indicator is clearly visible
+- Verify focus order is logical
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Focus indicator appears on all interactive elements
+- [ ] Focus indicator is clearly visible
+- [ ] Focus indicator has sufficient contrast
+- [ ] Focus indicator is distinguishable from non-focused state
+- [ ] Focus indicator works on all interactive elements
+
+### Keyboard Testing
+- [ ] Can navigate all elements using Tab
+- [ ] Focus indicator appears on each element
+- [ ] Focus indicator is clearly visible
+- [ ] Focus order is logical
+- [ ] Can activate elements using Enter/Space
+
+### Screen Reader Testing
+- [ ] Focus is announced correctly
+- [ ] Focus indicator is visible when screen reader focus changes
+- [ ] Can navigate using screen reader shortcuts
+
+## Related Resources
+
+- [WCAG 2.1 Focus Visible](https://www.w3.org/WAI/WCAG21/quickref/#focus-visible)
+- [MDN :focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible)
+- [WebAIM Keyboard Accessibility](https://webaim.org/techniques/keyboard/)

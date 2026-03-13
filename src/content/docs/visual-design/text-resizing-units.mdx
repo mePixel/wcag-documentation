@@ -1,0 +1,383 @@
+---
+title: "Text Resizing Units"
+description: "Using relative units for flexible text sizing - em, rem, and fluid typography"
+---
+
+# Text Resizing Units
+
+Using relative units for text sizing is essential for accessibility. Relative units allow text to scale based on user preferences and browser settings.
+
+## Overview
+
+WCAG 2.1 Level AA requires that text can be resized up to 200% without loss of content or functionality. Using relative units ensures your text scales appropriately.
+
+### Why Relative Units Matter
+
+- **User Control**: Users can adjust text size in browser settings
+- **Browser Zoom**: Text scales correctly when users zoom the page
+- **Accessibility**: Essential for users with low vision
+- **Responsive Design**: Text adapts to different screen sizes
+
+## Using Relative Units
+
+### rem Units
+
+`rem` (root em) units are relative to the root element's font size (typically the `<html>` element).
+
+```css
+/* Good: Using rem units */
+html {
+  font-size: 100%; /* 16px default */
+}
+
+body {
+  font-size: 1rem; /* Inherits from html */
+}
+
+h1 {
+  font-size: 2rem; /* 32px at default */
+}
+
+p {
+  font-size: 1rem; /* 16px at default */
+}
+```
+
+**Benefits of rem:**
+- Consistent sizing across the document
+- Easy to calculate (1rem = root font size)
+- Doesn't compound like em units
+- Works well with browser zoom
+
+### em Units
+
+`em` units are relative to the parent element's font size.
+
+```css
+/* Good: Using em units */
+body {
+  font-size: 1em; /* Inherits from browser default */
+}
+
+h1 {
+  font-size: 2em; /* 2x body font size */
+}
+
+p {
+  font-size: 1em; /* Same as body */
+}
+```
+
+**Benefits of em:**
+- Scales with parent element
+- Useful for component-based sizing
+- Good for maintaining proportions
+
+**Caution with em:**
+- Can compound (nested elements multiply)
+- Requires careful planning
+- May be harder to predict final size
+
+### Percentage Units
+
+Percentage units are relative to the parent element's font size.
+
+```css
+/* Good: Using percentage units */
+html {
+  font-size: 100%; /* 16px default */
+}
+
+body {
+  font-size: 100%; /* Inherits from html */
+}
+
+h1 {
+  font-size: 200%; /* 2x body font size */
+}
+```
+
+**Benefits of percentage:**
+- Familiar to many developers
+- Easy to understand
+- Works well for root font size
+
+## Fluid Typography
+
+Fluid typography uses CSS functions to create text that scales smoothly between viewport sizes.
+
+### Using clamp()
+
+The `clamp()` function sets a minimum, preferred, and maximum value.
+
+```css
+/* Good: Fluid typography with clamp() */
+html {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+}
+```
+
+**Benefits of clamp():**
+- Sets minimum and maximum bounds
+- Smooth scaling between breakpoints
+- No need for multiple media queries
+- Prevents text from becoming too small or too large
+
+### Using calc()
+
+The `calc()` function allows mathematical calculations for font sizes.
+
+```css
+/* Good: Fluid typography with calc() */
+html {
+  font-size: calc(1rem + 0.5vw);
+}
+
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: calc(2rem + 1vw);
+}
+
+h2 {
+  font-size: calc(1.5rem + 0.75vw);
+}
+```
+
+**Benefits of calc():**
+- Precise control over scaling
+- Can combine different units
+- Flexible calculations
+- Good for fine-tuning
+
+## Choosing the Right Unit
+
+### When to Use rem
+
+- **Base font sizes**: For body text and headings
+- **Consistent sizing**: When you want consistent sizing across components
+- **Layout calculations**: When calculating spacing and layout
+- **Browser zoom**: When you want text to scale with browser zoom
+
+```css
+/* Good: rem for base sizing */
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+```
+
+### When to Use em
+
+- **Component sizing**: When sizing text within components
+- **Proportional scaling**: When you want text to scale with parent
+- **Icon sizing**: When sizing icons with text
+- **Button sizing**: When sizing button text
+
+```css
+/* Good: em for component sizing */
+.button {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+
+.card {
+  font-size: 1em;
+}
+
+.card h2 {
+  font-size: 1.5em;
+}
+```
+
+### When to Use Fluid Typography
+
+- **Responsive headings**: When headings should scale with viewport
+- **Hero sections**: When text needs to adapt to screen size
+- **Landing pages**: When you want dramatic scaling effects
+- **Modern designs**: When you want smooth, continuous scaling
+
+```css
+/* Good: fluid typography for headings */
+.hero-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.1;
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+```
+
+## Common Mistakes
+
+### 1. Using Fixed Units
+
+```css
+/* Bad: Using fixed units */
+body {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+/* Good: Using relative units */
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+```
+
+### 2. Not Setting Root Font Size
+
+```css
+/* Bad: No root font size */
+body {
+  font-size: 1rem;
+}
+
+/* Good: Set root font size */
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: 1rem;
+}
+```
+
+### 3. Mixing Units Inconsistently
+
+```css
+/* Bad: Inconsistent units */
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5em;
+}
+
+/* Good: Consistent units */
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+```
+
+## Best Practices
+
+### 1. Set a Root Font Size
+
+Always set a root font size to establish a baseline.
+
+```css
+html {
+  font-size: 100%; /* 16px default */
+}
+```
+
+### 2. Use rem for Base Sizing
+
+Use rem for body text and headings for consistency.
+
+```css
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+```
+
+### 3. Use em for Component Sizing
+
+Use em for text within components to maintain proportions.
+
+```css
+.button {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+```
+
+### 4. Use Fluid Typography for Headings
+
+Use clamp() for responsive heading sizing.
+
+```css
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+```
+
+### 5. Test Text Resizing
+
+Verify your text scales correctly at 200%.
+
+- Set browser zoom to 200%
+- Check all text is readable
+- Verify no horizontal scrolling
+- Test on different devices
+
+## Testing Checklist
+
+- [ ] Root font size is set
+- [ ] All text uses relative units
+- [ ] Text scales to 200% without issues
+- [ ] No horizontal scrolling at 200%
+- [ ] All content remains visible
+- [ ] Layout adapts to text resizing
+- [ ] Tested on different browsers
+- [ ] Tested on different devices
+
+## Related Resources
+
+- [WCAG 2.1 Resize Text](https://www.w3.org/WAI/WCAG21/quickref/#resize-text)
+- [MDN CSS Units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [WebAIM Font Size](https://webaim.org/techniques/fonts/)
+- [Modern Fluid Typography Editor](https://modern-fluid-typography.vercel.app/)

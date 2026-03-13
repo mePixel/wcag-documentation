@@ -1,0 +1,520 @@
+---
+title: "Error Summary"
+description: "Displaying all form errors at the top with links to problematic fields"
+---
+
+# Error Summary
+
+Error summaries display all form errors at the top of the form with links to problematic fields, helping users quickly identify and navigate to errors.
+
+## Overview
+
+Error summaries are particularly useful for long forms with multiple errors. They provide a complete overview of all issues and allow users to jump directly to each problematic field.
+
+## Basic Error Summary
+
+Display all errors at the top of the form with links to problematic fields.
+
+```html
+<div id="error-summary" class="error-summary" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul>
+    <li>
+      <a href="#email">Email address is required</a>
+    </li>
+    <li>
+      <a href="#password">Password must be at least 8 characters</a>
+    </li>
+  </ul>
+</div>
+
+<form>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" aria-invalid="true">
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" aria-invalid="true">
+  </div>
+</form>
+
+<style>
+  .error-summary {
+    background-color: #ffebee;
+    border: 2px solid #d32f2f;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-summary h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.25rem;
+  }
+  
+  .error-summary ul {
+    margin: 0.5rem 0 0 1.5rem;
+  }
+  
+  .error-summary a {
+    color: #d32f2f;
+    text-decoration: underline;
+  }
+  
+  .error-summary a:hover,
+  .error-summary a:focus {
+    text-decoration: none;
+  }
+</style>
+```
+
+### Key Attributes
+
+- `role="alert"`: Announces the summary to screen readers
+- `aria-labelledby`: Associates the heading with the summary
+- Links to fields: Allow users to jump to each error
+
+## Dynamic Error Summary
+
+Generate error summary dynamically based on form validation.
+
+```html
+<div id="error-summary" class="error-summary hidden" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul id="error-list"></ul>
+</div>
+
+<form id="my-form" onsubmit="validateForm(event)">
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" aria-invalid="false">
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" aria-invalid="false">
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function validateForm(event) {
+  event.preventDefault();
+  
+  const form = document.getElementById('my-form');
+  const errorSummary = document.getElementById('error-summary');
+  const errorList = document.getElementById('error-list');
+  const errors = [];
+  
+  // Validate email
+  const email = document.getElementById('email');
+  if (!email.value) {
+    errors.push({
+      field: 'email',
+      message: 'Email address is required'
+    });
+    email.setAttribute('aria-invalid', 'true');
+  } else {
+    email.setAttribute('aria-invalid', 'false');
+  }
+  
+  // Validate password
+  const password = document.getElementById('password');
+  if (password.value.length < 8) {
+    errors.push({
+      field: 'password',
+      message: 'Password must be at least 8 characters'
+    });
+    password.setAttribute('aria-invalid', 'true');
+  } else {
+    password.setAttribute('aria-invalid', 'false');
+  }
+  
+  // Display or hide error summary
+  if (errors.length > 0) {
+    errorList.innerHTML = errors.map(error => 
+      `<li><a href="#${error.field}">${error.message}</a></li>`
+    ).join('');
+    
+    errorSummary.classList.remove('hidden');
+    errorSummary.focus();
+  } else {
+    errorSummary.classList.add('hidden');
+    form.submit();
+  }
+}
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  
+  .error-summary {
+    background-color: #ffebee;
+    border: 2px solid #d32f2f;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-summary h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.25rem;
+  }
+  
+  .error-summary ul {
+    margin: 0.5rem 0 0 1.5rem;
+  }
+  
+  .error-summary a {
+    color: #d32f2f;
+    text-decoration: underline;
+  }
+</style>
+```
+
+## Error Summary with Field Count
+
+Include the number of errors in the summary heading.
+
+```html
+<div id="error-summary" class="error-summary hidden" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">
+    There are <span id="error-count">0</span> errors in your form
+  </h2>
+  <ul id="error-list"></ul>
+</div>
+
+<script>
+function validateForm(event) {
+  event.preventDefault();
+  
+  const errorSummary = document.getElementById('error-summary');
+  const errorList = document.getElementById('error-list');
+  const errorCount = document.getElementById('error-count');
+  const errors = [];
+  
+  // ... validation logic ...
+  
+  // Display or hide error summary
+  if (errors.length > 0) {
+    errorCount.textContent = errors.length;
+    errorList.innerHTML = errors.map(error => 
+      `<li><a href="#${error.field}">${error.message}</a></li>`
+    ).join('');
+    
+    errorSummary.classList.remove('hidden');
+    errorSummary.focus();
+  } else {
+    errorSummary.classList.add('hidden');
+  }
+}
+</script>
+```
+
+## Error Summary with Inline Errors
+
+Combine error summary with inline error messages.
+
+```html
+<div id="error-summary" class="error-summary hidden" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul id="error-list"></ul>
+</div>
+
+<form id="my-form" onsubmit="validateForm(event)">
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email" 
+      aria-invalid="false"
+      aria-describedby="email-error"
+    >
+    <span id="email-error" class="error-message"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      name="password" 
+      aria-invalid="false"
+      aria-describedby="password-error"
+    >
+    <span id="password-error" class="error-message"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function validateForm(event) {
+  event.preventDefault();
+  
+  const errorSummary = document.getElementById('error-summary');
+  const errorList = document.getElementById('error-list');
+  const errors = [];
+  
+  // Validate email
+  const email = document.getElementById('email');
+  const emailError = document.getElementById('email-error');
+  if (!email.value) {
+    errors.push({
+      field: 'email',
+      message: 'Email address is required'
+    });
+    email.setAttribute('aria-invalid', 'true');
+    emailError.textContent = 'Email address is required';
+  } else {
+    email.setAttribute('aria-invalid', 'false');
+    emailError.textContent = '';
+  }
+  
+  // Validate password
+  const password = document.getElementById('password');
+  const passwordError = document.getElementById('password-error');
+  if (password.value.length < 8) {
+    errors.push({
+      field: 'password',
+      message: 'Password must be at least 8 characters'
+    });
+    password.setAttribute('aria-invalid', 'true');
+    passwordError.textContent = 'Password must be at least 8 characters';
+  } else {
+    password.setAttribute('aria-invalid', 'false');
+    passwordError.textContent = '';
+  }
+  
+  // Display or hide error summary
+  if (errors.length > 0) {
+    errorList.innerHTML = errors.map(error => 
+      `<li><a href="#${error.field}">${error.message}</a></li>`
+    ).join('');
+    
+    errorSummary.classList.remove('hidden');
+    errorSummary.focus();
+  } else {
+    errorSummary.classList.add('hidden');
+  }
+}
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  
+  .error-summary {
+    background-color: #ffebee;
+    border: 2px solid #d32f2f;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-summary h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.25rem;
+  }
+  
+  .error-summary ul {
+    margin: 0.5rem 0 0 1.5rem;
+  }
+  
+  .error-summary a {
+    color: #d32f2f;
+    text-decoration: underline;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+</style>
+```
+
+## Common Mistakes
+
+### 1. Not Using role="alert"
+
+```html
+<!-- Bad: No role="alert" -->
+<div class="error-summary">
+  <h2>There are errors in your form</h2>
+  <ul>
+    <li><a href="#email">Email address is required</a></li>
+  </ul>
+</div>
+
+<!-- Good: With role="alert" -->
+<div class="error-summary" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul>
+    <li><a href="#email">Email address is required</a></li>
+  </ul>
+</div>
+```
+
+### 2. Not Providing Links to Fields
+
+```html
+<!-- Bad: No links to fields -->
+<div class="error-summary" role="alert">
+  <h2>There are errors in your form</h2>
+  <ul>
+    <li>Email address is required</li>
+    <li>Password must be at least 8 characters</li>
+  </ul>
+</div>
+
+<!-- Good: With links to fields -->
+<div class="error-summary" role="alert">
+  <h2>There are errors in your form</h2>
+  <ul>
+    <li><a href="#email">Email address is required</a></li>
+    <li><a href="#password">Password must be at least 8 characters</a></li>
+  </ul>
+</div>
+```
+
+### 3. Not Focusing the Summary
+
+```javascript
+// Bad: Not focusing the summary
+if (errors.length > 0) {
+  errorSummary.classList.remove('hidden');
+}
+
+// Good: Focusing the summary
+if (errors.length > 0) {
+  errorSummary.classList.remove('hidden');
+  errorSummary.focus();
+}
+```
+
+### 4. Not Updating aria-invalid
+
+```javascript
+// Bad: Not updating aria-invalid
+if (!email.value) {
+  errors.push({
+    field: 'email',
+    message: 'Email address is required'
+  });
+}
+
+// Good: Updating aria-invalid
+if (!email.value) {
+  errors.push({
+    field: 'email',
+    message: 'Email address is required'
+  });
+  email.setAttribute('aria-invalid', 'true');
+} else {
+  email.setAttribute('aria-invalid', 'false');
+}
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Error summary appears at the top of the form
+- [ ] Error summary is clearly visible
+- [ ] Links to fields are clearly indicated
+- [ ] Color contrast is sufficient
+
+### Screen Reader Testing
+- [ ] Error summary is announced
+- [ ] Error count is announced (if included)
+- [ ] Links to fields are announced
+- [ ] Users can navigate to errors
+
+### Keyboard Testing
+- [ ] Can navigate to error summary
+- [ ] Can activate links to jump to fields
+- [ ] Focus moves to field when link is clicked
+- [ ] Can correct errors
+
+### Functional Testing
+- [ ] Error summary appears when there are errors
+- [ ] Error summary disappears when errors are fixed
+- [ ] Links jump to correct fields
+- [ ] Focus moves to field when link is clicked
+
+## Best Practices
+
+### 1. Use role="alert"
+
+Ensure the error summary is announced to screen readers.
+
+```html
+<div class="error-summary" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul>
+    <li><a href="#email">Email address is required</a></li>
+  </ul>
+</div>
+```
+
+### 2. Provide Links to Fields
+
+Allow users to jump directly to each problematic field.
+
+```html
+<ul>
+  <li><a href="#email">Email address is required</a></li>
+  <li><a href="#password">Password must be at least 8 characters</a></li>
+</ul>
+```
+
+### 3. Focus the Summary
+
+Move focus to the error summary when it appears.
+
+```javascript
+if (errors.length > 0) {
+  errorSummary.classList.remove('hidden');
+  errorSummary.focus();
+}
+```
+
+### 4. Update aria-invalid
+
+Mark fields as invalid when they have errors.
+
+```javascript
+if (!email.value) {
+  email.setAttribute('aria-invalid', 'true');
+} else {
+  email.setAttribute('aria-invalid', 'false');
+}
+```
+
+### 5. Include Error Count
+
+Show the number of errors in the summary heading.
+
+```html
+<h2 id="error-summary-title">
+  There are <span id="error-count">0</span> errors in your form
+</h2>
+```
+
+## Related Resources
+
+- [Error Handling Overview](./error-handling.mdx) - Complete error handling guide
+- [Inline Errors](./inline-errors.mdx) - Displaying errors below fields
+- [Toast Notifications](./toast-notifications.mdx) - Temporary error notifications
+- [Validation Feedback](./validation-feedback.mdx) - Real-time validation feedback

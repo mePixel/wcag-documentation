@@ -1,0 +1,252 @@
+
+---
+title: "Server-Side Validation"
+description: "Implementing accessible server-side form validation"
+---
+
+# Server-Side Validation
+
+Server-side validation validates input on the server and returns errors, providing security and ensuring data integrity.
+
+## Overview
+
+Server-side validation is essential for security and data integrity. It should always be used, even when client-side validation is implemented, as client-side validation can be bypassed.
+
+## Basic Server-Side Validation
+
+Validate input on server and return errors.
+
+```html
+<form action="/submit" method="post" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-help email-error"
+    >
+    <span id="email-help" class="help-text">
+      We'll never share your email
+    </span>
+    <span id="email-error" class="error-message" role="alert">
+      <!-- Server-side error message -->
+    </span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+// Handle server-side errors
+const urlParams = new URLSearchParams(window.location.search);
+const emailError = document.getElementById('email-error');
+const emailInput = document.getElementById('email');
+
+if (urlParams.get('error') === 'email') {
+  emailError.textContent = 'This email is already registered. Please use a different email.';
+  emailInput.setAttribute('aria-invalid', 'true');
+  emailInput.focus();
+}
+</script>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .help-text {
+    font-size: 0.875rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  [aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+</style>
+```
+
+### Key Points
+
+- Use `aria-invalid` to indicate invalid fields
+- Use `aria-describedby` to associate error messages with inputs
+- Focus first error field when page loads
+- Provide specific, actionable error messages
+
+## Error Summary with Server-Side Errors
+
+Display all server-side errors at the top of the form.
+
+```html
+<div id="error-summary" class="error-summary hidden" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul id="error-list"></ul>
+</div>
+
+<form action="/submit" method="post" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-error"
+    >
+    <span id="email-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      name="password"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="password-error"
+    >
+    <span id="password-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+// Handle server-side errors
+const serverErrors = {
+  email: 'This email is already registered. Please use a different email.',
+  password: 'Password is incorrect. Please try again.'
+};
+
+const errorSummary = document.getElementById('error-summary');
+const errorList = document.getElementById('error-list');
+const errors = Object.entries(serverErrors);
+
+if (errors.length > 0) {
+  // Display error summary
+  errorList.innerHTML = errors.map(([field, message]) => 
+    `<li><a href="#${field}">${message}</a></li>`
+  ).join('');
+  
+  errorSummary.classList.remove('hidden');
+  
+  // Mark fields as invalid and display errors
+  errors.forEach(([field, message]) => {
+    const input = document.getElementById(field);
+    const errorElement = document.getElementById(`${field}-error`);
+    
+    if (input && errorElement) {
+      input.setAttribute('aria-invalid', 'true');
+      errorElement.textContent = message;
+    }
+  });
+  
+  // Focus first error
+  const firstError = document.querySelector('[aria-invalid="true"]');
+  if (firstError) {
+    firstError.focus();
+  }
+}
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  
+  .error-summary {
+    background-color: #ffebee;
+    border: 2px solid #d32f2f;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-summary h2 {
+    color: #d32f2f;
+    margin-top: 0;
+    font-size: 1.25rem;
+  }
+  
+  .error-summary ul {
+    margin: 0.5rem 0 0 1.5rem;
+  }
+  
+  .error-summary a {
+    color: #d32f2f;
+    text-decoration: underline;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  [aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+</style>
+```
+
+## AJAX Form Submission with Validation
+
+Submit form via AJAX and handle server-side errors.
+
+```html
+<form id="contactForm" novalidate>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input 
+      type="email" 
+      id="email" 
+      name="email"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="email-error"
+    >
+    <span id="email-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input 
+      type="password" 
+      id="password" 
+      name="password"
+      required
+      aria-required="true"
+      aria-invalid="false"
+      aria-describedby="password-error"
+    >
+    <span id="password-error" class="error-message" role="alert"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const form = document.getElementById('contactForm');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  //

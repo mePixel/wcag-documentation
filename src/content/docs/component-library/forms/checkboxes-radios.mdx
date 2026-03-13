@@ -1,0 +1,310 @@
+---
+title: "Checkboxes and Radio Buttons"
+description: "Creating accessible checkboxes and radio buttons for form controls"
+---
+
+# Checkboxes and Radio Buttons
+
+Checkboxes and radio buttons allow users to select options. They have specific accessibility requirements for proper implementation.
+
+## Overview
+
+Checkboxes allow users to select one or more options, while radio buttons allow users to select exactly one option from a group.
+
+## Checkboxes
+
+Checkboxes allow users to select one or more options.
+
+### Single Checkbox
+
+```html
+<div class="form-group">
+  <label>
+    <input 
+      type="checkbox" 
+      name="subscribe" 
+      id="subscribe"
+      value="yes"
+    >
+    Subscribe to newsletter
+  </label>
+</div>
+```
+
+### Multiple Checkboxes
+
+```html
+<div class="form-group">
+  <fieldset>
+    <legend>Preferences</legend>
+    
+    <label>
+      <input type="checkbox" name="pref" value="email">
+      Email notifications
+    </label>
+    
+    <label>
+      <input type="checkbox" name="pref" value="sms">
+      SMS notifications
+    </label>
+    
+    <label>
+      <input type="checkbox" name="pref" value="push">
+      Push notifications
+    </label>
+  </fieldset>
+</div>
+```
+
+### Key Points
+
+- Wrap checkbox and label together
+- Use `fieldset` and `legend` for related checkboxes
+- Each checkbox should have a unique value
+- Checkboxes can be selected independently
+
+## Radio Buttons
+
+Radio buttons allow users to select one option from a group.
+
+### Basic Radio Group
+
+```html
+<div class="form-group">
+  <fieldset>
+    <legend>Preferred Contact Method</legend>
+    
+    <label>
+      <input 
+        type="radio" 
+        name="contact" 
+        id="contact-email"
+        value="email"
+        checked
+      >
+      Email
+    </label>
+    
+    <label>
+      <input 
+        type="radio" 
+        name="contact" 
+        id="contact-phone"
+        value="phone"
+      >
+      Phone
+    </label>
+    
+    <label>
+      <input 
+        type="radio" 
+        name="contact" 
+        id="contact-mail"
+        value="mail"
+      >
+      Mail
+    </label>
+  </fieldset>
+</div>
+```
+
+### Key Points
+
+- Use `fieldset` and `legend` for radio groups
+- All radios in a group must have the same `name`
+- Each radio should have a unique `id`
+- Use `checked` attribute for default selection
+- Only one radio can be selected at a time
+
+## Best Practices
+
+### 1. Use Fieldset and Legend
+
+Group related checkboxes and radios with `fieldset` and `legend`.
+
+```html
+<!-- Good: Using fieldset and legend -->
+<fieldset>
+  <legend>Preferences</legend>
+  
+  <label>
+    <input type="checkbox" name="pref" value="email">
+    Email notifications
+  </label>
+  
+  <label>
+    <input type="checkbox" name="pref" value="sms">
+    SMS notifications
+  </label>
+</fieldset>
+
+<!-- Bad: Not grouping -->
+<div>
+  <label>
+    <input type="checkbox" name="pref" value="email">
+    Email notifications
+  </label>
+  
+  <label>
+    <input type="checkbox" name="pref" value="sms">
+    SMS notifications
+  </label>
+</div>
+```
+
+### 2. Wrap Label and Input Together
+
+Wrap the checkbox/radio and its label together for better accessibility.
+
+```html
+<!-- Good: Wrapped together -->
+<label>
+  <input type="checkbox" name="subscribe" value="yes">
+  Subscribe to newsletter
+</label>
+
+<!-- Bad: Separate -->
+<input type="checkbox" name="subscribe" value="yes" id="subscribe">
+<label for="subscribe">Subscribe to newsletter</label>
+```
+
+### 3. Use Unique IDs
+
+Each checkbox and radio should have a unique `id` attribute.
+
+```html
+<!-- Good: Unique IDs -->
+<input type="checkbox" name="pref" id="pref-email" value="email">
+<input type="checkbox" name="pref" id="pref-sms" value="sms">
+
+<!-- Bad: Duplicate IDs -->
+<input type="checkbox" name="pref" id="pref" value="email">
+<input type="checkbox" name="pref" id="pref" value="sms">
+```
+
+### 4. Use Same Name for Radio Groups
+
+All radios in a group must have the same `name` attribute.
+
+```html
+<!-- Good: Same name -->
+<input type="radio" name="contact" value="email">
+<input type="radio" name="contact" value="phone">
+<input type="radio" name="contact" value="mail">
+
+<!-- Bad: Different names -->
+<input type="radio" name="contact1" value="email">
+<input type="radio" name="contact2" value="phone">
+<input type="radio" name="contact3" value="mail">
+```
+
+## Common Mistakes
+
+### 1. Not Grouping Related Checkboxes
+
+```html
+<!-- Bad: Not grouping -->
+<div>
+  <label>
+    <input type="checkbox" name="pref" value="email">
+    Email notifications
+  </label>
+  
+  <label>
+    <input type="checkbox" name="pref" value="sms">
+    SMS notifications
+  </label>
+</div>
+
+<!-- Good: Grouping with fieldset -->
+<fieldset>
+  <legend>Preferences</legend>
+  <label>
+    <input type="checkbox" name="pref" value="email">
+    Email notifications
+  </label>
+  <label>
+    <input type="checkbox" name="pref" value="sms">
+    SMS notifications
+  </label>
+</fieldset>
+```
+
+### 2. Not Using Fieldset for Radio Groups
+
+```html
+<!-- Bad: Radios not grouped -->
+<label>
+  <input type="radio" name="contact" value="email"> Email
+</label>
+<label>
+  <input type="radio" name="contact" value="phone"> Phone
+</label>
+
+<!-- Good: Proper grouping -->
+<fieldset>
+  <legend>Preferred Contact Method</legend>
+  <label>
+    <input type="radio" name="contact" value="email"> Email
+  </label>
+  <label>
+    <input type="radio" name="contact" value="phone"> Phone
+  </label>
+</fieldset>
+```
+
+### 3. Using Different Names for Radio Groups
+
+```html
+<!-- Bad: Different names -->
+<input type="radio" name="contact1" value="email">
+<input type="radio" name="contact2" value="phone">
+<input type="radio" name="contact3" value="mail">
+
+<!-- Good: Same name -->
+<input type="radio" name="contact" value="email">
+<input type="radio" name="contact" value="phone">
+<input type="radio" name="contact" value="mail">
+```
+
+### 4. Not Providing Default Selection
+
+```html
+<!-- Bad: No default selection -->
+<input type="radio" name="contact" value="email">
+<input type="radio" name="contact" value="phone">
+<input type="radio" name="contact" value="mail">
+
+<!-- Good: With default selection -->
+<input type="radio" name="contact" value="email" checked>
+<input type="radio" name="contact" value="phone">
+<input type="radio" name="contact" value="mail">
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to all checkboxes and radios using Tab
+- [ ] Can select checkboxes and radios using Space
+- [ ] Can navigate between radios in a group using arrow keys
+- [ ] Focus indicators are visible
+
+### Screen Reader Testing
+- [ ] All labels are announced
+- [ ] Fieldset legends are announced
+- [ ] Checkbox state is announced (checked/unchecked)
+- [ ] Radio group is announced with legend
+- [ ] Selected radio is announced
+
+### Visual Testing
+- [ ] Labels are visually associated with inputs
+- [ ] Focus indicators are visible
+- [ ] Selected state is clearly visible
+- [ ] Color contrast is sufficient
+
+## Related Resources
+
+- [Accessible Inputs Overview](./accessible-inputs.mdx) - Complete accessible inputs guide
+- [Text Inputs](./text-inputs.mdx) - Text inputs, email, password, textareas
+- [Select Dropdowns](./select-dropdowns.mdx) - Select dropdowns
+- [Form Validation](./form-validation.mdx) - Validating input data

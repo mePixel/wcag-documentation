@@ -1,0 +1,270 @@
+---
+title: "Testing & Auditing"
+description: "Testing and auditing for WCAG 2.1 AA compliance"
+---
+
+# Testing & Auditing
+
+Testing and auditing are essential for ensuring WCAG 2.1 AA compliance. This section covers automated and manual testing methods.
+
+## Overview
+
+Accessibility testing involves using automated tools, manual testing, and assistive technology testing to ensure your content is accessible to all users.
+
+### Why Testing Matters
+
+- **Compliance**: Meet legal and regulatory requirements
+- **User Experience**: Ensure all users can access your content
+- **Risk Reduction**: Identify and fix accessibility issues early
+- **Continuous Improvement**: Maintain accessibility over time
+
+## Testing Methodology
+
+### Testing Pyramid
+
+```
+           Manual Testing
+          /              \
+     Assistive Technology
+      /                  \
+  Automated Testing    Code Review
+```
+
+### Testing Types
+
+| Type | Description | Frequency |
+|------|-------------|-----------|
+| **Automated Testing** | Using tools to scan for issues | Continuous |
+| **Manual Testing** | Manual inspection and testing | Regular |
+| **Assistive Technology Testing** | Testing with screen readers, etc. | Regular |
+| **Code Review** | Reviewing code for accessibility | Continuous |
+| **User Testing** | Testing with users with disabilities | Periodic |
+
+## Quick Reference
+
+### Automated Testing Tools
+
+| Tool | Type | Platform | Cost |
+|------|------|----------|------|
+| **axe DevTools** | Browser extension | Chrome, Firefox, Edge | Free |
+| **WAVE** | Browser extension | Chrome, Firefox | Free |
+| **Lighthouse** | Browser tool | Chrome | Free |
+| **Pa11y** | Command line | Node.js | Free |
+| **Siteimprove** | SaaS | Web | Paid |
+
+### Manual Testing Checklists
+
+| Area | Key Checks |
+|------|------------|
+| **Keyboard** | Tab navigation, focus indicators, keyboard shortcuts |
+| **Screen Reader** | Content announcement, navigation, form labels |
+| **Visual** | Color contrast, text resizing, focus indicators |
+| **Forms** | Labels, error messages, validation |
+| **Images** | Alt text, decorative images, complex images |
+
+### Assistive Technology
+
+| Technology | Platform | Notes |
+|------------|----------|-------|
+| **NVDA** | Windows | Free, open source |
+| **JAWS** | Windows | Paid |
+| **VoiceOver** | macOS, iOS | Built-in |
+| **TalkBack** | Android | Built-in |
+| **Orca** | Linux | Free, open source |
+
+## Testing Process
+
+### 1. Automated Testing
+
+Run automated tools to identify common issues.
+
+```bash
+# Using axe DevTools
+# Install browser extension and run scan
+
+# Using Pa11y
+npm install -g pa11y
+pa11y https://example.com
+
+# Using Lighthouse
+lighthouse https://example.com --view
+```
+
+### 2. Manual Testing
+
+Perform manual testing for issues automated tools can't detect.
+
+- Keyboard navigation
+- Screen reader testing
+- Visual inspection
+- Form testing
+- Image testing
+
+### 3. Assistive Technology Testing
+
+Test with actual assistive technologies.
+
+- Screen readers
+- Screen magnifiers
+- Voice recognition
+- Alternative input devices
+
+### 4. Code Review
+
+Review code for accessibility issues.
+
+- Semantic HTML
+- ARIA attributes
+- Focus management
+- Color contrast
+- Text resizing
+
+### 5. User Testing
+
+Test with users with disabilities.
+
+- Recruit diverse users
+- Test real tasks
+- Gather feedback
+- Iterate based on results
+
+## Common Testing Scenarios
+
+### Keyboard Navigation
+
+```javascript
+// Test keyboard navigation
+// 1. Use Tab to navigate through page
+// 2. Verify focus moves logically
+// 3. Verify focus indicators are visible
+// 4. Verify all interactive elements are reachable
+// 5. Verify Enter/Space activate buttons
+// 6. Verify Arrow keys work for menus
+```
+
+### Screen Reader Testing
+
+```javascript
+// Test with screen reader
+// 1. Navigate using screen reader shortcuts
+// 2. Verify content is announced correctly
+// 3. Verify headings are announced
+// 4. Verify links are announced
+// 5. Verify form labels are announced
+// 6. Verify error messages are announced
+```
+
+### Color Contrast Testing
+
+```javascript
+// Test color contrast
+// 1. Use color contrast checker
+// 2. Verify normal text meets 4.5:1
+// 3. Verify large text meets 3:1
+// 4. Verify UI components meet 3:1
+// 5. Verify focus indicators have sufficient contrast
+```
+
+### Form Testing
+
+```javascript
+// Test forms
+// 1. Verify all inputs have labels
+// 2. Verify required fields are indicated
+// 3. Verify error messages are associated with inputs
+// 4. Verify validation is announced
+// 5. Verify form can be submitted with keyboard
+```
+
+## Best Practices
+
+### 1. Test Early and Often
+
+Start testing early in development and test frequently.
+
+```javascript
+// Good: Continuous testing
+// - Run automated tests on every commit
+// - Perform manual testing regularly
+// - Test with assistive technology regularly
+```
+
+### 2. Use Multiple Tools
+
+No single tool catches all issues.
+
+```javascript
+// Good: Multiple tools
+// - Use axe DevTools for automated testing
+// - Use WAVE for visual feedback
+// - Use Lighthouse for performance and accessibility
+// - Use screen readers for assistive technology testing
+```
+
+### 3. Test with Real Users
+
+Nothing replaces testing with actual users.
+
+```javascript
+// Good: User testing
+// - Recruit users with disabilities
+// - Test real tasks
+// - Gather feedback
+// - Iterate based on results
+```
+
+### 4. Document Findings
+
+Keep track of issues and their resolution.
+
+```javascript
+// Good: Documentation
+// - Document all issues found
+// - Track issue resolution
+// - Maintain accessibility audit reports
+// - Share findings with team
+```
+
+## Testing Checklist
+
+### Automated Testing
+- [ ] Run automated tools
+- [ ] Review automated results
+- [ ] Fix automated issues
+- [ ] Re-run automated tests
+- [ ] Document automated issues
+
+### Manual Testing
+- [ ] Test keyboard navigation
+- [ ] Test with screen reader
+- [ ] Test color contrast
+- [ ] Test forms
+- [ ] Test images
+- [ ] Test dynamic content
+
+### Assistive Technology Testing
+- [ ] Test with NVDA
+- [ ] Test with JAWS
+- [ ] Test with VoiceOver
+- [ ] Test with TalkBack
+- [ ] Test with screen magnifier
+
+### Code Review
+- [ ] Review semantic HTML
+- [ ] Review ARIA attributes
+- [ ] Review focus management
+- [ ] Review color contrast
+- [ ] Review text resizing
+
+### User Testing
+- [ ] Recruit diverse users
+- [ ] Test real tasks
+- [ ] Gather feedback
+- [ ] Iterate based on results
+
+## Related Resources
+
+- [WAI Evaluation Resources](https://www.w3.org/WAI/test-evaluate/)
+- [WebAIM Evaluation Resources](https://webaim.org/resources/eval/)
+- [axe DevTools](https://www.deque.com/axe/devtools/)
+- [WAVE Web Accessibility Evaluation Tool](https://wave.webaim.org/)

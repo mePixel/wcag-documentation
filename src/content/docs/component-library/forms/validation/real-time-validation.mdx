@@ -1,0 +1,443 @@
+---
+title: "Real-Time Validation"
+description: "Implementing accessible real-time form validation"
+---
+
+# Real-Time Validation
+
+Real-time validation validates input as user types, providing immediate feedback and helping users understand requirements.
+
+## Overview
+
+Real-time validation provides immediate feedback to users as they type, helping them understand requirements and correct errors before submitting the form. This improves user experience and reduces frustration.
+
+## Basic Real-Time Validation
+
+Validate input as user types.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    required
+    aria-required="true"
+    aria-invalid="false"
+    aria-describedby="email-help email-error"
+  >
+  <span id="email-help" class="help-text">
+    We'll never share your email
+  </span>
+  <span id="email-error" class="error-message" role="alert"></span>
+</div>
+
+<script>
+const emailInput = document.getElementById('email');
+const emailError = document.getElementById('email-error');
+
+let debounceTimer;
+
+emailInput.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  
+  debounceTimer = setTimeout(() => {
+    if (emailInput.value && !emailInput.value.includes('@')) {
+      emailError.textContent = 'Please enter a valid email address';
+      emailInput.setAttribute('aria-invalid', 'true');
+    } else {
+      emailError.textContent = '';
+      emailInput.setAttribute('aria-invalid', 'false');
+    }
+  }, 500); // Wait 500ms after user stops typing
+});
+</script>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .help-text {
+    font-size: 0.875rem;
+    color: #666;
+    display: block;
+    margin-top: 0.25rem;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  [aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+</style>
+```
+
+### Key Points
+
+- Use debounce to avoid excessive feedback while typing
+- Validate after user stops typing
+- Use `aria-invalid` to indicate invalid fields
+- Use `aria-describedby` to associate error messages with inputs
+- Clear errors as user corrects them
+
+## Debounced Validation
+
+Debounce validation to avoid excessive feedback while typing.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    required
+    aria-required="true"
+    aria-invalid="false"
+    aria-describedby="email-error"
+  >
+  <span id="email-error" class="error-message" role="alert"></span>
+</div>
+
+<script>
+const emailInput = document.getElementById('email');
+const emailError = document.getElementById('email-error');
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+function validateEmail() {
+  const email = emailInput.value;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (email && !emailRegex.test(email)) {
+    emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+    emailInput.setAttribute('aria-invalid', 'true');
+  } else {
+    emailError.textContent = '';
+    emailInput.setAttribute('aria-invalid', 'false');
+  }
+}
+
+emailInput.addEventListener('input', debounce(validateEmail, 300));
+</script>
+```
+
+## Validation on Blur
+
+Validate when user leaves the field.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    required
+    aria-required="true"
+    aria-invalid="false"
+    aria-describedby="email-error"
+  >
+  <span id="email-error" class="error-message" role="alert"></span>
+</div>
+
+<script>
+const emailInput = document.getElementById('email');
+const emailError = document.getElementById('email-error');
+
+function validateEmail() {
+  const email = emailInput.value;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (email && !emailRegex.test(email)) {
+    emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+    emailInput.setAttribute('aria-invalid', 'true');
+  } else {
+    emailError.textContent = '';
+    emailInput.setAttribute('aria-invalid', 'false');
+  }
+}
+
+emailInput.addEventListener('blur', validateEmail);
+</script>
+```
+
+## Password Strength Indicator
+
+Show password strength as user types.
+
+```html
+<div class="form-group">
+  <label for="password">Password</label>
+  <input 
+    type="password" 
+    id="password" 
+    name="password"
+    aria-describedby="password-strength password-error"
+  >
+  <div id="password-strength" class="password-strength">
+    <div class="strength-bar">
+      <div class="strength-fill"></div>
+    </div>
+    <span class="strength-text"></span>
+  </div>
+  <span id="password-error" class="error-message" role="alert"></span>
+</div>
+
+<script>
+const passwordInput = document.getElementById('password');
+const strengthFill = document.querySelector('.strength-fill');
+const strengthText = document.querySelector('.strength-text');
+
+passwordInput.addEventListener('input', () => {
+  const password = passwordInput.value;
+  const strength = calculatePasswordStrength(password);
+  
+  strengthFill.style.width = `${strength.score * 25}%`;
+  strengthFill.className = `strength-fill ${strength.level}`;
+  strengthText.textContent = strength.label;
+  
+  if (password && strength.score < 2) {
+    passwordInput.setAttribute('aria-invalid', 'true');
+  } else {
+    passwordInput.setAttribute('aria-invalid', 'false');
+  }
+});
+
+function calculatePasswordStrength(password) {
+  let score = 0;
+  
+  if (password.length >= 8) score++;
+  if (password.length >= 12) score++;
+  if (/[a-z]/.test(password)) score++;
+  if (/[A-Z]/.test(password)) score++;
+  if (/\d/.test(password)) score++;
+  if (/[^a-zA-Z0-9]/.test(password)) score++;
+  
+  if (score <= 2) {
+    return { score, level: 'weak', label: 'Weak' };
+  } else if (score <= 4) {
+    return { score, level: 'medium', label: 'Medium' };
+  } else {
+    return { score, level: 'strong', label: 'Strong' };
+  }
+}
+</script>
+
+<style>
+  .password-strength {
+    margin-top: 0.5rem;
+  }
+  
+  .strength-bar {
+    height: 4px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .strength-fill {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .strength-fill.weak {
+    background-color: #d32f2f;
+  }
+  
+  .strength-fill.medium {
+    background-color: #f57c00;
+  }
+  
+  .strength-fill.strong {
+    background-color: #388e3c;
+  }
+  
+  .strength-text {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+</style>
+```
+
+## Common Mistakes
+
+### 1. Validating Too Early
+
+```javascript
+// Bad: Validates on every keystroke without debounce
+input.addEventListener('input', validate);
+
+// Good: Debounces validation
+input.addEventListener('input', debounce(validate, 300));
+```
+
+### 2. Not Using aria-invalid
+
+```html
+<!-- Bad: No aria-invalid -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: With aria-invalid -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+### 3. Not Providing Clear Feedback
+
+```javascript
+// Bad: Vague feedback
+if (!isValid) {
+  showError('Invalid input');
+}
+
+// Good: Specific feedback
+if (!isValid) {
+  showError('Please enter a valid email address (e.g., user@example.com)');
+}
+```
+
+### 4. Not Updating ARIA Attributes
+
+```javascript
+// Bad: Not updating ARIA attributes
+if (!isValid) {
+  showError('Invalid email');
+}
+
+// Good: Updating ARIA attributes
+if (!isValid) {
+  input.setAttribute('aria-invalid', 'true');
+  showError('Invalid email');
+} else {
+  input.setAttribute('aria-invalid', 'false');
+  hideError();
+}
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Validation feedback appears at the right time
+- [ ] Validation feedback is clearly visible
+- [ ] Visual indicators are clear
+- [ ] Color contrast is sufficient
+
+### Screen Reader Testing
+- [ ] Validation feedback is announced
+- [ ] aria-invalid state is announced
+- [ ] Requirements are announced
+- [ ] Feedback is specific and helpful
+
+### Keyboard Testing
+- [ ] Can navigate to fields
+- [ ] Can correct errors
+- [ ] Focus management is correct
+- [ ] Validation doesn't interfere with typing
+
+### Functional Testing
+- [ ] Validation triggers at the right time
+- [ ] Validation feedback is accurate
+- [ ] Validation feedback updates correctly
+- [ ] Debouncing works correctly
+
+## Best Practices
+
+### 1. Debounce Validation
+
+Avoid excessive feedback while typing.
+
+```javascript
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+input.addEventListener('input', debounce(validate, 300));
+```
+
+### 2. Validate on Blur
+
+Validate when user leaves the field.
+
+```javascript
+input.addEventListener('blur', validate);
+```
+
+### 3. Update ARIA Attributes
+
+Mark fields as invalid when they have errors.
+
+```javascript
+if (!isValid) {
+  input.setAttribute('aria-invalid', 'true');
+} else {
+  input.setAttribute('aria-invalid', 'false');
+}
+```
+
+### 4. Provide Clear Feedback
+
+Tell users exactly what's wrong and how to fix it.
+
+```javascript
+if (!isValid) {
+  showError('Please enter a valid email address (e.g., user@example.com)');
+}
+```
+
+### 5. Use Visual Indicators
+
+Use icons and colors to show validation status.
+
+```html
+<li class="requirement met">
+  <span class="icon">✓</span> At least 8 characters
+</li>
+```
+
+### 6. Don't Validate Too Early
+
+Wait for user to finish typing before validating.
+
+```javascript
+// Validate on blur
+input.addEventListener('blur', validate);
+
+// Or debounce input validation
+input.addEventListener('input', debounce(validate, 300));
+```
+
+## Related Resources
+
+- [Form Validation Overview](./form-validation.mdx) - Complete form validation guide
+- [Client-Side Validation](./client-side-validation.mdx) - Client-side validation
+- [Server-Side Validation](./server-side-validation.mdx) - Server-side validation
+- [Validation Feedback](./validation-feedback.mdx) - Real-time validation feedback

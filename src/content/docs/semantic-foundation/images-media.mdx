@@ -1,0 +1,307 @@
+---
+title: "Images and Media Elements"
+description: "HTML elements for images and media content"
+---
+
+# Images and Media Elements
+
+Images and media elements provide visual content to users. Proper accessibility ensures all users can understand and interact with media content.
+
+## Image (img)
+
+The `<img>` element displays images.
+
+### Informative Images
+
+Informative images convey important information and need descriptive alt text.
+
+```html
+<img src="chart.png" alt="Bar chart showing 50% increase in sales from January to June">
+```
+
+**Best practices for informative images:**
+- Provide descriptive alt text that conveys the same information as the image
+- Keep alt text concise but complete
+- Focus on content and purpose of the image
+- Don't include "image of" or "picture of" in alt text
+
+### Decorative Images
+
+Decorative images don't convey important information and should have empty alt text.
+
+```html
+<img src="decoration.png" alt="">
+```
+
+**Best practices for decorative images:**
+- Use empty alt text (`alt=""`)
+- Consider using CSS for decorative images instead
+- Don't include decorative images in the accessibility tree
+
+### Images with Text
+
+If an image contains text, include that text in the alt attribute.
+
+```html
+<img src="logo.png" alt="Company Name - Accessibility Solutions">
+```
+
+### Complex Images
+
+Complex images like charts, graphs, and diagrams may need additional descriptions.
+
+```html
+<img src="complex-chart.png" alt="Bar chart showing quarterly sales data">
+<p class="sr-only">
+  Detailed description: The chart shows sales data for Q1-Q4. Q1: $10,000, Q2: $15,000, 
+  Q3: $12,000, Q4: $18,000. The highest sales were in Q4 with $18,000.
+</p>
+```
+
+### SVG Images
+
+SVG images can include inline descriptions for better accessibility.
+
+```html
+<svg role="img" aria-labelledby="chart-title chart-desc">
+  <title id="chart-title">Sales Chart</title>
+  <desc id="chart-desc">Bar chart showing quarterly sales data</desc>
+  <!-- SVG content -->
+</svg>
+```
+
+### Image Best Practices
+
+- **Always provide alt text** for informative images
+- **Use empty alt text** for decorative images
+- **Keep alt text descriptive** but concise
+- **Don't use "image of"** in alt text
+- **Include text content** in alt text for images with text
+- **Provide detailed descriptions** for complex images
+
+```html
+<!-- Good: Descriptive alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+
+<!-- Bad: Non-descriptive alt text -->
+<img src="chart.png" alt="chart">
+
+<!-- Bad: Missing alt text -->
+<img src="chart.png">
+
+<!-- Good: Empty alt for decorative image -->
+<img src="decoration.png" alt="">
+
+<!-- Bad: Decorative image without alt text -->
+<img src="decoration.png">
+```
+
+### Why Alt Text Matters
+
+- **Screen Reader Users**: Hear description of image instead of seeing it
+- **Users with Slow Connections**: See alt text while image loads
+- **Search Engines**: Use alt text to understand image content
+- **All Users**: Benefit if image fails to load
+
+## Figure and Figcaption
+
+The `<figure>` and `<figcaption>` elements group images with captions.
+
+### Basic Figure
+
+```html
+<figure>
+  <img src="chart.png" alt="Bar chart showing sales data">
+  <figcaption>Figure 1: Monthly sales chart showing 50% increase</figcaption>
+</figure>
+```
+
+### Multiple Figures
+
+```html
+<figure>
+  <img src="chart1.png" alt="Sales chart for Q1">
+  <img src="chart2.png" alt="Sales chart for Q2">
+  <figcaption>Figure 1: Quarterly sales comparison</figcaption>
+</figure>
+```
+
+### Figure with Code
+
+```html
+<figure>
+  <pre><code>function hello() {
+  console.log("Hello, World!");
+}</code></pre>
+  <figcaption>Figure 1: Hello World function</figcaption>
+</figure>
+```
+
+### Best Practices
+
+- Use `<figure>` for self-contained content like images, diagrams, code
+- Use `<figcaption>` to provide a caption or description
+- Keep captions concise and informative
+- Don't repeat alt text in figcaption
+
+```html
+<!-- Good: Figure with caption -->
+<figure>
+  <img src="chart.png" alt="Bar chart showing sales data">
+  <figcaption>Figure 1: Monthly sales chart</figcaption>
+</figure>
+
+<!-- Bad: Repeating alt text in figcaption -->
+<figure>
+  <img src="chart.png" alt="Bar chart showing sales data">
+  <figcaption>Bar chart showing sales data</figcaption>
+</figure>
+```
+
+## Video (video)
+
+The `<video>` element embeds video content.
+
+### Basic Video
+
+```html
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  <source src="video.webm" type="video/webm">
+  <p>Your browser doesn't support HTML5 video.</p>
+</video>
+```
+
+### Video with Captions
+
+```html
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  <track kind="captions" src="captions.vtt" srclang="en" label="English">
+  <p>Your browser doesn't support HTML5 video.</p>
+</video>
+```
+
+### Video with Audio Description
+
+```html
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  <track kind="descriptions" src="descriptions.vtt" srclang="en" label="English Description">
+  <p>Your browser doesn't support HTML5 video.</p>
+</video>
+```
+
+### Video Best Practices
+
+- **Always provide captions** for video content
+- **Provide audio descriptions** for important visual content
+- **Include multiple formats** for browser compatibility
+- **Provide fallback content** for browsers that don't support video
+- **Use controls attribute** to allow users to control playback
+
+## Audio (audio)
+
+The `<audio>` element embeds audio content.
+
+### Basic Audio
+
+```html
+<audio controls>
+  <source src="audio.mp3" type="audio/mpeg">
+  <source src="audio.ogg" type="audio/ogg">
+  <p>Your browser doesn't support HTML5 audio.</p>
+</audio>
+```
+
+### Audio with Transcript
+
+```html
+<audio controls>
+  <source src="audio.mp3" type="audio/mpeg">
+  <p>Your browser doesn't support HTML5 audio.</p>
+</audio>
+
+<p>
+  <a href="transcript.html">Read transcript</a>
+</p>
+```
+
+### Audio Best Practices
+
+- **Always provide transcripts** for audio content
+- **Include multiple formats** for browser compatibility
+- **Provide fallback content** for browsers that don't support audio
+- **Use controls attribute** to allow users to control playback
+
+## Common Mistakes
+
+### 1. Missing Alt Text
+
+```html
+<!-- Bad: No alt text -->
+<img src="chart.png">
+
+<!-- Good: With alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+```
+
+### 2. Non-Descriptive Alt Text
+
+```html
+<!-- Bad: Non-descriptive alt text -->
+<img src="chart.png" alt="chart">
+
+<!-- Good: Descriptive alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+```
+
+### 3. Using "Image of" in Alt Text
+
+```html
+<!-- Bad: Using "image of" -->
+<img src="chart.png" alt="Image of a bar chart">
+
+<!-- Good: Without "image of" -->
+<img src="chart.png" alt="Bar chart showing sales data">
+```
+
+### 4. Not Providing Captions for Video
+
+```html
+<!-- Bad: No captions -->
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<!-- Good: With captions -->
+<video controls>
+  <source src="video.mp4" type="video/mp4">
+  <track kind="captions" src="captions.vtt" srclang="en" label="English">
+</video>
+```
+
+### 5. Not Providing Transcript for Audio
+
+```html
+<!-- Bad: No transcript -->
+<audio controls>
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Good: With transcript -->
+<audio controls>
+  <source src="audio.mp3" type="audio/mpeg">
+</audio>
+
+<p>
+  <a href="transcript.html">Read transcript</a>
+</p>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [Form Elements](./form-elements.mdx) - Form controls and inputs
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

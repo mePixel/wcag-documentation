@@ -1,0 +1,218 @@
+---
+title: "Accessible Inputs"
+description: "Creating accessible text inputs, checkboxes, radio buttons, and select dropdowns"
+---
+
+# Accessible Inputs
+
+Form inputs are the primary way users interact with web applications. Accessible inputs ensure that all users can understand, navigate, and complete form fields successfully.
+
+## Component Overview
+
+Accessible form inputs have clear labels, proper semantic markup, and work seamlessly with assistive technologies. Each input type has specific accessibility requirements and best practices.
+
+### Input Types Covered
+
+- **[Text Inputs](./text-inputs.mdx)**: Single-line text fields, email inputs, password inputs, and textareas
+- **[Checkboxes and Radios](./checkboxes-radios.mdx)**: Binary choice controls and single-choice controls
+- **[Select Dropdowns](./select-dropdowns.mdx)**: Choice selection controls
+- **[File Inputs](./file-inputs.mdx)**: File upload controls
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Input labels must be programmatically associated
+
+### Understandable
+- **3.3.2 Labels or Instructions**: All inputs must have labels or instructions
+
+### Robust
+- **4.1.2 Name, Role, Value**: Inputs must have proper name, role, and value
+
+## Required Fields
+
+Mark required fields clearly and programmatically.
+
+```html
+<div class="form-group">
+  <label for="email">
+    Email Address
+    <span class="required" aria-hidden="true">*</span>
+  </label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    required
+    aria-required="true"
+  >
+</div>
+
+<style>
+  .required {
+    color: #d32f2f;
+    font-weight: bold;
+  }
+</style>
+```
+
+## Common Pitfalls
+
+### 1. Using Placeholder Text as Labels
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 2. Missing Labels
+
+```html
+<!-- Bad: No label -->
+<input type="text" name="username">
+
+<!-- Good: Proper label -->
+<label for="username">Username</label>
+<input type="text" id="username">
+```
+
+### 3. Incorrect Radio Grouping
+
+```html
+<!-- Bad: Radios not grouped -->
+<label>
+  <input type="radio" name="contact" value="email"> Email
+</label>
+<label>
+  <input type="radio" name="contact" value="phone"> Phone
+</label>
+
+<!-- Good: Proper grouping -->
+<fieldset>
+  <legend>Preferred Contact Method</legend>
+  <label>
+    <input type="radio" name="contact" value="email"> Email
+  </label>
+  <label>
+    <input type="radio" name="contact" value="phone"> Phone
+  </label>
+</fieldset>
+```
+
+### 4. Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+input:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+input:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to all inputs using Tab
+- [ ] Can select checkboxes and radios using Space
+- [ ] Can open select dropdowns using Alt+Down (Windows) or Option+Down (Mac)
+- [ ] Focus indicators are visible
+
+### Screen Reader Testing
+- [ ] All labels are announced
+- [ ] Required fields are identified
+- [ ] Help text is available
+- [ ] Radio groups are announced with legend
+- [ ] Checkbox state is announced
+
+### Visual Testing
+- [ ] Labels are visually associated with inputs
+- [ ] Required fields are clearly marked
+- [ ] Focus indicators are visible
+- [ ] Color contrast is sufficient
+
+## Best Practices
+
+### 1. Use Appropriate Input Types
+
+Choose the right input type for the data:
+
+```html
+<!-- Good: Appropriate types -->
+<input type="email" name="email">
+<input type="tel" name="phone">
+<input type="url" name="website">
+<input type="number" name="quantity">
+<input type="date" name="birthdate">
+<input type="time" name="appointment">
+```
+
+### 2. Provide Help Text
+
+Give users additional guidance when needed:
+
+```html
+<div class="form-group">
+  <label for="password">Password</label>
+  <input 
+    type="password" 
+    id="password" 
+    name="password"
+    aria-describedby="password-help"
+  >
+  <span id="password-help" class="help-text">
+    Must be at least 8 characters with at least one number
+  </span>
+</div>
+```
+
+### 3. Use Autocomplete
+
+Help users complete forms faster:
+
+```html
+<input type="text" name="name" autocomplete="name">
+<input type="email" name="email" autocomplete="email">
+<input type="tel" name="phone" autocomplete="tel">
+<input type="text" name="address" autocomplete="street-address">
+<input type="text" name="city" autocomplete="address-level2">
+<input type="text" name="zip" autocomplete="postal-code">
+```
+
+### 4. Group Related Elements
+
+Use fieldset and legend for related inputs:
+
+```html
+<fieldset>
+  <legend>Shipping Address</legend>
+  
+  <label for="address">Street Address</label>
+  <input type="text" id="address" name="address">
+  
+  <label for="city">City</label>
+  <input type="text" id="city" name="city">
+  
+  <label for="zip">ZIP Code</label>
+  <input type="text" id="zip" name="zip">
+</fieldset>
+```
+
+## Related Components
+
+- [Form Validation](./form-validation.mdx) - Validating input data
+- [Error Handling](./error-handling.mdx) - Displaying error messages
+
+## Resources
+
+- [MDN HTML Input Types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input)
+- [WebAIM Form Accessibility](https://webaim.org/techniques/forms/)
+- [WAI-ARIA Authoring Practices - Forms](https://www.w3.org/WAI/ARIA/apg/patterns/form/)

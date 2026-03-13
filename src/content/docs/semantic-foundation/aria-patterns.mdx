@@ -1,0 +1,434 @@
+---
+title: "Common ARIA Patterns"
+description: "Implementing common accessible widgets with ARIA"
+---
+
+# Common ARIA Patterns
+
+These patterns show how to implement common accessible widgets using ARIA attributes. Always prefer native HTML elements when possible.
+
+## Custom Button
+
+When you need to create a custom button (e.g., an icon button), use button role with proper keyboard support.
+
+```html
+<div 
+  role="button" 
+  tabindex="0" 
+  aria-label="Close dialog"
+  onclick="closeDialog()"
+  onkeydown="handleKeydown(event)"
+>
+  ×
+</div>
+
+<script>
+function handleKeydown(event) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    closeDialog();
+  }
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="button"`: Identifies element as a button
+- `tabindex="0"`: Makes element keyboard focusable
+- `aria-label`: Provides accessible name when no visible text
+- Keyboard handlers: Respond to Enter and Space keys
+
+## Custom Checkbox
+
+Create an accessible custom checkbox with proper state management.
+
+```html
+<div 
+  role="checkbox" 
+  tabindex="0" 
+  aria-checked="false"
+  aria-labelledby="checkbox-label"
+  onclick="toggleCheckbox()"
+  onkeydown="handleKeydown(event)"
+>
+  <span id="checkbox-label">Subscribe to newsletter</span>
+</div>
+
+<script>
+let isChecked = false;
+
+function toggleCheckbox() {
+  isChecked = !isChecked;
+  this.setAttribute('aria-checked', isChecked);
+}
+
+function handleKeydown(event) {
+  if (event.key === ' ') {
+    event.preventDefault();
+    toggleCheckbox();
+  }
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="checkbox"`: Identifies element as a checkbox
+- `aria-checked`: Tracks checked state (true/false/mixed)
+- `tabindex="0"`: Makes element keyboard focusable
+- Update `aria-checked` when state changes
+
+## Custom Radio Group
+
+Implement an accessible radio button group with proper keyboard navigation.
+
+```html
+<div role="radiogroup" aria-labelledby="radio-group-label">
+  <h3 id="radio-group-label">Choose an option:</h3>
+  
+  <div 
+    role="radio" 
+    tabindex="0" 
+    aria-checked="true"
+    aria-labelledby="radio1-label"
+    onclick="selectRadio(1)"
+    onkeydown="handleKeydown(event)"
+  >
+    <span id="radio1-label">Option 1</span>
+  </div>
+  
+  <div 
+    role="radio" 
+    tabindex="-1" 
+    aria-checked="false"
+    aria-labelledby="radio2-label"
+    onclick="selectRadio(2)"
+    onkeydown="handleKeydown(event)"
+  >
+    <span id="radio2-label">Option 2</span>
+  </div>
+</div>
+
+<script>
+let selectedRadio = 1;
+
+function selectRadio(index) {
+  selectedRadio = index;
+  // Update aria-checked for all radios
+  const radios = document.querySelectorAll('[role="radio"]');
+  radios.forEach((radio, i) => {
+    radio.setAttribute('aria-checked', i + 1 === selectedRadio);
+    radio.setAttribute('tabindex', i + 1 === selectedRadio ? '0' : '-1');
+  });
+}
+
+function handleKeydown(event) {
+  if (event.key === ' ') {
+    event.preventDefault();
+    selectRadio(parseInt(this.getAttribute('data-index')));
+  }
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="radiogroup"`: Groups radio buttons
+- `role="radio"`: Identifies each radio button
+- Only one radio has `tabindex="0"` at a time
+- Update `aria-checked` and `tabindex` when selection changes
+
+## Tabs
+
+Create an accessible tab interface with proper keyboard navigation and ARIA relationships.
+
+```html
+<div role="tablist" aria-label="Product tabs">
+  <button 
+    role="tab" 
+    id="tab1" 
+    aria-selected="true" 
+    aria-controls="panel1"
+    onclick="activateTab(1)"
+  >
+    Description
+  </button>
+  <button 
+    role="tab" 
+    id="tab2" 
+    aria-selected="false" 
+    aria-controls="panel2"
+    onclick="activateTab(2)"
+  >
+    Reviews
+  </button>
+</div>
+
+<div 
+  role="tabpanel" 
+  id="panel1" 
+  aria-labelledby="tab1"
+  tabindex="0"
+>
+  <p>Product description goes here.</p>
+</div>
+
+<div 
+  role="tabpanel" 
+  id="panel2" 
+  aria-labelledby="tab2"
+  hidden
+  tabindex="0"
+>
+  <p>Product reviews go here.</p>
+</div>
+
+<script>
+function activateTab(index) {
+  // Update aria-selected for all tabs
+  const tabs = document.querySelectorAll('[role="tab"]');
+  tabs.forEach((tab, i) => {
+    tab.setAttribute('aria-selected', i + 1 === index);
+  });
+  
+  // Show/hide panels
+  const panels = document.querySelectorAll('[role="tabpanel"]');
+  panels.forEach((panel, i) => {
+    if (i + 1 === index) {
+      panel.removeAttribute('hidden');
+      panel.setAttribute('tabindex', '0');
+    } else {
+      panel.setAttribute('hidden', 'true');
+      panel.setAttribute('tabindex', '-1');
+    }
+  });
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="tablist"`: Groups tab buttons
+- `role="tab"`: Identifies each tab button
+- `role="tabpanel"`: Identifies each panel
+- `aria-selected`: Tracks which tab is active
+- `aria-controls`: Links tabs to their panels
+- `aria-labelledby`: Links panels to their tabs
+- Only active panel is visible and focusable
+
+## Accordion
+
+Create an accessible accordion with expandable sections.
+
+```html
+<div role="region" aria-labelledby="accordion-title">
+  <h2 id="accordion-title">Frequently Asked Questions</h2>
+  
+  <div class="accordion-item">
+    <button 
+      aria-expanded="false" 
+      aria-controls="section1"
+      onclick="toggleSection(1)"
+    >
+      Question 1
+    </button>
+    <div id="section1" hidden>
+      <p>Answer to question 1.</p>
+    </div>
+  </div>
+  
+  <div class="accordion-item">
+    <button 
+      aria-expanded="false" 
+      aria-controls="section2"
+      onclick="toggleSection(2)"
+    >
+      Question 2
+    </button>
+    <div id="section2" hidden>
+      <p>Answer to question 2.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleSection(index) {
+  const button = event.target;
+  const section = document.getElementById(`section${index}`);
+  const isExpanded = button.getAttribute('aria-expanded') === 'true';
+  
+  button.setAttribute('aria-expanded', !isExpanded);
+  section.hidden = isExpanded;
+}
+</script>
+```
+
+**Key Requirements:**
+- `aria-expanded`: Tracks expanded/collapsed state
+- `aria-controls`: Links button to content
+- Update `aria-expanded` when toggling
+- Use `hidden` attribute to hide content
+
+## Modal Dialog
+
+Create an accessible modal dialog with focus management.
+
+```html
+<button onclick="openModal()">Open Modal</button>
+
+<div 
+  id="modal" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="modal-title"
+  hidden
+>
+  <h2 id="modal-title">Modal Title</h2>
+  <p>Modal content goes here.</p>
+  <button onclick="closeModal()">Close</button>
+</div>
+
+<script>
+let previousFocus;
+
+function openModal() {
+  const modal = document.getElementById('modal');
+  previousFocus = document.activeElement;
+  
+  modal.hidden = false;
+  modal.querySelector('button').focus();
+  
+  // Trap focus in modal
+  modal.addEventListener('keydown', trapFocus);
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  
+  modal.hidden = true;
+  modal.removeEventListener('keydown', trapFocus);
+  
+  // Return focus to trigger
+  previousFocus.focus();
+}
+
+function trapFocus(event) {
+  const modal = document.getElementById('modal');
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+  
+  if (event.key === 'Tab') {
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement.focus();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement.focus();
+    }
+  }
+  
+  if (event.key === 'Escape') {
+    closeModal();
+  }
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="dialog"`: Identifies element as a dialog
+- `aria-modal="true"`: Indicates modal behavior
+- `aria-labelledby`: Provides accessible name
+- Trap focus within modal
+- Return focus to trigger when closed
+- Allow Escape key to close
+
+## Menu
+
+Create an accessible menu with keyboard navigation.
+
+```html
+<button 
+  id="menu-button" 
+  aria-haspopup="true" 
+  aria-expanded="false"
+  onclick="toggleMenu()"
+>
+  Menu
+</button>
+
+<ul 
+  id="menu" 
+  role="menu" 
+  aria-labelledby="menu-button"
+  hidden
+>
+  <li role="none">
+    <a role="menuitem" href="/item1">Item 1</a>
+  </li>
+  <li role="none">
+    <a role="menuitem" href="/item2">Item 2</a>
+  </li>
+</ul>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('menu');
+  const button = document.getElementById('menu-button');
+  const isExpanded = button.getAttribute('aria-expanded') === 'true';
+  
+  button.setAttribute('aria-expanded', !isExpanded);
+  menu.hidden = isExpanded;
+  
+  if (!isExpanded) {
+    menu.querySelector('[role="menuitem"]').focus();
+  }
+}
+</script>
+```
+
+**Key Requirements:**
+- `role="menu"`: Identifies menu container
+- `role="menuitem"`: Identifies menu items
+- `aria-haspopup`: Indicates button has menu
+- `aria-expanded`: Tracks menu state
+- Proper keyboard navigation (Arrow keys, Enter, Escape)
+
+## Common Mistakes
+
+### 1. Forgetting tabindex on Custom Widgets
+
+```html
+<!-- Bad: No tabindex -->
+<div role="button" onclick="handleClick()">
+  Custom Button
+</div>
+
+<!-- Good: With tabindex -->
+<div role="button" tabindex="0" onclick="handleClick()">
+  Custom Button
+</div>
+```
+
+### 2. Not Updating ARIA States
+
+```html
+<!-- Bad: Not updating aria-expanded -->
+<button onclick="toggleMenu()">Toggle Menu</button>
+
+<!-- Good: Updating aria-expanded -->
+<button aria-expanded="false" onclick="toggleMenu()">Toggle Menu</button>
+```
+
+### 3. Using aria-hidden on Focusable Elements
+
+```html
+<!-- Bad: Hiding focusable element -->
+<button aria-hidden="true">Hidden Button</button>
+
+<!-- Good: Using hidden attribute -->
+<button hidden>Hidden Button</button>
+```
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [ARIA Design Patterns](https://www.w3.org/WAI/ARIA/apg/patterns/)
+- [MDN ARIA Documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)

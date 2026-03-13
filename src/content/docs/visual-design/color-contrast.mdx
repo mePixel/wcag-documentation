@@ -1,0 +1,328 @@
+---
+title: "Color Contrast"
+description: "Understanding and implementing WCAG 2.1 AA color contrast requirements"
+---
+
+# Color Contrast
+
+Color contrast ensures text and graphical objects are readable for users with visual impairments, including color blindness and low vision.
+
+## Overview
+
+WCAG 2.1 Level AA requires specific contrast ratios between text and its background. These requirements ensure content is readable for users with various visual abilities.
+
+### Why Color Contrast Matters
+
+- **Low Vision Users**: Need sufficient contrast to read text
+- **Color Blind Users**: Can't rely on color differences alone
+- **All Users**: Benefit from clear, readable content
+- **Aging Users**: Experience reduced contrast sensitivity
+
+## WCAG Requirements
+
+### 1.4.3 Contrast (Minimum) (Level AA)
+
+Text and images of text must have a contrast ratio of at least 4.5:1, except for:
+
+- **Large Text**: Contrast ratio of at least 3:1
+- **Incidental**: Text or images of text that are part of an inactive user interface component, pure decoration, or not visible to anyone
+- **Logotypes**: Text that is part of a logo or brand name
+
+### 1.4.11 Non-text Contrast (Level AA)
+
+The visual presentation of user interface components and graphical objects must have a contrast ratio of at least 3:1 against adjacent colors.
+
+## Contrast Ratios
+
+### Text Contrast Requirements
+
+| Text Type | Minimum Contrast | WCAG Level |
+|-----------|------------------|-------------|
+| Normal text (under 18pt or 14pt bold) | 4.5:1 | AA |
+| Large text (18pt and up, or 14pt bold and up) | 3:1 | AA |
+| Graphical objects | 3:1 | AA |
+| UI components | 3:1 | AA |
+
+### Text Size Definitions
+
+- **Normal text**: Under 18 point (24px) or under 14 point bold (18.67px bold)
+- **Large text**: 18 point (24px) and up, or 14 point bold (18.67px bold) and up
+
+## Calculating Contrast
+
+### Contrast Ratio Formula
+
+Contrast ratio is calculated using the following formula:
+
+```
+(L1 + 0.05) / (L2 + 0.05)
+
+Where:
+- L1 = relative luminance of the lighter color
+- L2 = relative luminance of the darker color
+```
+
+### Luminance Formula
+
+```
+L = 0.2126 * R + 0.7152 * G + 0.0722 * B
+
+Where R, G, and B are:
+- If RsRGB <= 0.03928: RsRGB / 12.92
+- Else: ((RsRGB + 0.055) / 1.055) ^ 2.4
+```
+
+## Implementation Examples
+
+### Good Contrast Examples
+
+```css
+/* Good: High contrast (4.5:1 or higher) */
+body {
+  color: #333333;
+  background-color: #ffffff;
+}
+
+/* Good: Large text with lower contrast (3:1 or higher) */
+h1 {
+  color: #444444;
+  font-size: 24px;
+}
+
+/* Good: UI components with sufficient contrast (3:1 or higher) */
+button {
+  color: #ffffff;
+  background-color: #005fcc;
+}
+
+/* Good: Links with sufficient contrast */
+a {
+  color: #005fcc;
+  text-decoration: underline;
+}
+```
+
+### Bad Contrast Examples
+
+```css
+/* Bad: Low contrast (below 4.5:1) */
+body {
+  color: #999999;
+  background-color: #ffffff;
+}
+
+/* Bad: Links with insufficient contrast */
+a {
+  color: #cccccc;
+  text-decoration: none;
+}
+
+/* Bad: Buttons with insufficient contrast */
+button {
+  color: #ffffff;
+  background-color: #cccccc;
+}
+```
+
+## Color Contrast Tools
+
+### Online Checkers
+
+- [WebAIM Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [Colour Contrast Analyser](https://www.tpgi.com/colour-contrast-analyser.html)
+- [Contrast Ratio](https://contrast-ratio.com/)
+- [Accessible Colors](https://accessible-colors.com/)
+
+### Browser Extensions
+
+- axe DevTools
+- WAVE Browser Extension
+- Chrome DevTools Accessibility Panel
+
+### Command Line Tools
+
+- [Pa11y](https://github.com/pa11y/pa11y)
+- [Color Contrast CLI](https://www.npmjs.com/package/color-contrast-cli)
+
+## Common Mistakes
+
+### 1. Using Light Gray on White
+
+```css
+/* Bad: Low contrast */
+body {
+  color: #cccccc;
+  background-color: #ffffff;
+}
+
+/* Good: Sufficient contrast */
+body {
+  color: #333333;
+  background-color: #ffffff;
+}
+```
+
+### 2. Using Color Alone to Convey Information
+
+```css
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+### 3. Not Checking Contrast on All States
+
+```css
+/* Bad: Only checking default state */
+button {
+  color: #ffffff;
+  background-color: #005fcc;
+}
+
+/* Good: Checking all states */
+button {
+  color: #ffffff;
+  background-color: #005fcc;
+}
+
+button:hover {
+  background-color: #0047b3;
+}
+
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  color: #999999;
+  background-color: #f5f5f5;
+}
+```
+
+### 4. Forgetting Large Text Exception
+
+```css
+/* Bad: Using 4.5:1 for large text */
+h1 {
+  color: #444444;
+  font-size: 24px;
+}
+
+/* Good: Using 3:1 for large text */
+h1 {
+  color: #666666;
+  font-size: 24px;
+}
+```
+
+## Best Practices
+
+### 1. Use Sufficient Contrast
+
+Ensure all text meets minimum contrast requirements.
+
+```css
+/* Good: Sufficient contrast */
+body {
+  color: #333333;
+  background-color: #ffffff;
+}
+
+h1 {
+  color: #444444;
+  font-size: 24px;
+}
+```
+
+### 2. Test All States
+
+Check contrast on hover, focus, active, and disabled states.
+
+```css
+button {
+  color: #ffffff;
+  background-color: #005fcc;
+}
+
+button:hover {
+  background-color: #0047b3;
+}
+
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  color: #999999;
+  background-color: #f5f5f5;
+}
+```
+
+### 3. Use Multiple Indicators
+
+Don't rely on color alone to convey information.
+
+```css
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+
+.success {
+  color: #388e3c;
+  font-weight: bold;
+}
+.success::before {
+  content: "✓ ";
+}
+```
+
+### 4. Test with Tools
+
+Use contrast checkers to verify compliance.
+
+- Test all text and background combinations
+- Test all interactive states
+- Test with different color blindness simulators
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] All text meets minimum contrast requirements
+- [ ] Large text meets 3:1 contrast requirement
+- [ ] UI components meet 3:1 contrast requirement
+- [ ] Graphical objects meet 3:1 contrast requirement
+- [ ] All states (hover, focus, active, disabled) meet requirements
+
+### Tool Testing
+- [ ] Tested with WebAIM Contrast Checker
+- [ ] Tested with axe DevTools
+- [ ] Tested with WAVE Browser Extension
+- [ ] Tested with color blindness simulators
+
+### User Testing
+- [ ] Tested with users with low vision
+- [ ] Tested with users with color blindness
+- [ ] Tested in various lighting conditions
+
+## Related Resources
+
+- [WCAG 2.1 Contrast Requirements](https://www.w3.org/WAI/WCAG21/quickref/#visual-audio-contrast)
+- [WebAIM Color Contrast Checker](https://webaim.org/resources/contrastchecker/)
+- [MDN Color Contrast](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Understanding_WCAG/Perceivable/Color_contrast)

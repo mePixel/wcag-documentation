@@ -1,0 +1,401 @@
+---
+title: "Focus Management Best Practices"
+description: "Best practices for managing focus in accessible web applications"
+---
+
+# Focus Management Best Practices
+
+Following best practices for focus management ensures your custom components are accessible to all users, especially those who rely on keyboard navigation.
+
+## Core Principles
+
+### 1. Always Manage Focus in Custom Components
+
+Custom components must manage focus properly to be accessible.
+
+```javascript
+// Good: Managing focus
+function openComponent(componentId) {
+  previousFocus = document.activeElement;
+  const component = document.getElementById(componentId);
+  component.style.display = 'block';
+  const focusableElements = component.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+```
+
+**Why it matters:**
+- Keyboard users need to know where they are
+- Screen readers announce the focused element
+- Focus provides context for all users
+
+### 2. Restore Focus After Closing
+
+Always restore focus to the element that opened a component.
+
+```javascript
+// Good: Restoring focus
+function closeComponent(componentId) {
+  document.getElementById(componentId).style.display = 'none';
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+**Why it matters:**
+- Maintains user's context
+- Prevents focus from getting lost
+- Provides predictable behavior
+
+### 3. Trap Focus in Modals
+
+Focus should be trapped within modal dialogs.
+
+```javascript
+// Good: Trapping focus
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  element.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  });
+}
+```
+
+**Why it matters:**
+- Prevents keyboard users from navigating outside modal
+- Ensures users complete modal interaction
+- Provides expected modal behavior
+
+### 4. Move Focus to Dynamic Content
+
+Focus should move to newly revealed content.
+
+```javascript
+// Good: Moving focus to new content
+function showContent(contentId) {
+  const content = document.getElementById(contentId);
+  content.style.display = 'block';
+  content.focus();
+}
+```
+
+**Why it matters:**
+- Alerts users to new content
+- Ensures users are aware of changes
+- Provides clear feedback
+
+## Focus Order
+
+### Maintain Logical Focus Order
+
+Focus should follow a logical, predictable order.
+
+```javascript
+// Good: Logical focus order
+const focusableElements = document.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+focusableElements.forEach((element, index) => {
+  element.setAttribute('tabindex', index);
+});
+```
+
+**Best practices:**
+- Follow visual reading order (left-to-right, top-to-bottom)
+- Avoid jumping focus around the page
+- Use DOM order for natural tab navigation
+- Avoid positive `tabindex` values
+
+### Avoid Positive Tabindex Values
+
+Positive `tabindex` values disrupt natural focus order.
+
+```javascript
+// Bad: Positive tabindex
+element.setAttribute('tabindex', '5');
+
+// Good: Use tabindex="0" or tabindex="-1"
+element.setAttribute('tabindex', '0'); // Make focusable
+element.setAttribute('tabindex', '-1'); // Remove from tab order
+```
+
+**Why it matters:**
+- Maintains predictable focus order
+- Works better with assistive technologies
+- Follows web standards
+
+## Focus Indicators
+
+### Provide Clear Focus Indicators
+
+Focus indicators must be clearly visible and distinguishable.
+
+```css
+/* Good: Clear focus indicator */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Alternative: Custom focus indicator */
+button:focus-visible {
+  box-shadow: 0 0 0 3px #005fcc;
+}
+```
+
+**Requirements:**
+- Focus indicator must be visible
+- Must have sufficient contrast (3:1 minimum)
+- Must be distinguishable from non-focused state
+- Should not rely on color alone
+
+### Use focus-visible for Better UX
+
+The `:focus-visible` pseudo-class only shows focus when keyboard navigation is used.
+
+```css
+/* Good: Using focus-visible */
+button:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Fallback for browsers that don't support focus-visible */
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+```
+
+**Why it matters:**
+- Provides better UX for mouse users
+- Maintains accessibility for keyboard users
+- Follows modern web standards
+
+## Keyboard Support
+
+### Support Standard Keyboard Interactions
+
+Ensure your components support standard keyboard interactions.
+
+```javascript
+// Good: Supporting standard keys
+element.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    activateElement();
+  } else if (e.key === 'Escape') {
+    closeElement();
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    moveFocusDown();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    moveFocusUp();
+  }
+});
+```
+
+**Standard keys to support:**
+- **Enter/Space**: Activate buttons and links
+- **Escape**: Close modals and menus
+- **Arrow keys**: Navigate within components
+- **Home/End**: Jump to first/last item
+- **Tab/Shift+Tab**: Navigate between components
+
+### Prevent Default Behavior When Necessary
+
+Prevent default browser behavior when implementing custom interactions.
+
+```javascript
+// Good: Preventing default
+element.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    e.preventDefault(); // Prevent page scroll
+    activateElement();
+  }
+});
+```
+
+**When to prevent default:**
+- Space key (prevents page scroll)
+- Arrow keys (prevents page scroll)
+- Enter key (prevents form submission in some cases)
+
+## ARIA Attributes
+
+### Use Appropriate ARIA Roles
+
+Use ARIA roles to identify custom components.
+
+```html
+<!-- Good: Using ARIA roles -->
+<div role="button" tabindex="0">Button</div>
+<div role="dialog" aria-modal="true">Modal</div>
+<div role="menu">Menu</div>
+```
+
+**Common roles:**
+- `button`: Custom buttons
+- `dialog`: Modal dialogs
+- `menu`: Menus
+- `tablist`: Tab lists
+- `tabpanel`: Tab panels
+
+### Update ARIA States and Properties
+
+Keep ARIA attributes in sync with component state.
+
+```javascript
+// Good: Updating ARIA attributes
+function activateTab(tab) {
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+}
+```
+
+**Common ARIA attributes:**
+- `aria-selected`: Selected state
+- `aria-expanded`: Expanded state
+- `aria-pressed`: Pressed state
+- `aria-disabled`: Disabled state
+- `aria-hidden`: Hidden state
+
+## Testing
+
+### Test with Keyboard Navigation
+
+Verify focus management works correctly with keyboard navigation.
+
+**Testing checklist:**
+- Navigate using Tab key
+- Verify focus moves logically
+- Verify focus is trapped in modals
+- Verify focus is restored after closing
+- Verify focus moves to new content
+- Verify all interactive elements are focusable
+
+### Test with Screen Readers
+
+Verify focus management works with screen readers.
+
+**Testing checklist:**
+- Focus is announced correctly
+- Focus changes are announced
+- Can navigate using screen reader
+- Focus management works with screen reader
+
+### Test with Different Browsers
+
+Verify focus management works across different browsers.
+
+**Browsers to test:**
+- Chrome
+- Firefox
+- Safari
+- Edge
+
+## Common Mistakes to Avoid
+
+### 1. Not Managing Focus
+
+```javascript
+// Bad: Not managing focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Managing focus
+function openModal(modalId) {
+  previousFocus = document.activeElement;
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+```
+
+### 2. Not Restoring Focus
+
+```javascript
+// Bad: Not restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+// Good: Restoring focus
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+### 3. Not Trapping Focus
+
+```javascript
+// Bad: Not trapping focus
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Good: Trapping focus
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  trapFocus(modal);
+}
+```
+
+### 4. Not Moving Focus to New Content
+
+```javascript
+// Bad: Not moving focus
+function showContent(contentId) {
+  document.getElementById(contentId).style.display = 'block';
+}
+
+// Good: Moving focus
+function showContent(contentId) {
+  const content = document.getElementById(contentId);
+  content.style.display = 'block';
+  content.focus();
+}
+```
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Custom Button Focus Management](./custom-button-focus.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

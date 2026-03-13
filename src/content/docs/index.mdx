@@ -1,0 +1,49 @@
+---
+title: WCAG Documentation
+description: Comprehensive guide to web accessibility and WCAG 2.1 AA compliance
+template: splash # Remove or comment out this line to display the site sidebar on this page.
+hero:
+  title: |
+    Web Accessibility
+    <span
+      class="font-black text-transparent
+        bg-clip-text bg-gradient-to-b
+        from-accent-700 to-accent-400
+        dark:from-accent-500 dark:to-accent-200"
+    >
+      Documentation
+    </span>
+  tagline: Your comprehensive guide to WCAG 2.1 AA compliance and accessible web development
+  image:
+    file: ../../assets/houston.webp
+  actions:
+    - text: Quick Start Guide
+      link: /fundamentals/quick-start-guide/
+      icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+    - text: Accessibility Fundamentals
+      link: /fundamentals/accessibility-fundamentals/
+      icon: <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" /></svg>
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Explore the Documentation
+
+<CardGrid stagger>
+	<Card title="Quick Start Guide" icon="rocket">
+		Get started with 8 immediate accessibility improvements you can implement in under 15 minutes.
+	</Card>
+	<Card title="Accessibility Fundamentals" icon="book">
+		Learn the core concepts, POUR principles, and foundational knowledge of web accessibility.
+	</Card>
+	<Card title="Component Library" icon="puzzle">
+		Explore accessible patterns and implementations for common UI components.
+	</Card>
+	<Card title="WCAG Reference" icon="list">
+		Comprehensive reference for WCAG 2.1 AA success criteria and techniques.
+	</Card>
+	<Card title="Testing & Validation" icon="check-circle">
+		Learn automated and manual testing methods to validate your accessibility implementations.
+	</Card>
+</CardGrid>

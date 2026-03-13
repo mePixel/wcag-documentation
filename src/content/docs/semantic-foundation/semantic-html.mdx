@@ -1,0 +1,176 @@
+---
+title: "Semantic HTML"
+description: "Using semantic HTML elements for accessible content structure"
+---
+
+# Semantic HTML
+
+Semantic HTML uses HTML elements for their intended purpose, providing meaning and structure that assistive technologies can understand. This is the foundation of web accessibility.
+
+## Overview
+
+Semantic HTML elements convey meaning about the type of content they contain, not just how it should look. This meaning helps assistive technologies present content appropriately to users.
+
+### Why Semantic HTML Matters
+
+- **Screen Reader Users**: Navigate by element type (headings, landmarks, lists)
+- **Keyboard Users**: Interact with elements using standard keyboard shortcuts
+- **Search Engines**: Better understand and index your content
+- **All Users**: Benefit from consistent, predictable behavior
+
+## Semantic HTML Categories
+
+### Document Structure
+
+HTML elements for document structure and metadata.
+
+- [Document Structure Elements](./document-structure.mdx) - HTML document structure and metadata
+
+**Key Topics:**
+- HTML element with language declaration
+- Head element with metadata
+- Body element for visible content
+- DOCTYPE declaration
+
+### Text Content
+
+HTML elements for text content including headings, paragraphs, and lists.
+
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+
+**Key Topics:**
+- Headings (h1-h6) for hierarchical structure
+- Paragraphs for grouping related text
+- Lists (unordered, ordered, definition)
+- Text formatting elements
+
+### Links and Navigation
+
+HTML elements for links and navigation.
+
+- [Links and Navigation Elements](./links-navigation.mdx) - Links and navigation
+
+**Key Topics:**
+- Anchor links for navigation
+- Navigation element for major navigation blocks
+- Skip links for bypassing repeated content
+- Link best practices
+
+### Forms
+
+HTML elements for creating accessible forms.
+
+- [Form Elements](./form-elements.mdx) - Form controls and inputs
+
+**Key Topics:**
+- Form element for form structure
+- Label element for associating text with controls
+- Input element for various form controls
+- Button element for clickable buttons
+- Fieldset and legend for grouping controls
+
+### Tables
+
+HTML elements for creating accessible data tables.
+
+- [Table Elements](./table-elements.mdx) - Data tables
+
+**Key Topics:**
+- Table element for tabular data
+- Caption for table descriptions
+- Thead, tbody, tfoot for table structure
+- Scope attribute for header cells
+- Complex tables with multiple headers
+
+### Images and Media
+
+HTML elements for images and media content.
+
+- [Images and Media Elements](./images-media.mdx) - Images and media
+
+**Key Topics:**
+- Image element with alt text
+- Figure and figcaption for grouping images with captions
+- Video element with captions and descriptions
+- Audio element with transcripts
+
+### Interactive Elements
+
+HTML elements for interactive content.
+
+- [Interactive Elements](./interactive-elements.mdx) - Interactive components
+
+**Key Topics:**
+- Button element for clickable buttons
+- Details and summary for expandable content
+- Dialog element for modal dialogs
+- Progress and meter for displaying values
+
+### Landmark Elements
+
+HTML5 landmark elements for page structure.
+
+- [Landmark Elements](./landmark-elements.mdx) - HTML5 landmark elements
+
+**Key Topics:**
+- Header for introductory content
+- Footer for concluding content
+- Main for primary content
+- Aside for tangentially related content
+- Article for self-contained content
+- Section for grouping related content
+- Navigation for major navigation blocks
+
+### Best Practices
+
+Best practices and common mistakes for using semantic HTML.
+
+- [Semantic HTML Best Practices](./semantic-best-practices.mdx) - Best practices and common mistakes
+
+**Key Topics:**
+- Core principles of semantic HTML
+- Common mistakes to avoid
+- Best practices by element type
+- Testing semantic HTML
+
+## Quick Reference
+
+### Common Semantic Elements
+
+| Element | Purpose | Example |
+|----------|---------|---------|
+| `<h1>`-`<h6>` | Headings | `<h1>Page Title</h1>` |
+| `<p>` | Paragraphs | `<p>Paragraph text</p>` |
+| `<ul>`, `<ol>` | Lists | `<ul><li>Item</li></ul>` |
+| `<a>` | Links | `<a href="/about">About</a>` |
+| `<button>` | Buttons | `<button type="submit">Submit</button>` |
+| `<img>` | Images | `<img src="photo.jpg" alt="Description">` |
+| `<nav>` | Navigation | `<nav><a href="/">Home</a></nav>` |
+| `<main>` | Main content | `<main><h1>Main</h1></main>` |
+| `<article>` | Self-contained content | `<article><h2>Article</h2></article>` |
+| `<section>` | Grouped content | `<section><h2>Section</h2></section>` |
+
+### Common Mistakes
+
+1. **Using divs instead of semantic elements**
+   - Bad: `<div class="button">Submit</div>`
+   - Good: `<button type="button">Submit</button>`
+
+2. **Skipping heading levels**
+   - Bad: `<h1>Title</h1><h3>Subtitle</h3>`
+   - Good: `<h1>Title</h1><h2>Subtitle</h2>`
+
+3. **Using non-descriptive link text**
+   - Bad: `<a href="/about">Click here</a>`
+   - Good: `<a href="/about">Learn about our company</a>`
+
+4. **Missing alt text**
+   - Bad: `<img src="chart.png">`
+   - Good: `<img src="chart.png" alt="Bar chart showing sales data">`
+
+## Related Resources
+
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference
+- [ARIA Attributes](./aria-attributes.mdx) - ARIA attributes and roles
+- [MDN HTML Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
+- [HTML5 Specification](https://html.spec.whatwg.org/)

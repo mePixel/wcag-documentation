@@ -1,0 +1,349 @@
+---
+title: "Dropdown Focus Management"
+description: "Managing focus in dropdown menus for accessibility"
+---
+
+# Dropdown Focus Management
+
+Dropdown menus require proper focus management to ensure keyboard users can navigate menu items efficiently and return to the trigger button when closed.
+
+## Overview
+
+When a dropdown opens, focus must:
+1. Move to the first menu item
+2. Allow navigation with arrow keys
+3. Return to the trigger button when closed
+
+## Implementation
+
+### HTML Structure
+
+```html
+<!-- Good: Accessible dropdown menu -->
+<div class="dropdown">
+  <button id="menu-button" aria-haspopup="true" aria-expanded="false">
+    Menu
+  </button>
+  
+  <ul id="menu" role="menu" aria-labelledby="menu-button" style="display: none;">
+    <li role="none">
+      <a href="#" role="menuitem">Item 1</a>
+    </li>
+    <li role="none">
+      <a href="#" role="menuitem">Item 2</a>
+    </li>
+    <li role="none">
+      <a href="#" role="menuitem">Item 3</a>
+    </li>
+  </ul>
+</div>
+```
+
+**Key Attributes:**
+- `aria-haspopup="true"` - Indicates the button has a popup menu
+- `aria-expanded` - Indicates whether the menu is expanded
+- `role="menu"` - Identifies the container as a menu
+- `role="menuitem"` - Identifies each item as a menu item
+- `aria-labelledby` - References the button that controls the menu
+
+### JavaScript Implementation
+
+```javascript
+// Dropdown focus management
+const menuButton = document.getElementById('menu-button');
+const menu = document.getElementById('menu');
+const menuItems = menu.querySelectorAll('[role="menuitem"]');
+
+function toggleMenu() {
+  const isExpanded = menuButton.getAttribute('aria-expanded') === 'true';
+  
+  if (isExpanded) {
+    closeMenu();
+  } else {
+    openMenu();
+  }
+}
+
+function openMenu() {
+  menu.style.display = 'block';
+  menuButton.setAttribute('aria-expanded', 'true');
+  menuItems[0].focus();
+}
+
+function closeMenu() {
+  menu.style.display = 'none';
+  menuButton.setAttribute('aria-expanded', 'false');
+  menuButton.focus();
+}
+
+menuButton.addEventListener('click', toggleMenu);
+
+menu.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(menuItems).indexOf(document.activeElement);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % menuItems.length;
+    menuItems[nextIndex].focus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+    menuItems[prevIndex].focus();
+  } else if (e.key === 'Escape') {
+    closeMenu();
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    menuItems[0].focus();
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    menuItems[menuItems.length - 1].focus();
+  }
+});
+```
+
+## Keyboard Navigation
+
+### Arrow Keys
+
+- **Arrow Down**: Move to next menu item
+- **Arrow Up**: Move to previous menu item
+- **Home**: Move to first menu item
+- **End**: Move to last menu item
+
+```javascript
+menu.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(menuItems).indexOf(document.activeElement);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % menuItems.length;
+    menuItems[nextIndex].focus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+    menuItems[prevIndex].focus();
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    menuItems[0].focus();
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    menuItems[menuItems.length - 1].focus();
+  }
+});
+```
+
+### Escape Key
+
+Allow users to close the menu with the Escape key:
+
+```javascript
+menu.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeMenu();
+  }
+});
+```
+
+### Enter and Space
+
+Allow users to activate menu items with Enter or Space:
+
+```javascript
+menuItems.forEach(item => {
+  item.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      // Activate the menu item
+      item.click();
+    }
+  });
+});
+```
+
+## Focus Management
+
+### Opening the Menu
+
+When the menu opens, move focus to the first menu item:
+
+```javascript
+function openMenu() {
+  menu.style.display = 'block';
+  menuButton.setAttribute('aria-expanded', 'true');
+  menuItems[0].focus();
+}
+```
+
+### Closing the Menu
+
+When the menu closes, return focus to the trigger button:
+
+```javascript
+function closeMenu() {
+  menu.style.display = 'none';
+  menuButton.setAttribute('aria-expanded', 'false');
+  menuButton.focus();
+}
+```
+
+### Click Outside
+
+Close the menu when clicking outside:
+
+```javascript
+document.addEventListener('click', (e) => {
+  if (!menu.contains(e.target) && !menuButton.contains(e.target)) {
+    closeMenu();
+  }
+});
+```
+
+## Nested Menus
+
+For nested menus (submenus), manage focus appropriately:
+
+```html
+<div class="dropdown">
+  <button id="menu-button" aria-haspopup="true" aria-expanded="false">
+    Menu
+  </button>
+  
+  <ul id="menu" role="menu" aria-labelledby="menu-button" style="display: none;">
+    <li role="none">
+      <a href="#" role="menuitem">Item 1</a>
+    </li>
+    <li role="none">
+      <a href="#" role="menuitem" aria-haspopup="true" aria-expanded="false">
+        Submenu
+      </a>
+      <ul role="menu" style="display: none;">
+        <li role="none">
+          <a href="#" role="menuitem">Subitem 1</a>
+        </li>
+        <li role="none">
+          <a href="#" role="menuitem">Subitem 2</a>
+        </li>
+      </ul>
+    </li>
+    <li role="none">
+      <a href="#" role="menuitem">Item 3</a>
+    </li>
+  </ul>
+</div>
+```
+
+```javascript
+// Handle submenu navigation
+const submenuTriggers = menu.querySelectorAll('[role="menuitem"][aria-haspopup="true"]');
+
+submenuTriggers.forEach(trigger => {
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const submenu = trigger.nextElementSibling;
+      submenu.style.display = 'block';
+      trigger.setAttribute('aria-expanded', 'true');
+      const submenuItems = submenu.querySelectorAll('[role="menuitem"]');
+      submenuItems[0].focus();
+    }
+  });
+});
+
+// Handle submenu close with ArrowLeft
+const submenus = menu.querySelectorAll('ul[role="menu"] ul[role="menu"]');
+
+submenus.forEach(submenu => {
+  submenu.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      submenu.style.display = 'none';
+      const trigger = submenu.previousElementSibling;
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.focus();
+    }
+  });
+});
+```
+
+## Common Mistakes
+
+### 1. Not Moving Focus to Menu Items
+
+```javascript
+// Bad: Not moving focus
+function openMenu() {
+  menu.style.display = 'block';
+  menuButton.setAttribute('aria-expanded', 'true');
+}
+
+// Good: Moving focus to first item
+function openMenu() {
+  menu.style.display = 'block';
+  menuButton.setAttribute('aria-expanded', 'true');
+  menuItems[0].focus();
+}
+```
+
+### 2. Not Restoring Focus
+
+```javascript
+// Bad: Not restoring focus
+function closeMenu() {
+  menu.style.display = 'none';
+  menuButton.setAttribute('aria-expanded', 'false');
+}
+
+// Good: Restoring focus to button
+function closeMenu() {
+  menu.style.display = 'none';
+  menuButton.setAttribute('aria-expanded', 'false');
+  menuButton.focus();
+}
+```
+
+### 3. Not Supporting Arrow Keys
+
+```javascript
+// Bad: No arrow key support
+menu.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeMenu();
+  }
+});
+
+// Good: Full keyboard support
+menu.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(menuItems).indexOf(document.activeElement);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % menuItems.length;
+    menuItems[nextIndex].focus();
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+    menuItems[prevIndex].focus();
+  } else if (e.key === 'Escape') {
+    closeMenu();
+  }
+});
+```
+
+## Best Practices
+
+1. **Move focus to first menu item** when opening
+2. **Return focus to trigger button** when closing
+3. **Support arrow keys** for navigation
+4. **Support Escape key** for closing
+5. **Support Home and End keys** for quick navigation
+6. **Handle nested menus** appropriately
+7. **Close on click outside** for better UX
+8. **Update ARIA attributes** to reflect state
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

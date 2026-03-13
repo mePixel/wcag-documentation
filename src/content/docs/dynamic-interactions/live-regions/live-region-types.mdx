@@ -1,0 +1,198 @@
+---
+title: "Live Region Types"
+description: "Understanding different ARIA live region types and when to use them"
+---
+
+# Live Region Types
+
+ARIA live regions come in different types, each suited for specific use cases. Understanding when to use each type is crucial for creating accessible dynamic content.
+
+## Live Region Attributes
+
+| Attribute | Description | Values |
+|-----------|-------------|--------|
+| `aria-live` | Announcement priority | `polite`, `assertive`, `off` |
+| `aria-atomic` | Update entire region | `true`, `false` |
+| `aria-relevant` | What changes to announce | `additions`, `removals`, `text`, `all` |
+| `aria-busy` | Region is being updated | `true`, `false` |
+
+## Polite Live Regions
+
+Polite live regions announce changes when the user is idle, without interrupting current speech. Use these for non-critical updates.
+
+### When to Use
+
+- Status messages
+- Loading indicators
+- Non-urgent notifications
+- Progress updates
+
+### Implementation
+
+```html
+<!-- Good: Polite live region -->
+<div id="status" aria-live="polite" aria-atomic="true">
+  Status: Ready
+</div>
+```
+
+```javascript
+// Update status
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = `Status: ${message}`;
+}
+```
+
+### Best Practices
+
+- Use `aria-atomic="true"` when the entire message should be announced
+- Use `aria-atomic="false"` when only new content should be announced
+- Keep messages concise and clear
+- Avoid frequent updates that could overwhelm users
+
+## Assertive Live Regions
+
+Assertive live regions announce changes immediately, interrupting current speech. Use these only for critical alerts.
+
+### When to Use
+
+- Error messages
+- Critical warnings
+- Security alerts
+- Time-sensitive notifications
+
+### Implementation
+
+```html
+<!-- Good: Assertive live region for critical alerts -->
+<div id="alert" role="alert" aria-live="assertive">
+  <!-- Alert messages -->
+</div>
+```
+
+```javascript
+// Show critical alert
+function showAlert(message) {
+  const alert = document.getElementById('alert');
+  alert.textContent = message;
+}
+```
+
+### Best Practices
+
+- Use sparingly - only for truly critical information
+- Keep messages brief and actionable
+- Provide clear guidance on what to do
+- Don't use for routine updates
+
+## Status Regions
+
+Status regions are a specialized type of polite live region designed for status messages and updates.
+
+### When to Use
+
+- Form submission status
+- Operation completion messages
+- System status updates
+- Non-critical feedback
+
+### Implementation
+
+```html
+<!-- Good: Status region -->
+<div id="status" role="status">
+  <!-- Status messages -->
+</div>
+```
+
+```javascript
+// Update status
+function updateStatus(message) {
+  const status = document.getElementById('status');
+  status.textContent = message;
+}
+```
+
+### Best Practices
+
+- Use `role="status"` instead of `aria-live="polite"` for semantic clarity
+- Provide clear, descriptive status messages
+- Include context when necessary
+- Update status promptly after actions complete
+
+## Alert Regions
+
+Alert regions are a specialized type of assertive live region designed for important alerts and errors.
+
+### When to Use
+
+- Form validation errors
+- System errors
+- Security warnings
+- Critical failures
+
+### Implementation
+
+```html
+<!-- Good: Alert region -->
+<div id="alert" role="alert">
+  <!-- Alert messages -->
+</div>
+```
+
+```javascript
+// Show alert
+function showAlert(message) {
+  const alert = document.getElementById('alert');
+  alert.textContent = message;
+}
+```
+
+### Best Practices
+
+- Use `role="alert"` instead of `aria-live="assertive"` for semantic clarity
+- Provide clear, actionable error messages
+- Explain what went wrong and how to fix it
+- Associate alerts with related form fields using `aria-describedby`
+
+## Choosing the Right Type
+
+### Decision Tree
+
+1. **Is the update critical?**
+   - Yes → Use `role="alert"` (assertive)
+   - No → Continue to step 2
+
+2. **Is it a status message?**
+   - Yes → Use `role="status"` (polite)
+   - No → Continue to step 3
+
+3. **Is it a general update?**
+   - Yes → Use `aria-live="polite"`
+   - No → Consider if a live region is needed
+
+### Examples
+
+```html
+<!-- Critical error - use alert -->
+<div role="alert">
+  Payment failed. Please try again.
+</div>
+
+<!-- Status update - use status -->
+<div role="status">
+  Your changes have been saved.
+</div>
+
+<!-- General update - use polite -->
+<div aria-live="polite">
+  New messages available.
+</div>
+```
+
+## Related Resources
+
+- [ARIA Live Regions](https://www.w3.org/WAI/ARIA/apg/practices/live-regions/)
+- [MDN aria-live](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [WebAIM Dynamic Content](https://webaim.org/techniques/aria/)

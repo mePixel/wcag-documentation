@@ -1,0 +1,500 @@
+---
+title: "Landmark Elements"
+description: "HTML5 landmark elements for page structure"
+---
+
+# Landmark Elements
+
+HTML5 landmark elements define page structure, making it easier for users to navigate and understand content.
+
+## Overview
+
+Landmark elements provide a way to identify the organization and structure of web content. They are particularly useful for:
+- **Screen Reader Users**: Can navigate by landmarks to find content quickly
+- **Keyboard Users**: Can jump between sections using landmark shortcuts
+- **All Users**: Benefit from clear, organized page structure
+
+## Header (header)
+
+The `<header>` element contains introductory content for a page or section.
+
+### Page Header
+
+```html
+<header>
+  <h1>Site Title</h1>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+### Section Header
+
+```html
+<article>
+  <header>
+    <h2>Article Title</h2>
+    <p>Published on March 10, 2024</p>
+  </header>
+  <p>Article content...</p>
+</article>
+```
+
+### Best Practices
+
+- Use `<header>` for introductory content
+- Can include navigation, search, or other introductory elements
+- Don't use `<header>` for styling purposes only
+- A page can have multiple `<header>` elements (one per section)
+
+## Footer (footer)
+
+The `<footer>` element contains footer information for a page or section.
+
+### Page Footer
+
+```html
+<footer>
+  <p>&copy; 2024 Company Name</p>
+  <nav aria-label="Footer navigation">
+    <ul>
+      <li><a href="/privacy">Privacy Policy</a></li>
+      <li><a href="/terms">Terms of Service</a></li>
+      <li><a href="/sitemap">Sitemap</a></li>
+    </ul>
+  </nav>
+</footer>
+```
+
+### Section Footer
+
+```html
+<article>
+  <header>
+    <h2>Article Title</h2>
+  </header>
+  <p>Article content...</p>
+  <footer>
+    <p>Author: John Doe</p>
+    <p>Published: March 10, 2024</p>
+  </footer>
+</article>
+```
+
+### Best Practices
+
+- Use `<footer>` for concluding content
+- Can include copyright, contact info, or related links
+- Don't use `<footer>` for styling purposes only
+- A page can have multiple `<footer>` elements (one per section)
+
+## Main (main)
+
+The `<main>` element contains the main content of the document.
+
+### Basic Main
+
+```html
+<header>
+  <!-- Header content -->
+</header>
+
+<main>
+  <h1>Main Content Title</h1>
+  <p>Main content goes here.</p>
+</main>
+
+<footer>
+  <!-- Footer content -->
+</footer>
+```
+
+### Main with ARIA
+
+```html
+<main role="main">
+  <h1>Main Content Title</h1>
+  <p>Main content goes here.</p>
+</main>
+```
+
+**Note:** The `role="main"` attribute is redundant with the `<main>` element, but can be used for older browsers.
+
+### Best Practices
+
+- **Use only one `<main>` element per page**
+- Use `<main>` for the primary content of the page
+- Don't include navigation, header, or footer in `<main>`
+- Ensure `<main>` is a direct child of `<body>` when possible
+
+```html
+<!-- Good: Single main element -->
+<body>
+  <header>
+    <!-- Header -->
+  </header>
+  
+  <main>
+    <!-- Main content -->
+  </main>
+  
+  <footer>
+    <!-- Footer -->
+  </footer>
+</body>
+
+<!-- Bad: Multiple main elements -->
+<body>
+  <main>
+    <!-- Main content -->
+  </main>
+  
+  <main>
+    <!-- More content -->
+  </main>
+</body>
+```
+
+## Aside (aside)
+
+The `<aside>` element contains tangentially related content.
+
+### Sidebar
+
+```html
+<main>
+  <article>
+    <h2>Main Article</h2>
+    <p>Main content...</p>
+  </article>
+  
+  <aside>
+    <h2>Related Links</h2>
+    <ul>
+      <li><a href="/link1">Related 1</a></li>
+      <li><a href="/link2">Related 2</a></li>
+    </ul>
+  </aside>
+</main>
+```
+
+### Pull Quote
+
+```html
+<article>
+  <p>Main article content...</p>
+  
+  <aside>
+    <blockquote>
+      <p>This is a pull quote from the article.</p>
+    </blockquote>
+  </aside>
+</article>
+```
+
+### Best Practices
+
+- Use `<aside>` for content tangentially related to main content
+- Common uses: sidebars, pull quotes, advertising
+- Don't use `<aside>` for content that's essential to understanding main content
+- Consider using ARIA roles to provide additional context
+
+```html
+<!-- Good: Tangentially related content -->
+<aside aria-label="Related articles">
+  <h2>Related Articles</h2>
+  <ul>
+    <li><a href="/article1">Article 1</a></li>
+    <li><a href="/article2">Article 2</a></li>
+  </ul>
+</aside>
+
+<!-- Bad: Essential content in aside -->
+<aside>
+  <h2>Important Information</h2>
+  <p>This is essential to understanding the article.</p>
+</aside>
+```
+
+## Article (article)
+
+The `<article>` element contains self-contained content.
+
+### Basic Article
+
+```html
+<article>
+  <header>
+    <h2>Article Title</h2>
+    <p>Published on March 10, 2024</p>
+  </header>
+  <p>Article content...</p>
+  <footer>
+    <p>Author: John Doe</p>
+  </footer>
+</article>
+```
+
+### Multiple Articles
+
+```html
+<main>
+  <article>
+    <h2>Article 1</h2>
+    <p>Content...</p>
+  </article>
+  
+  <article>
+    <h2>Article 2</h2>
+    <p>Content...</p>
+  </article>
+  
+  <article>
+    <h2>Article 3</h2>
+    <p>Content...</p>
+  </article>
+</main>
+```
+
+### Nested Articles
+
+```html
+<article>
+  <h2>Main Article</h2>
+  <p>Main article content...</p>
+  
+  <article>
+    <h3>Related Article</h3>
+    <p>Related article content...</p>
+  </article>
+</article>
+```
+
+### Best Practices
+
+- Use `<article>` for self-contained, distributable content
+- Common uses: blog posts, news articles, forum posts
+- Include `<header>` and `<footer>` within `<article>` when appropriate
+- Can nest `<article>` elements for related content
+
+## Section (section)
+
+The `<section>` element groups related content.
+
+### Basic Section
+
+```html
+<section>
+  <h2>Section Title</h2>
+  <p>Section content...</p>
+</section>
+```
+
+### Multiple Sections
+
+```html
+<main>
+  <section>
+    <h2>Introduction</h2>
+    <p>Introduction content...</p>
+  </section>
+  
+  <section>
+    <h2>Features</h2>
+    <p>Features content...</p>
+  </section>
+  
+  <section>
+    <h2>Pricing</h2>
+    <p>Pricing content...</p>
+  </section>
+</main>
+```
+
+### Nested Sections
+
+```html
+<section>
+  <h2>Main Section</h2>
+  <p>Main section content...</p>
+  
+  <section>
+    <h3>Subsection</h3>
+    <p>Subsection content...</p>
+  </section>
+</section>
+```
+
+### Best Practices
+
+- Use `<section>` to group related content
+- Always include a heading within each `<section>`
+- Use `<section>` when content has a natural heading
+- Don't use `<section>` for styling purposes only
+
+```html
+<!-- Good: Section with heading -->
+<section>
+  <h2>Features</h2>
+  <p>Features content...</p>
+</section>
+
+<!-- Bad: Section without heading -->
+<section>
+  <p>Features content...</p>
+</section>
+```
+
+## Navigation (nav)
+
+The `<nav>` element contains navigation links.
+
+### Main Navigation
+
+```html
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+### Multiple Navigation Sections
+
+```html
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<nav aria-label="Footer navigation">
+  <ul>
+    <li><a href="/privacy">Privacy Policy</a></li>
+    <li><a href="/terms">Terms of Service</a></li>
+  </ul>
+</nav>
+```
+
+### Best Practices
+
+- Use `<nav>` for major navigation blocks
+- Include `aria-label` to describe the navigation
+- Use lists (`<ul>` or `<ol>`) for navigation items
+- Don't use `<nav>` for every group of links
+
+```html
+<!-- Good: Major navigation -->
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<!-- Bad: Using nav for minor links -->
+<nav aria-label="Social links">
+  <a href="/twitter">Twitter</a>
+  <a href="/facebook">Facebook</a>
+</nav>
+```
+
+## Landmark Navigation
+
+Screen readers provide shortcuts for navigating by landmarks:
+
+- **NVDA**: D (next landmark), Shift+D (previous landmark)
+- **JAWS**: R (next landmark), Shift+R (previous landmark)
+- **VoiceOver**: VO+Command+U (landmarks menu)
+
+## Common Mistakes
+
+### 1. Multiple Main Elements
+
+```html
+<!-- Bad: Multiple main elements -->
+<main>
+  <h1>Main Content</h1>
+</main>
+
+<main>
+  <h2>Additional Content</h2>
+</main>
+
+<!-- Good: Single main element -->
+<main>
+  <h1>Main Content</h1>
+  <section>
+    <h2>Additional Content</h2>
+  </section>
+</main>
+```
+
+### 2. Section Without Heading
+
+```html
+<!-- Bad: Section without heading -->
+<section>
+  <p>Content...</p>
+</section>
+
+<!-- Good: Section with heading -->
+<section>
+  <h2>Section Title</h2>
+  <p>Content...</p>
+</section>
+```
+
+### 3. Using Divs Instead of Landmarks
+
+```html
+<!-- Bad: Using divs -->
+<div class="header">
+  <h1>Site Title</h1>
+</div>
+
+<div class="main">
+  <h1>Main Content</h1>
+</div>
+
+<!-- Good: Using landmarks -->
+<header>
+  <h1>Site Title</h1>
+</header>
+
+<main>
+  <h1>Main Content</h1>
+</main>
+```
+
+### 4. Using Nav for Minor Links
+
+```html
+<!-- Bad: Using nav for minor links -->
+<nav aria-label="Social links">
+  <a href="/twitter">Twitter</a>
+  <a href="/facebook">Facebook</a>
+</nav>
+
+<!-- Good: Using div for minor links -->
+<div class="social-links">
+  <a href="/twitter" aria-label="Twitter">Twitter</a>
+  <a href="/facebook" aria-label="Facebook">Facebook</a>
+</div>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Document Structure Elements](./document-structure.mdx) - HTML document structure
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

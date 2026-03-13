@@ -1,0 +1,348 @@
+---
+title: "Links and Navigation Elements"
+description: "HTML elements for links and navigation"
+---
+
+# Links and Navigation Elements
+
+Links and navigation elements enable users to navigate between pages and sections of your website.
+
+## Anchor Links (a)
+
+The `<a>` element creates links to other pages, locations, or resources.
+
+### Link Types
+
+#### Link to Another Page
+
+```html
+<a href="/about">About Us</a>
+```
+
+#### Link to External Site
+
+```html
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+  External Link
+</a>
+```
+
+**Important:** Always include `rel="noopener noreferrer"` when using `target="_blank"` for security and accessibility.
+
+#### Link to Section on Same Page
+
+```html
+<a href="#section">Jump to Section</a>
+```
+
+The target section must have a matching `id` attribute:
+
+```html
+<section id="section">
+  <h2>Section Title</h2>
+  <p>Section content...</p>
+</section>
+```
+
+#### Email Link
+
+```html
+<a href="mailto:info@example.com">Email Us</a>
+```
+
+#### Phone Link
+
+```html
+<a href="tel:+1234567890">Call Us</a>
+```
+
+#### Download Link
+
+```html
+<a href="/document.pdf" download>Download PDF</a>
+```
+
+### Link Best Practices
+
+#### Use Descriptive Link Text
+
+Link text should clearly describe the destination or purpose of the link.
+
+```html
+<!-- Good: Descriptive link text -->
+<a href="/about">Learn about our company</a>
+<a href="/products">View our products</a>
+<a href="/contact">Contact our support team</a>
+
+<!-- Bad: Non-descriptive link text -->
+<a href="/about">Click here</a>
+<a href="/products">Read more</a>
+<a href="/contact">Go</a>
+```
+
+**Why descriptive text matters:**
+- Screen reader users can navigate by links and hear the link text
+- Keyboard users can tab through links and understand their purpose
+- All users benefit from clear, informative link text
+- Search engines use link text to understand page content
+
+#### Avoid "Click Here"
+
+"Click here" is problematic because:
+- Assumes users are using a mouse
+- Doesn't describe the link destination
+- Is repetitive when multiple links use the same text
+- Is less accessible for screen reader users
+
+```html
+<!-- Bad: Using "click here" -->
+<p>To learn more about our services, <a href="/services">click here</a>.</p>
+
+<!-- Good: Descriptive link text -->
+<p><a href="/services">Learn more about our services</a>.</p>
+```
+
+#### Link Text Should Make Sense Out of Context
+
+Screen reader users often navigate by links, hearing them out of context.
+
+```html
+<!-- Bad: Link text doesn't make sense out of context -->
+<p>Read our <a href="/blog">blog post</a> to learn more.</p>
+
+<!-- Good: Link text is self-contained -->
+<p>Read our <a href="/blog">blog post about accessibility</a> to learn more.</p>
+```
+
+#### Don't Use URLs as Link Text
+
+URLs are difficult to understand, especially for screen reader users.
+
+```html
+<!-- Bad: Using URL as link text -->
+<a href="https://example.com/about">https://example.com/about</a>
+
+<!-- Good: Using descriptive text -->
+<a href="https://example.com/about">About Us</a>
+```
+
+### Link Accessibility Attributes
+
+#### Title Attribute
+
+The `title` attribute can provide additional information about a link, but it's not a substitute for descriptive link text.
+
+```html
+<a href="/about" title="Learn about our company history and mission">
+  About Us
+</a>
+```
+
+**Note:** The `title` attribute is not reliably announced by all screen readers. Always use descriptive link text.
+
+#### ARIA Attributes
+
+Use ARIA attributes when link text alone doesn't provide sufficient information.
+
+```html
+<a href="/download" aria-label="Download the accessibility guide (PDF, 2.5 MB)">
+  Download
+</a>
+```
+
+### Link States
+
+Links have different states that should be styled appropriately:
+
+```css
+/* Unvisited link */
+a:link {
+  color: #0066cc;
+}
+
+/* Visited link */
+a:visited {
+  color: #663399;
+}
+
+/* Hover state */
+a:hover {
+  text-decoration: underline;
+}
+
+/* Focus state */
+a:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Active state */
+a:active {
+  color: #ff0000;
+}
+```
+
+## Navigation (nav)
+
+The `<nav>` element contains navigation links, identifying them as a major navigation block.
+
+### Basic Navigation
+
+```html
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+```
+
+### Multiple Navigation Sections
+
+Use `aria-label` to distinguish between different navigation sections.
+
+```html
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/services">Services</a></li>
+  </ul>
+</nav>
+
+<nav aria-label="Footer navigation">
+  <ul>
+    <li><a href="/privacy">Privacy Policy</a></li>
+    <li><a href="/terms">Terms of Service</a></li>
+    <li><a href="/sitemap">Sitemap</a></li>
+  </ul>
+</nav>
+```
+
+### Navigation Best Practices
+
+- Use `<nav>` for major navigation blocks
+- Include `aria-label` to describe the navigation
+- Use lists (`<ul>` or `<ol>`) for navigation items
+- Keep navigation consistent across pages
+- Provide a skip link to bypass navigation
+
+```html
+<!-- Good: Accessible navigation -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/services">Services</a></li>
+  </ul>
+</nav>
+
+<main id="main-content">
+  <!-- Main content -->
+</main>
+```
+
+### Why Navigation Matters
+
+- **Screen Reader Users**: Can navigate by landmarks to find navigation quickly
+- **Keyboard Users**: Can tab through navigation links
+- **All Users**: Benefit from consistent, predictable navigation
+- **SEO**: Search engines understand navigation structure
+
+## Skip Links
+
+Skip links allow keyboard users to bypass repeated content like navigation.
+
+```html
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<nav aria-label="Main navigation">
+  <!-- Navigation links -->
+</nav>
+
+<main id="main-content">
+  <!-- Main content -->
+</main>
+```
+
+### Skip Link Styling
+
+Skip links should be visible when focused:
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #005fcc;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+## Common Mistakes
+
+### 1. Using Non-Descriptive Link Text
+
+```html
+<!-- Bad: Non-descriptive links -->
+<a href="/about">Click here</a>
+<a href="/products">Read more</a>
+
+<!-- Good: Descriptive links -->
+<a href="/about">Learn about our company</a>
+<a href="/products">View our products</a>
+```
+
+### 2. Missing rel Attribute for External Links
+
+```html
+<!-- Bad: Missing rel attribute -->
+<a href="https://example.com" target="_blank">
+  External Link
+</a>
+
+<!-- Good: With rel attribute -->
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+  External Link
+</a>
+```
+
+### 3. Using Divs Instead of Links
+
+```html
+<!-- Bad: Using divs -->
+<div class="link" onclick="navigate('/about')">About</div>
+
+<!-- Good: Using anchor element -->
+<a href="/about">About</a>
+```
+
+### 4. Empty Links
+
+```html
+<!-- Bad: Empty link -->
+<a href="/about"></a>
+
+<!-- Good: With descriptive text -->
+<a href="/about">About Us</a>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [Form Elements](./form-elements.mdx) - Form controls and inputs
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

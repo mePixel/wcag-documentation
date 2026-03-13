@@ -1,0 +1,324 @@
+---
+title: "Custom Button Focus Management"
+description: "Managing focus in custom button components for accessibility"
+---
+
+# Custom Button Focus Management
+
+Custom button components require proper focus management to ensure keyboard users can activate them and understand their purpose.
+
+## Overview
+
+Custom buttons are non-button elements that function as buttons. They must:
+1. Be focusable with the keyboard
+2. Be activatable with Enter and Space keys
+3. Have appropriate ARIA attributes
+4. Provide clear visual feedback
+
+## Implementation
+
+### HTML Structure
+
+```html
+<!-- Good: Custom button with focus management -->
+<div id="custom-button" role="button" tabindex="0" aria-label="Custom button">
+  Custom Button
+</div>
+```
+
+**Key Attributes:**
+- `role="button"` - Identifies the element as a button
+- `tabindex="0"` - Makes the element focusable in the tab order
+- `aria-label` - Provides an accessible label (if text content is not sufficient)
+
+### JavaScript Implementation
+
+```javascript
+// Custom button focus management
+const customButton = document.getElementById('custom-button');
+
+customButton.addEventListener('click', () => {
+  console.log('Button clicked');
+});
+
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    console.log('Button activated');
+  }
+});
+```
+
+## Keyboard Activation
+
+### Enter Key
+
+The Enter key should activate the button:
+
+```javascript
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    // Activate the button
+    activateButton();
+  }
+});
+```
+
+### Space Key
+
+The Space key should also activate the button:
+
+```javascript
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    e.preventDefault();
+    // Activate the button
+    activateButton();
+  }
+});
+```
+
+### Combined Implementation
+
+```javascript
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    activateButton();
+  }
+});
+
+function activateButton() {
+  // Perform button action
+  console.log('Button activated');
+}
+```
+
+## Focus Management
+
+### Making Elements Focusable
+
+Use `tabindex="0"` to make an element focusable:
+
+```javascript
+element.setAttribute('tabindex', '0');
+```
+
+### Removing Elements from Tab Order
+
+Use `tabindex="-1"` to remove an element from the tab order:
+
+```javascript
+element.setAttribute('tabindex', '-1');
+```
+
+### Setting Focus Programmatically
+
+```javascript
+// Set focus to the button
+customButton.focus();
+
+// Check if element has focus
+if (document.activeElement === customButton) {
+  console.log('Button has focus');
+}
+```
+
+## ARIA Attributes
+
+### Role Attribute
+
+The `role="button"` attribute identifies the element as a button:
+
+```html
+<div role="button" tabindex="0">Button</div>
+```
+
+### Label Attribute
+
+The `aria-label` attribute provides an accessible label:
+
+```html
+<div role="button" tabindex="0" aria-label="Submit form">
+  <svg>...</svg>
+</div>
+```
+
+### Pressed State
+
+The `aria-pressed` attribute indicates toggle button state:
+
+```html
+<div role="button" tabindex="0" aria-pressed="false">
+  Toggle Button
+</div>
+```
+
+```javascript
+function toggleButton() {
+  const isPressed = customButton.getAttribute('aria-pressed') === 'true';
+  customButton.setAttribute('aria-pressed', !isPressed);
+}
+```
+
+### Disabled State
+
+The `aria-disabled` attribute indicates the button is disabled:
+
+```html
+<div role="button" tabindex="0" aria-disabled="true">
+  Disabled Button
+</div>
+```
+
+```javascript
+function disableButton() {
+  customButton.setAttribute('aria-disabled', 'true');
+  customButton.setAttribute('tabindex', '-1');
+}
+
+function enableButton() {
+  customButton.setAttribute('aria-disabled', 'false');
+  customButton.setAttribute('tabindex', '0');
+}
+```
+
+## Visual Feedback
+
+### Focus Indicator
+
+Provide a clear visual indicator when the button has focus:
+
+```css
+.custom-button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+### Active State
+
+Provide visual feedback when the button is activated:
+
+```css
+.custom-button:active {
+  background-color: #003d99;
+}
+
+.custom-button[aria-pressed="true"] {
+  background-color: #003d99;
+}
+```
+
+### Disabled State
+
+Provide visual feedback when the button is disabled:
+
+```css
+.custom-button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+```
+
+## Common Mistakes
+
+### 1. Not Making Element Focusable
+
+```html
+<!-- Bad: Not focusable -->
+<div class="button" onclick="activate()">Button</div>
+
+<!-- Good: Focusable -->
+<div role="button" tabindex="0">Button</div>
+```
+
+### 2. Not Handling Keyboard Activation
+
+```javascript
+// Bad: No keyboard support
+customButton.addEventListener('click', () => {
+  activateButton();
+});
+
+// Good: Keyboard support
+customButton.addEventListener('click', () => {
+  activateButton();
+});
+
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    activateButton();
+  }
+});
+```
+
+### 3. Not Preventing Default on Space
+
+```javascript
+// Bad: Not preventing default
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    activateButton();
+  }
+});
+
+// Good: Preventing default
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === ' ') {
+    e.preventDefault();
+    activateButton();
+  }
+});
+```
+
+### 4. Not Providing ARIA Role
+
+```html
+<!-- Bad: No ARIA role -->
+<div tabindex="0">Button</div>
+
+<!-- Good: With ARIA role -->
+<div role="button" tabindex="0">Button</div>
+```
+
+## Best Practices
+
+1. **Use native `<button>` elements** whenever possible
+2. **Add `role="button"`** to custom button elements
+3. **Set `tabindex="0"`** to make elements focusable
+4. **Handle Enter and Space keys** for activation
+5. **Prevent default behavior** on Space key
+6. **Provide ARIA labels** for icon-only buttons
+7. **Update ARIA states** for toggle buttons
+8. **Provide visual feedback** for focus and active states
+9. **Handle disabled state** appropriately
+10. **Test with keyboard navigation** to verify behavior
+
+## When to Use Custom Buttons
+
+Use custom buttons only when:
+- You need a button-like element that's not a `<button>`
+- You're working with legacy code that uses `<div>` or `<span>`
+- You need specific styling that's difficult with `<button>`
+
+**Prefer native `<button>` elements** whenever possible:
+
+```html
+<!-- Good: Native button -->
+<button type="button">Button</button>
+
+<!-- Acceptable: Custom button when necessary -->
+<div role="button" tabindex="0">Button</div>
+```
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

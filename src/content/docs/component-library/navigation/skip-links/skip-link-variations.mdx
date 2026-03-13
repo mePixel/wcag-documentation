@@ -1,0 +1,433 @@
+---
+title: "Skip Link Variations"
+description: "Advanced skip link implementations including multiple links, visual design, and mobile optimization"
+---
+
+# Skip Link Variations
+
+Explore advanced skip link implementations including multiple skip links, custom visual designs, and mobile-optimized solutions.
+
+## Multiple Skip Links
+
+Provide multiple skip links for different content sections to give users more navigation options.
+
+### Implementation
+
+```html
+<body>
+  <div class="skip-links">
+    <a href="#main-content" class="skip-link">
+      Skip to main content
+    </a>
+    <a href="#navigation" class="skip-link">
+      Skip to navigation
+    </a>
+    <a href="#search" class="skip-link">
+      Skip to search
+    </a>
+  </div>
+  
+  <header>
+    <nav id="navigation">
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+  
+  <aside id="search">
+    <!-- Search content -->
+  </aside>
+</body>
+```
+
+### CSS for Multiple Skip Links
+
+```css
+.skip-links {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 100;
+}
+
+.skip-link {
+  display: block;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  text-decoration: none;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.skip-link:focus {
+  position: relative;
+  top: 0;
+}
+```
+
+### When to Use Multiple Skip Links
+
+- **Complex Sites**: Sites with multiple major content sections
+- **E-commerce**: Products, reviews, related items
+- **Documentation**: Content, navigation, search
+- **Dashboards**: Main content, sidebar, tools
+
+## Visual Design Variations
+
+### Styled Skip Link
+
+Style skip links to match your site design while maintaining accessibility.
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 0 0 4px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: top 0.2s ease-in-out;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+.skip-link:hover {
+  background: #0047b3;
+}
+```
+
+### Centered Skip Link
+
+Center skip link for better visibility on focus.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 4px;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+### Animated Skip Link
+
+Add smooth animation for better user experience.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.skip-link:focus {
+  top: 0;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    top: -60px;
+    opacity: 0;
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
+```
+
+## Mobile Optimization
+
+### Responsive Skip Link
+
+Optimize skip links for mobile devices with larger touch targets.
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  .skip-link {
+    padding: 16px;
+    font-size: 1.125rem;
+    min-height: 48px; /* WCAG touch target size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+```
+
+### Mobile-First Skip Link
+
+Design skip links with mobile as primary consideration.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  right: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 16px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.125rem;
+  text-align: center;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+@media (min-width: 769px) {
+  .skip-link {
+    padding: 12px 24px;
+    font-size: 1rem;
+    right: auto;
+    width: auto;
+  }
+}
+```
+
+## Advanced Patterns
+
+### Skip Link with Icon
+
+Add an icon to skip link for better visual recognition.
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    <svg class="skip-link-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+.skip-link-icon {
+  width: 20px;
+  height: 20px;
+}
+```
+
+### Skip Link with Keyboard Shortcut
+
+Display keyboard shortcut information in skip link.
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+    <span class="skip-link-shortcut">(Alt+M)</span>
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  background: #005fcc;
+  color: #fff;
+  padding: 12px 24px;
+  z-index: 1000;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+.skip-link-shortcut {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.875rem;
+  margin-left: 8px;
+}
+```
+
+```javascript
+// Add keyboard shortcut
+document.addEventListener('keydown', function(event) {
+  if (event.altKey && event.key === 'm') {
+    event.preventDefault();
+    const skipLink = document.querySelector('.skip-link');
+    if (skipLink) {
+      skipLink.click();
+    }
+  }
+});
+```
+
+## Best Practices for Variations
+
+### 1. Maintain Accessibility
+
+Regardless of visual design, ensure skip links remain accessible:
+
+- Always visible on focus
+- Sufficient color contrast (4.5:1 minimum)
+- Large enough touch targets (44x44px minimum)
+- Clear, descriptive text
+
+### 2. Test Across Devices
+
+Test skip links on:
+
+- Desktop browsers
+- Mobile browsers
+- Tablet devices
+- Different screen sizes
+- Different input methods (keyboard, touch, mouse)
+
+### 3. Consider User Preferences
+
+- Respect user's preferred color scheme
+- Honor reduced motion preferences
+- Support high contrast mode
+- Work with custom stylesheets
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Skip Links](https://www.w3.org/WAI/WCAG21/Techniques/general/G1)
+- [WebAIM Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [MDN HTML Anchor Links](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)

@@ -1,0 +1,306 @@
+---
+title: "ARIA Properties"
+description: "Using ARIA properties to define element characteristics"
+---
+
+# ARIA Properties
+
+ARIA properties define characteristics of an element that are less likely to change than states. They provide additional information to assistive technologies about element relationships and features.
+
+## Labels
+
+Provide accessible names for elements, helping users understand what elements do.
+
+```html
+<!-- aria-label -->
+<button aria-label="Close dialog">×</button>
+
+<!-- aria-labelledby -->
+<div role="dialog" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Dialog Title</h2>
+  <!-- Dialog content -->
+</div>
+
+<!-- aria-describedby -->
+<input type="text" aria-describedby="help-text">
+<span id="help-text">Enter your full name</span>
+```
+
+**Key Points:**
+- `aria-label`: Provides a direct label for the element
+- `aria-labelledby`: References another element that provides the label
+- `aria-describedby`: References another element that provides additional description
+- Use `aria-labelledby` when there's visible text that should serve as the label
+- Use `aria-label` when there's no visible text or the visible text isn't descriptive enough
+
+## Live Regions
+
+Announce dynamic content changes to assistive technology users.
+
+```html
+<!-- aria-live="polite" -->
+<div aria-live="polite" id="status">
+  Status updates appear here
+</div>
+
+<!-- aria-live="assertive" -->
+<div aria-live="assertive" role="alert">
+  Important alerts appear here
+</div>
+
+<!-- aria-live="off" -->
+<div aria-live="off">
+  This content is not announced
+</div>
+```
+
+**Values:**
+- `off`: Changes are not announced (default)
+- `polite`: Changes are announced when user is idle
+- `assertive`: Changes are announced immediately, interrupting current speech
+
+**Related Properties:**
+- `aria-atomic`: Whether the entire region should be announced as a unit
+- `aria-relevant`: What types of changes should be announced
+
+## Controls
+
+Associate a control with the content it controls.
+
+```html
+<button aria-controls="menu" aria-expanded="false">
+  Toggle Menu
+</button>
+
+<div id="menu" hidden>
+  <!-- Menu content -->
+</div>
+```
+
+**Use Cases:**
+- Buttons that show/hide content
+- Tabs that control panels
+- Accordions that expand/collapse sections
+
+## Current
+
+Indicate the current item in a set, such as the current page in breadcrumbs or current step in a process.
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Current Page</li>
+  </ol>
+</nav>
+```
+
+**Values:**
+- `page`: Current page
+- `step`: Current step in a process
+- `location`: Current location
+- `date`: Current date
+- `time`: Current time
+- `true`: Current item (generic)
+
+## Required
+
+Indicate whether a form field is required.
+
+```html
+<label for="email">Email Address *</label>
+<input type="email" id="email" required aria-required="true">
+```
+
+**Values:**
+- `true`: Element is required
+- `false`: Element is optional
+- `undefined`: Requirement status is unknown
+
+**Note:** Always use the native `required` attribute in addition to `aria-required` for form elements.
+
+## Autocomplete
+
+Indicate autocomplete behavior for input fields.
+
+```html
+<input type="text" aria-autocomplete="list" list="suggestions">
+<datalist id="suggestions">
+  <option value="Suggestion 1">
+  <option value="Suggestion 2">
+</datalist>
+```
+
+**Values:**
+- `inline`: Autocomplete suggestions appear inline
+- `list`: Autocomplete suggestions appear in a list
+- `both`: Both inline and list suggestions
+- `none`: No autocomplete
+
+## Orientation
+
+Indicate component orientation (horizontal or vertical).
+
+```html
+<div role="slider" aria-orientation="horizontal">
+  <!-- Horizontal slider -->
+</div>
+
+<div role="slider" aria-orientation="vertical">
+  <!-- Vertical slider -->
+</div>
+```
+
+**Values:**
+- `horizontal`: Component is oriented horizontally
+- `vertical`: Component is oriented vertically
+- `undefined`: Orientation is unknown
+
+## Sort
+
+Indicate sort order of table column or list.
+
+```html
+<th aria-sort="ascending">Column Name</th>
+```
+
+**Values:**
+- `ascending`: Sorted in ascending order
+- `descending`: Sorted in descending order
+- `none`: Not sorted
+- `other`: Sorted in another way
+
+## Haspopup
+
+Indicate whether an element has a popup menu or submenu.
+
+```html
+<button aria-haspopup="true" aria-expanded="false">
+  Menu
+</button>
+```
+
+**Values:**
+- `true`: Has a popup
+- `false`: No popup
+- `menu`: Has a menu popup
+- `listbox`: Has a listbox popup
+- `tree`: Has a tree popup
+- `grid`: Has a grid popup
+- `dialog`: Has a dialog popup
+
+## Level
+
+Indicate the hierarchical level of an element within a structure.
+
+```html
+<div role="heading" aria-level="2">
+  This is a level 2 heading
+</div>
+```
+
+**Use Cases:**
+- Custom headings that aren't using `<h1>`-`<h6>` tags
+- Tree items at different levels
+- List items in nested lists
+
+## Value
+
+Indicate the current value of a widget.
+
+```html
+<div role="slider" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+  Slider value: 50
+</div>
+```
+
+**Related Properties:**
+- `aria-valuenow`: Current value
+- `aria-valuemin`: Minimum value
+- `aria-valuemax`: Maximum value
+- `aria-valuetext`: Text representation of the value
+
+## Keyset
+
+Indicate the keyboard shortcuts available for an element.
+
+```html
+<div role="toolbar" aria-keyshortcuts="Ctrl+B Ctrl+I">
+  <!-- Toolbar with bold and italic shortcuts -->
+</div>
+```
+
+## Dropeffect
+
+Indicate the effect when an element is dropped.
+
+```html
+<div role="listbox" aria-dropeffect="copy">
+  <!-- Items can be copied here -->
+</div>
+```
+
+**Values:**
+- `copy`: Copy operation
+- `move`: Move operation
+- `link`: Link operation
+- `execute`: Execute operation
+- `popup`: Popup operation
+- `none`: No operation
+
+## Grabbed
+
+Indicate whether an element is being dragged (also a state).
+
+```html
+<div role="listitem" aria-grabbed="false" draggable="true">
+  Draggable Item
+</div>
+```
+
+## Common Mistakes
+
+### 1. Using aria-label When Visible Text Exists
+
+```html
+<!-- Bad: aria-label duplicates visible text -->
+<button aria-label="Submit">Submit</button>
+
+<!-- Good: Use visible text as label -->
+<button>Submit</button>
+```
+
+### 2. Not Using aria-labelledby with Visible Labels
+
+```html
+<!-- Bad: aria-label duplicates visible label -->
+<div role="dialog" aria-label="Dialog Title">
+  <h2>Dialog Title</h2>
+</div>
+
+<!-- Good: Use aria-labelledby -->
+<div role="dialog" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Dialog Title</h2>
+</div>
+```
+
+### 3. Overusing aria-live
+
+```html
+<!-- Bad: aria-live on entire page -->
+<body aria-live="polite">
+  <!-- All changes announced -->
+</body>
+
+<!-- Good: aria-live on specific regions -->
+<div aria-live="polite" id="status">
+  <!-- Only status changes announced -->
+</div>
+```
+
+## Related Resources
+
+- [WAI-ARIA Properties](https://www.w3.org/TR/wai-aria-1.2/#state_prop_def)
+- [ARIA Authoring Practices - Properties](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN ARIA Properties](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes)

@@ -1,0 +1,375 @@
+---
+title: "Skip Link Best Practices"
+description: "Common pitfalls, best practices, and testing checklist for skip links"
+---
+
+# Skip Link Best Practices
+
+Learn common mistakes to avoid and best practices to follow when implementing skip links.
+
+## Common Pitfalls
+
+### 1. Not Hiding Skip Link
+
+Skip links should be hidden by default and only visible when focused.
+
+```html
+<!-- Bad: Skip link always visible -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<style>
+  .skip-link {
+    /* No hiding */
+  }
+</style>
+
+<!-- Good: Skip link hidden until focused -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<style>
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+  }
+  
+  .skip-link:focus {
+    top: 0;
+  }
+</style>
+```
+
+### 2. Not Providing Skip Link
+
+Every page with repeated content should have a skip link.
+
+```html
+<!-- Bad: No skip link -->
+<body>
+  <header>
+    <nav>
+      <!-- Long navigation -->
+    </nav>
+  </header>
+  
+  <main>
+    <!-- Main content -->
+  </main>
+</body>
+
+<!-- Good: Skip link provided -->
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Long navigation -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+### 3. Missing Target ID
+
+The skip link must have a valid target element with matching ID.
+
+```html
+<!-- Bad: No target ID -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<main>
+  <!-- Main content -->
+</main>
+
+<!-- Good: Target ID provided -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<main id="main-content">
+  <!-- Main content -->
+</main>
+```
+
+### 4. Poor Contrast
+
+Skip links must have sufficient color contrast when visible.
+
+```css
+/* Bad: Poor contrast */
+.skip-link {
+  background: #ccc;
+  color: #fff;
+}
+
+/* Good: Sufficient contrast */
+.skip-link {
+  background: #000;
+  color: #fff;
+}
+```
+
+### 5. Not First Focusable Element
+
+Skip link must be the first element that can receive keyboard focus.
+
+```html
+<!-- Bad: Skip link not first -->
+<body>
+  <header>
+    <a href="/" class="logo">Logo</a>
+    <a href="#main-content" class="skip-link">
+      Skip to main content
+    </a>
+  </header>
+</body>
+
+<!-- Good: Skip link first -->
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <a href="/" class="logo">Logo</a>
+  </header>
+</body>
+```
+
+### 6. Vague Link Text
+
+Skip link text should clearly describe what it does.
+
+```html
+<!-- Bad: Vague text -->
+<a href="#main-content" class="skip-link">
+  Skip
+</a>
+
+<!-- Good: Descriptive text -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+```
+
+### 7. Not Testing with Screen Readers
+
+Skip links must work correctly with screen readers.
+
+## Best Practices
+
+### 1. Make Skip Link First Focusable Element
+
+Place skip link at the very top of the page, before any other content.
+
+```html
+<body>
+  <!-- Skip link must be first -->
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <!-- Everything else comes after -->
+  <header>...</header>
+</body>
+```
+
+### 2. Use Descriptive Text
+
+Make skip link text clear and descriptive.
+
+```html
+<!-- Good: Descriptive text -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<a href="#navigation" class="skip-link">
+  Skip to navigation
+</a>
+
+<a href="#search" class="skip-link">
+  Skip to search
+</a>
+```
+
+### 3. Provide Multiple Skip Links
+
+Offer skip links for different content sections on complex sites.
+
+```html
+<div class="skip-links">
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  <a href="#navigation" class="skip-link">
+    Skip to navigation
+  </a>
+  <a href="#search" class="skip-link">
+    Skip to search
+  </a>
+</div>
+```
+
+### 4. Ensure Sufficient Contrast
+
+Make sure skip link has good contrast when visible (minimum 4.5:1).
+
+```css
+.skip-link {
+  background: #000;
+  color: #fff;
+  /* Contrast ratio: 21:1 (excellent) */
+}
+
+.skip-link:focus {
+  background: #005fcc;
+  color: #fff;
+  /* Contrast ratio: 7.5:1 (excellent) */
+}
+```
+
+### 5. Make Visible on Focus
+
+Skip link must be visible when it receives keyboard focus.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+}
+
+.skip-link:focus {
+  top: 0; /* Move into view */
+}
+```
+
+### 6. Use Appropriate Positioning
+
+Position skip link so it doesn't overlap important content when visible.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  z-index: 1000; /* High z-index */
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+### 7. Consider Mobile Users
+
+Ensure skip links work well on mobile devices.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -50px;
+  left: 0;
+  right: 0;
+  padding: 12px 24px;
+  min-height: 48px; /* WCAG touch target size */
+}
+
+@media (max-width: 768px) {
+  .skip-link {
+    padding: 16px;
+    font-size: 1.125rem;
+  }
+}
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+
+- [ ] Skip link is first focusable element
+- [ ] Skip link becomes visible on focus
+- [ ] Skip link activates with Enter
+- [ ] Focus moves to target after activation
+- [ ] Can navigate to target using Tab
+- [ ] Skip link works with all keyboard shortcuts
+
+### Screen Reader Testing
+
+- [ ] Skip link is announced
+- [ ] Skip link purpose is clear
+- [ ] Can activate skip link
+- [ ] Focus moves to target after activation
+- [ ] Works with NVDA
+- [ ] Works with JAWS
+- [ ] Works with VoiceOver
+- [ ] Works with TalkBack
+
+### Visual Testing
+
+- [ ] Skip link is hidden by default
+- [ ] Skip link is visible on focus
+- [ ] Skip link has sufficient contrast
+- [ ] Skip link is clearly visible when focused
+- [ ] Skip link doesn't overlap important content
+- [ ] Skip link works on mobile devices
+- [ ] Skip link works on tablet devices
+
+### Cross-Browser Testing
+
+- [ ] Works in Chrome
+- [ ] Works in Firefox
+- [ ] Works in Safari
+- [ ] Works in Edge
+- [ ] Works on iOS Safari
+- [ ] Works on Android Chrome
+
+### Accessibility Testing
+
+- [ ] Passes WCAG 2.4.1 Bypass Blocks
+- [ ] Passes automated accessibility tests
+- [ ] Works with keyboard-only navigation
+- [ ] Works with screen readers
+- [ ] Works with magnification tools
+- [ ] Works with high contrast mode
+
+## Common Questions
+
+### Should skip links be visible to mouse users?
+
+No, skip links should only be visible when they receive keyboard focus. This keeps the design clean while providing accessibility benefits.
+
+### Can I have multiple skip links?
+
+Yes, you can provide multiple skip links for different content sections. This is especially useful on complex sites with multiple navigation areas.
+
+### Do skip links work with screen readers?
+
+Yes, skip links work well with screen readers. Screen reader users can navigate to the skip link and activate it to jump to the target content.
+
+### What if my site doesn't have repeated content?
+
+If your site doesn't have repeated content (like navigation), you may not need skip links. However, most sites have some form of repeated content.
+
+### Should skip links be styled to match my site?
+
+Yes, you can style skip links to match your site design, but ensure they remain accessible with sufficient contrast and visibility on focus.
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Skip Links](https://www.w3.org/WAI/WCAG21/Techniques/general/G1)
+- [WebAIM Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [MDN HTML Anchor Links](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)

@@ -1,0 +1,281 @@
+---
+title: "HTML Elements"
+description: "Semantic HTML elements and their accessibility features"
+---
+
+# HTML Elements
+
+This section covers semantic HTML elements and their accessibility features. Using the right HTML elements for the right purpose is the foundation of web accessibility.
+
+## Overview
+
+HTML provides built-in accessibility features that work with assistive technologies. Semantic HTML elements convey meaning and structure, making content accessible to all users.
+
+### Why Semantic HTML Matters
+
+- **Screen Reader Users**: Understand content structure and navigate efficiently
+- **Keyboard Users**: Navigate and interact with content without a mouse
+- **Search Engines**: Better understand and index your content
+- **All Users**: Benefit from consistent, predictable behavior
+
+## HTML Element Categories
+
+### Document Structure
+
+Elements that define the overall structure of a document:
+
+- [`<!DOCTYPE html>`](#doctype) - Document type declaration
+- [`<html>`](#html) - Root element
+- [`<head>`](#head) - Document metadata
+- [`<body>`](#body) - Document body
+
+### Text Content
+
+Elements for structuring and presenting text:
+
+- [`<h1>` - `<h6>`](#headings) - Headings
+- [`<p>`](#paragraphs) - Paragraphs
+- [`<span>`](#span) - Generic inline container
+- [`<div>`](#div) - Generic block container
+
+### Lists
+
+Elements for creating lists:
+
+- [`<ul>`](#unordered-lists) - Unordered lists
+- [`<ol>`](#ordered-lists) - Ordered lists
+- [`<dl>`](#definition-lists) - Definition lists
+- [`<li>`](#list-items) - List items
+
+### Links and Navigation
+
+Elements for navigation:
+
+- [`<a>`](#anchors) - Anchor links
+- [`<nav>`](#navigation) - Navigation section
+
+### Forms
+
+Elements for creating forms:
+
+- [`<form>`](#forms) - Form container
+- [`<label>`](#labels) - Form labels
+- [`<input>`](#inputs) - Form inputs
+- [`<textarea>`](#textareas) - Text areas
+- [`<select>`](#selects) - Select dropdowns
+- [`<button>`](#buttons) - Buttons
+- [`<fieldset>`](#fieldsets) - Field groups
+- [`<legend>`](#legends) - Field group labels
+
+### Tables
+
+Elements for creating tables:
+
+- [`<table>`](#tables) - Table container
+- [`<thead>`](#table-head) - Table header
+- [`<tbody>`](#table-body) - Table body
+- [`<tfoot>`](#table-foot) - Table footer
+- [`<tr>`](#table-row) - Table row
+- [`<th>`](#table-header-cell) - Table header cell
+- [`<td>`](#table-data-cell) - Table data cell
+
+### Images and Media
+
+Elements for images and media:
+
+- [`<img>`](#images) - Images
+- [`<figure>`](#figures) - Figures
+- [`<figcaption>`](#figure-captions) - Figure captions
+- [`<video>`](#video) - Video
+- [`<audio>`](#audio) - Audio
+
+### Interactive Elements
+
+Elements for interactive content:
+
+- [`<button>`](#buttons) - Buttons
+- [`<a>`](#anchors) - Anchor links
+- [`<details>`](#details) - Expandable details
+- [`<summary>`](#summary) - Details summary
+
+### Landmark Elements
+
+HTML5 landmark elements for page structure:
+
+- [`<header>`](#header) - Page or section header
+- [`<footer>`](#footer) - Page or section footer
+- [`<main>`](#main) - Main content area
+- [`<nav>`](#navigation) - Navigation section
+- [`<aside>`](#aside) - Complementary content
+- [`<article>`](#article) - Self-contained content
+- [`<section>`](#section) - Thematic grouping
+
+## Quick Reference
+
+### Document Structure
+
+| Element | Purpose | Accessibility Features |
+|---------|---------|----------------------|
+| `<!DOCTYPE html>` | Document type | Enables standards mode |
+| `<html>` | Root element | Language attribute |
+| `<head>` | Metadata | Title, meta tags |
+| `<body>` | Content | Main content area |
+
+### Text Content
+
+| Element | Purpose | Accessibility Features |
+|---------|---------|----------------------|
+| `<h1>` - `<h6>` | Headings | Document structure, navigation |
+| `<p>` | Paragraphs | Text grouping |
+| `<span>` | Inline container | Styling hooks |
+| `<div>` | Block container | Grouping elements |
+
+### Forms
+
+| Element | Purpose | Accessibility Features |
+|---------|---------|----------------------|
+| `<form>` | Form container | Submission handling |
+| `<label>` | Form labels | Input association |
+| `<input>` | Form inputs | Built-in validation |
+| `<button>` | Buttons | Keyboard accessible |
+| `<fieldset>` | Field groups | Related grouping |
+| `<legend>` | Field labels | Group description |
+
+### Landmarks
+
+| Element | Purpose | Accessibility Features |
+|---------|---------|----------------------|
+| `<header>` | Header | Banner landmark |
+| `<footer>` | Footer | Contentinfo landmark |
+| `<main>` | Main content | Main landmark |
+| `<nav>` | Navigation | Navigation landmark |
+| `<aside>` | Sidebar | Complementary landmark |
+| `<article>` | Article | Article landmark |
+| `<section>` | Section | Region landmark |
+
+## Best Practices
+
+### 1. Use Semantic HTML
+
+Choose elements based on meaning, not appearance.
+
+```html
+<!-- Good: Semantic HTML -->
+<button type="button">Submit</button>
+<a href="/about">About</a>
+<h1>Page Title</h1>
+
+<!-- Bad: Non-semantic HTML -->
+<div class="button" onclick="submitForm()">Submit</div>
+<div class="link" onclick="navigate('/about')">About</div>
+<div class="title">Page Title</div>
+```
+
+### 2. Maintain Proper Hierarchy
+
+Use elements in their proper order and nesting.
+
+```html
+<!-- Good: Proper hierarchy -->
+<h1>Main Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+
+<!-- Bad: Incorrect hierarchy -->
+<h1>Main Title</h1>
+<h3>Subsection Title</h3>
+```
+
+### 3. Provide Complete Information
+
+Ensure all elements have necessary attributes.
+
+```html
+<!-- Good: Complete attributes -->
+<img src="photo.jpg" alt="Sunset over the ocean">
+<label for="email">Email Address</label>
+<input type="email" id="email" required>
+
+<!-- Bad: Missing attributes -->
+<img src="photo.jpg">
+<input type="email" placeholder="Email Address">
+```
+
+### 4. Use Landmarks Appropriately
+
+Use landmark elements to define page structure.
+
+```html
+<!-- Good: Proper landmarks -->
+<header>
+  <nav>
+    <!-- Navigation -->
+  </nav>
+</header>
+
+<main>
+  <article>
+    <!-- Main content -->
+  </article>
+  
+  <aside>
+    <!-- Sidebar content -->
+  </aside>
+</main>
+
+<footer>
+  <!-- Footer content -->
+</footer>
+```
+
+## Common Mistakes
+
+### 1. Using Divs Instead of Semantic Elements
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+
+<!-- Good: Using button element -->
+<button type="button">Submit</button>
+```
+
+### 2. Skipping Heading Levels
+
+```html
+<!-- Bad: Skipping levels -->
+<h1>Title</h1>
+<h3>Subtitle</h3>
+
+<!-- Good: Proper hierarchy -->
+<h1>Title</h1>
+<h2>Subtitle</h2>
+```
+
+### 3. Missing Alt Text
+
+```html
+<!-- Bad: No alt text -->
+<img src="chart.png">
+
+<!-- Good: Descriptive alt text -->
+<img src="chart.png" alt="Bar chart showing 50% increase in sales">
+```
+
+### 4. Using Placeholder Text as Labels
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+## Related Resources
+
+- [Semantic HTML Guide](./semantic-html.mdx) - Detailed semantic HTML guide
+- [ARIA Attributes](./aria-attributes.mdx) - ARIA attributes and roles
+- [MDN HTML Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)
+- [HTML5 Specification](https://html.spec.whatwg.org/)

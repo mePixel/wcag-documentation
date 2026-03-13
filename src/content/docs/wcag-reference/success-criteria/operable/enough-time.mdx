@@ -1,0 +1,94 @@
+---
+title: "2.2 Enough Time"
+description: "WCAG 2.1 AA success criteria for providing enough time"
+---
+
+# 2.2 Enough Time
+
+Users with disabilities may need more time to complete tasks. Provide flexibility for time limits and controls for moving or auto-updating content.
+
+## 2.2.1 Timing Adjustable (Level A)
+
+**Requirement**: For each time limit that is set by the content, at least one of the following is true:
+- Turn off: The user is allowed to turn off the time limit before encountering it
+- Adjust: The user is allowed to adjust the time limit before encountering it over a wide range that is at least ten times the length of the default setting
+- Extend: The user is warned before time expires and given at least 20 seconds to extend the time limit with a simple action (for example, "press the space bar"), and the user is allowed to extend the time limit at least ten times
+- Real-time Exception: The time limit is a required part of a real-time event (for example, an auction), and no alternative to the time limit is possible
+- Essential Exception: The time limit is essential and extending it would invalidate the activity
+- 20 Hour Exception: The time limit is longer than 20 hours
+
+**Understanding**: Users with disabilities may need more time to complete tasks. Provide flexibility for time limits.
+
+**Sufficient Techniques**:
+- **G198**: Providing a way for the user to turn off the time limit
+- **G180**: Providing the user with a means to extend the default time limit
+
+**Example**:
+```javascript
+// Good: Provide warning and extension
+let timeRemaining = 60;
+let timer;
+
+function startTimer() {
+  timer = setInterval(() => {
+    timeRemaining--;
+    updateDisplay();
+    
+    // Warn at 20 seconds
+    if (timeRemaining === 20) {
+      showWarning('Time expiring soon. Press Space to extend.');
+    }
+    
+    if (timeRemaining <= 0) {
+      clearInterval(timer);
+      handleTimeout();
+    }
+  }, 1000);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' && timeRemaining <= 20) {
+    e.preventDefault();
+    timeRemaining += 30; // Extend by 30 seconds
+    hideWarning();
+  }
+});
+```
+
+## 2.2.2 Pause, Stop, Hide (Level A)
+
+**Requirement**: For moving, blinking, scrolling, or auto-updating information, all of the following are true:
+- Moving, blinking, scrolling: For any moving, blinking or scrolling information that (1) starts automatically, (2) lasts more than five seconds, and (3) is presented in parallel with other content, there is a mechanism for the user to pause, stop, or hide it unless the movement, blinking, or scrolling is part of an activity where it is essential
+- Auto-updating: For any auto-updating information that (1) starts automatically and (2) is presented in parallel with other content, there is a mechanism for the user to pause, stop, or hide it or to control the frequency of the update unless the auto-updating is part of an activity where it is essential
+
+**Understanding**: Moving or auto-updating content can be distracting or interfere with assistive technologies. Provide controls.
+
+**Sufficient Techniques**:
+- **G4**: Allowing the user to pause content
+- **G186**: Using a control in the Web page that stops moving, blinking, or auto-updating content
+
+**Example**:
+```html
+<!-- Provide pause/play controls -->
+<button id="pauseBtn" aria-pressed="false">Pause Animation</button>
+<div id="animation" class="animating">...</div>
+
+<script>
+const pauseBtn = document.getElementById('pauseBtn');
+const animation = document.getElementById('animation');
+let isPaused = false;
+
+pauseBtn.addEventListener('click', () => {
+  isPaused = !isPaused;
+  animation.classList.toggle('animating', !isPaused);
+  pauseBtn.setAttribute('aria-pressed', isPaused);
+  pauseBtn.textContent = isPaused ? 'Resume Animation' : 'Pause Animation';
+});
+</script>
+```
+
+## Related Resources
+
+- [WCAG 2.1 Enough Time Guidelines](https://www.w3.org/WAI/WCAG21/quickref/#enough-time)
+- [Understanding Enough Time](https://www.w3.org/WAI/WCAG21/Understanding/enough-time)
+- [Enough Time Techniques](https://www.w3.org/WAI/WCAG21/Techniques/#enough-time)

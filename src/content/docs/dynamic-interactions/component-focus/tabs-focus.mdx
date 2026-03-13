@@ -1,0 +1,442 @@
+---
+title: "Tabs Focus Management"
+description: "Managing focus in tab interfaces for accessibility"
+---
+
+# Tabs Focus Management
+
+Tab interfaces require proper focus management to ensure keyboard users can navigate between tabs and access the associated content panels.
+
+## Overview
+
+When a tab is activated, focus must:
+1. Move to the activated tab
+2. Show the associated content panel
+3. Hide other content panels
+4. Support arrow key navigation between tabs
+
+## Implementation
+
+### HTML Structure
+
+```html
+<!-- Good: Accessible tabs -->
+<div role="tablist" aria-label="Sample Tabs">
+  <button role="tab" aria-selected="true" aria-controls="panel1" id="tab1" tabindex="0">
+    Tab 1
+  </button>
+  <button role="tab" aria-selected="false" aria-controls="panel2" id="tab2" tabindex="-1">
+    Tab 2
+  </button>
+  <button role="tab" aria-selected="false" aria-controls="panel3" id="tab3" tabindex="-1">
+    Tab 3
+  </button>
+</div>
+
+<div id="panel1" role="tabpanel" aria-labelledby="tab1">
+  Panel 1 content
+</div>
+<div id="panel2" role="tabpanel" aria-labelledby="tab2" hidden>
+  Panel 2 content
+</div>
+<div id="panel3" role="tabpanel" aria-labelledby="tab3" hidden>
+  Panel 3 content
+</div>
+```
+
+**Key Attributes:**
+- `role="tablist"` - Identifies the container as a tab list
+- `role="tab"` - Identifies each button as a tab
+- `role="tabpanel"` - Identifies each content panel
+- `aria-selected` - Indicates which tab is selected
+- `aria-controls` - References the associated panel
+- `aria-labelledby` - References the controlling tab
+- `tabindex` - Controls tab order (0 for selected, -1 for others)
+
+### JavaScript Implementation
+
+```javascript
+// Tab focus management
+const tabs = document.querySelectorAll('[role="tab"]');
+const panels = document.querySelectorAll('[role="tabpanel"]');
+
+function activateTab(tab) {
+  // Deactivate all tabs
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  // Hide all panels
+  panels.forEach(p => {
+    p.setAttribute('hidden', 'true');
+  });
+  
+  // Activate selected tab
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+  
+  // Show corresponding panel
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => activateTab(tab));
+  
+  tab.addEventListener('keydown', (e) => {
+    const currentIndex = Array.from(tabs).indexOf(tab);
+    
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % tabs.length;
+      activateTab(tabs[nextIndex]);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      activateTab(tabs[prevIndex]);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      activateTab(tabs[0]);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      activateTab(tabs[tabs.length - 1]);
+    }
+  });
+});
+```
+
+## Keyboard Navigation
+
+### Arrow Keys
+
+- **Arrow Right**: Move to next tab
+- **Arrow Left**: Move to previous tab
+- **Home**: Move to first tab
+- **End**: Move to last tab
+
+```javascript
+tab.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(tabs).indexOf(tab);
+  
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % tabs.length;
+    activateTab(tabs[nextIndex]);
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    activateTab(tabs[prevIndex]);
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    activateTab(tabs[0]);
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    activateTab(tabs[tabs.length - 1]);
+  }
+});
+```
+
+### Tab Key
+
+The Tab key should move focus out of the tab list to the next focusable element:
+
+```javascript
+// Tab key behavior is automatic - no special handling needed
+// Focus moves to the next focusable element in the DOM
+```
+
+## Focus Management
+
+### Activating a Tab
+
+When a tab is activated:
+1. Set `aria-selected="true"` on the activated tab
+2. Set `tabindex="0"` on the activated tab
+3. Set `aria-selected="false"` on all other tabs
+4. Set `tabindex="-1"` on all other tabs
+5. Show the associated panel
+6. Hide all other panels
+7. Move focus to the activated tab
+
+```javascript
+function activateTab(tab) {
+  // Deactivate all tabs
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  // Hide all panels
+  panels.forEach(p => {
+    p.setAttribute('hidden', 'true');
+  });
+  
+  // Activate selected tab
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+  
+  // Show corresponding panel
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+```
+
+### Initial Focus
+
+Set initial focus to the first tab when the page loads:
+
+```javascript
+// Set initial focus to first tab
+tabs[0].focus();
+```
+
+### Focus Restoration
+
+If focus needs to be restored after navigating away and back:
+
+```javascript
+let lastActiveTab = tabs[0];
+
+function activateTab(tab) {
+  lastActiveTab = tab;
+  // ... rest of activation logic
+}
+
+// Restore focus when returning to tabs
+function restoreTabFocus() {
+  lastActiveTab.focus();
+}
+```
+
+## Vertical Tabs
+
+For vertical tabs, use Arrow Up and Arrow Down instead of Arrow Left and Arrow Right:
+
+```javascript
+tab.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(tabs).indexOf(tab);
+  
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % tabs.length;
+    activateTab(tabs[nextIndex]);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    activateTab(tabs[prevIndex]);
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    activateTab(tabs[0]);
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    activateTab(tabs[tabs.length - 1]);
+  }
+});
+```
+
+## Nested Tabs
+
+For nested tabs (tabs within tabs), manage focus appropriately:
+
+```html
+<!-- Outer tabs -->
+<div role="tablist" aria-label="Outer Tabs">
+  <button role="tab" aria-selected="true" aria-controls="outer-panel1" id="outer-tab1">
+    Outer Tab 1
+  </button>
+  <button role="tab" aria-selected="false" aria-controls="outer-panel2" id="outer-tab2">
+    Outer Tab 2
+  </button>
+</div>
+
+<div id="outer-panel1" role="tabpanel" aria-labelledby="outer-tab1">
+  <!-- Inner tabs -->
+  <div role="tablist" aria-label="Inner Tabs">
+    <button role="tab" aria-selected="true" aria-controls="inner-panel1" id="inner-tab1">
+      Inner Tab 1
+    </button>
+    <button role="tab" aria-selected="false" aria-controls="inner-panel2" id="inner-tab2">
+      Inner Tab 2
+    </button>
+  </div>
+  
+  <div id="inner-panel1" role="tabpanel" aria-labelledby="inner-tab1">
+    Inner Panel 1 content
+  </div>
+  <div id="inner-panel2" role="tabpanel" aria-labelledby="inner-tab2" hidden>
+    Inner Panel 2 content
+  </div>
+</div>
+
+<div id="outer-panel2" role="tabpanel" aria-labelledby="outer-tab2" hidden>
+  Outer Panel 2 content
+</div>
+```
+
+```javascript
+// Handle outer tabs
+const outerTabs = document.querySelectorAll('#outer-tablist [role="tab"]');
+const outerPanels = document.querySelectorAll('[role="tabpanel"][aria-labelledby^="outer-tab"]');
+
+// Handle inner tabs
+const innerTabs = document.querySelectorAll('#inner-tablist [role="tab"]');
+const innerPanels = document.querySelectorAll('[role="tabpanel"][aria-labelledby^="inner-tab"]');
+
+// Separate activation functions for outer and inner tabs
+function activateOuterTab(tab) {
+  // Deactivate all outer tabs
+  outerTabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  // Hide all outer panels
+  outerPanels.forEach(p => {
+    p.setAttribute('hidden', 'true');
+  });
+  
+  // Activate selected outer tab
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+  
+  // Show corresponding outer panel
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+
+function activateInnerTab(tab) {
+  // Deactivate all inner tabs
+  innerTabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  // Hide all inner panels
+  innerPanels.forEach(p => {
+    p.setAttribute('hidden', 'true');
+  });
+  
+  // Activate selected inner tab
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+  
+  // Show corresponding inner panel
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+```
+
+## Common Mistakes
+
+### 1. Not Managing Tabindex
+
+```javascript
+// Bad: Not managing tabindex
+function activateTab(tab) {
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+  });
+  
+  tab.setAttribute('aria-selected', 'true');
+  tab.focus();
+}
+
+// Good: Managing tabindex
+function activateTab(tab) {
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+}
+```
+
+### 2. Not Hiding Panels
+
+```javascript
+// Bad: Not hiding panels
+function activateTab(tab) {
+  tab.setAttribute('aria-selected', 'true');
+  tab.focus();
+  
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+
+// Good: Hiding other panels
+function activateTab(tab) {
+  tabs.forEach(t => {
+    t.setAttribute('aria-selected', 'false');
+    t.setAttribute('tabindex', '-1');
+  });
+  
+  panels.forEach(p => {
+    p.setAttribute('hidden', 'true');
+  });
+  
+  tab.setAttribute('aria-selected', 'true');
+  tab.setAttribute('tabindex', '0');
+  tab.focus();
+  
+  const panelId = tab.getAttribute('aria-controls');
+  const panel = document.getElementById(panelId);
+  panel.removeAttribute('hidden');
+}
+```
+
+### 3. Not Supporting Arrow Keys
+
+```javascript
+// Bad: No arrow key support
+tab.addEventListener('click', () => activateTab(tab));
+
+// Good: Full keyboard support
+tab.addEventListener('click', () => activateTab(tab));
+
+tab.addEventListener('keydown', (e) => {
+  const currentIndex = Array.from(tabs).indexOf(tab);
+  
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    const nextIndex = (currentIndex + 1) % tabs.length;
+    activateTab(tabs[nextIndex]);
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+    activateTab(tabs[prevIndex]);
+  }
+});
+```
+
+## Best Practices
+
+1. **Use proper ARIA roles** for tabs and panels
+2. **Manage tabindex** to control tab order
+3. **Support arrow keys** for navigation
+4. **Support Home and End keys** for quick navigation
+5. **Hide inactive panels** with the `hidden` attribute
+6. **Update ARIA attributes** to reflect state
+7. **Move focus to activated tab** when switching
+8. **Handle vertical tabs** with appropriate arrow keys
+9. **Test with keyboard navigation** to verify behavior
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

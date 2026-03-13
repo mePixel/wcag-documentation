@@ -1,0 +1,254 @@
+---
+title: "Document Structure Elements"
+description: "HTML elements for document structure and metadata"
+---
+
+# Document Structure Elements
+
+Document structure elements provide the foundation for HTML documents, defining the overall structure and metadata.
+
+## HTML Element
+
+The root element that contains all page content.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Page Title</title>
+  </head>
+  <body>
+    <!-- Page content -->
+  </body>
+</html>
+```
+
+### Key Attributes
+
+- `lang`: Specifies the language of the page content
+  - Essential for screen readers to use correct pronunciation
+  - Required for WCAG compliance
+  - Example: `lang="en"` for English, `lang="es"` for Spanish
+
+- `dir`: Specifies the text direction
+  - `ltr`: Left-to-right (default)
+  - `rtl`: Right-to-left (for languages like Arabic, Hebrew)
+
+### Best Practices
+
+- Always include the `lang` attribute on the `<html>` element
+- Use appropriate language codes (ISO 639-1)
+- Set `dir="rtl"` for right-to-left languages
+
+```html
+<!-- Good: Proper language declaration -->
+<html lang="en">
+  <!-- Content -->
+</html>
+
+<!-- Good: Right-to-left language -->
+<html lang="ar" dir="rtl">
+  <!-- Content -->
+</html>
+
+<!-- Bad: Missing language attribute -->
+<html>
+  <!-- Content -->
+</html>
+```
+
+## Head Element
+
+Contains metadata about the document.
+
+```html
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Page description for search engines">
+  <title>Page Title</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="favicon.ico">
+</head>
+```
+
+### Essential Meta Tags
+
+- `charset`: Specifies character encoding
+  - Always use UTF-8 for best compatibility
+  - Should be the first element in `<head>`
+
+- `viewport`: Controls how the page displays on mobile devices
+  - Essential for responsive design
+  - Improves accessibility on mobile devices
+
+- `description`: Provides page description for search engines
+  - Helps with SEO
+  - May appear in search results
+
+### Title Element
+
+The `<title>` element is crucial for accessibility:
+
+- Screen readers announce the page title
+- Browser tabs display the title
+- Search engines use the title
+- Users rely on titles to identify pages
+
+```html
+<!-- Good: Descriptive title -->
+<title>Accessibility Guidelines - WCAG 2.1 AA Compliance</title>
+
+<!-- Bad: Generic title -->
+<title>Home</title>
+```
+
+### Best Practices
+
+- Keep titles under 60 characters for optimal display
+- Make titles unique for each page
+- Include the most important information first
+- Use a consistent title format across your site
+
+## Body Element
+
+Contains the visible page content.
+
+```html
+<body>
+  <!-- All visible content goes here -->
+  <header>
+    <!-- Header content -->
+  </header>
+  
+  <main>
+    <!-- Main content -->
+  </main>
+  
+  <footer>
+    <!-- Footer content -->
+  </footer>
+</body>
+```
+
+### Best Practices
+
+- Use semantic HTML elements within the body
+- Maintain proper heading hierarchy
+- Use landmark elements for structure
+- Ensure proper nesting of elements
+
+## DOCTYPE Declaration
+
+The DOCTYPE declaration tells the browser which version of HTML to use.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Document content -->
+</html>
+```
+
+### Why DOCTYPE Matters
+
+- Triggers standards mode in browsers
+- Ensures consistent rendering across browsers
+- Required for HTML5 documents
+- Affects how CSS and JavaScript behave
+
+### Best Practices
+
+- Always include `<!DOCTYPE html>` at the very top of your document
+- Use the HTML5 DOCTYPE for new projects
+- Don't use older DOCTYPEs (HTML 4.01, XHTML)
+
+## Complete Document Structure Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about web accessibility and WCAG 2.1 AA compliance">
+    <title>Accessibility Guidelines - WCAG 2.1 AA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico">
+  </head>
+  <body>
+    <header>
+      <h1>Accessibility Guidelines</h1>
+      <nav>
+        <!-- Navigation -->
+      </nav>
+    </header>
+    
+    <main>
+      <!-- Main content -->
+    </main>
+    
+    <footer>
+      <!-- Footer content -->
+    </footer>
+  </body>
+</html>
+```
+
+## Common Mistakes
+
+### 1. Missing Language Attribute
+
+```html
+<!-- Bad: Missing language -->
+<html>
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <!-- Content -->
+  </body>
+</html>
+
+<!-- Good: With language -->
+<html lang="en">
+  <head>
+    <title>Page Title</title>
+  </head>
+  <body>
+    <!-- Content -->
+  </body>
+</html>
+```
+
+### 2. Missing DOCTYPE
+
+```html
+<!-- Bad: No DOCTYPE -->
+<html lang="en">
+  <!-- Content -->
+</html>
+
+<!-- Good: With DOCTYPE -->
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Content -->
+</html>
+```
+
+### 3. Non-Descriptive Titles
+
+```html
+<!-- Bad: Generic title -->
+<title>Home</title>
+
+<!-- Good: Descriptive title -->
+<title>Accessibility Guidelines - WCAG 2.1 AA Compliance</title>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Text Content Elements](./text-content.mdx) - Headings, paragraphs, and lists
+- [Landmark Elements](./landmark-elements.mdx) - HTML5 landmark elements
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

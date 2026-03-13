@@ -1,0 +1,303 @@
+---
+title: "Live Region Patterns"
+description: "Implementation patterns for ARIA live regions in common scenarios"
+---
+
+# Live Region Patterns
+
+Learn how to implement ARIA live regions in common scenarios with practical examples and best practices.
+
+## Form Validation Messages
+
+Form validation is one of the most common use cases for live regions. Use assertive live regions for immediate error feedback.
+
+### Implementation
+
+```html
+<!-- Good: Form validation with live regions -->
+<form id="contact-form">
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required>
+  <div id="email-error" role="alert" aria-live="assertive"></div>
+  
+  <button type="submit">Submit</button>
+</form>
+```
+
+```javascript
+// Validate form
+function validateForm(event) {
+  event.preventDefault();
+  const email = document.getElementById('email');
+  const error = document.getElementById('email-error');
+  
+  if (!email.value.includes('@')) {
+    error.textContent = 'Please enter a valid email address';
+    email.setAttribute('aria-invalid', 'true');
+    email.setAttribute('aria-describedby', 'email-error');
+  } else {
+    error.textContent = '';
+    email.setAttribute('aria-invalid', 'false');
+  }
+}
+
+document.getElementById('contact-form').addEventListener('submit', validateForm);
+```
+
+### Best Practices
+
+- Use `role="alert"` for validation errors
+- Associate errors with form fields using `aria-describedby`
+- Set `aria-invalid` on invalid fields
+- Clear errors when user corrects input
+- Provide specific, actionable error messages
+
+## Loading States
+
+Loading states keep users informed during asynchronous operations. Use polite live regions for non-critical loading updates.
+
+### Implementation
+
+```html
+<!-- Good: Loading state with live region -->
+<button id="load-button" onclick="loadData()">
+  Load Data
+</button>
+<div id="loading-status" aria-live="polite" aria-atomic="true"></div>
+```
+
+```javascript
+// Load data with status updates
+async function loadData() {
+  const button = document.getElementById('load-button');
+  const status = document.getElementById('loading-status');
+  
+  button.disabled = true;
+  status.textContent = 'Loading data...';
+  
+  try {
+    const data = await fetchData();
+    status.textContent = 'Data loaded successfully';
+    processData(data);
+  } catch (error) {
+    status.textContent = 'Error loading data';
+  } finally {
+    button.disabled = false;
+  }
+}
+```
+
+### Best Practices
+
+- Use `aria-live="polite"` for loading updates
+- Set `aria-atomic="true"` for complete status messages
+- Disable controls during loading
+- Provide clear success/error feedback
+- Consider using `aria-busy` for complex loading scenarios
+
+## Chat Messages
+
+Chat applications need to announce new messages without interrupting the user. Use polite live regions with `aria-atomic="false"`.
+
+### Implementation
+
+```html
+<!-- Good: Chat with live region -->
+<div id="chat-container">
+  <div id="messages" role="log" aria-live="polite" aria-atomic="false">
+    <!-- Chat messages -->
+  </div>
+  
+  <form id="chat-form">
+    <input type="text" id="message-input" placeholder="Type a message...">
+    <button type="submit">Send</button>
+  </form>
+</div>
+```
+
+```javascript
+// Send message
+function sendMessage(event) {
+  event.preventDefault();
+  const input = document.getElementById('message-input');
+  const messages = document.getElementById('messages');
+  
+  const message = input.value;
+  if (message.trim()) {
+    const messageElement = document.createElement('div');
+    messageElement.textContent = message;
+    messages.appendChild(messageElement);
+    input.value = '';
+  }
+}
+
+document.getElementById('chat-form').addEventListener('submit', sendMessage);
+```
+
+### Best Practices
+
+- Use `role="log"` for chat message containers
+- Set `aria-atomic="false"` to announce only new messages
+- Use `aria-live="polite"` to avoid interruptions
+- Consider using `aria-label` to identify the chat
+- Provide timestamps or sender information
+
+## Progress Updates
+
+Progress indicators need to update frequently without overwhelming users. Use polite live regions for progress announcements.
+
+### Implementation
+
+```html
+<!-- Good: Progress with live region -->
+<div id="progress-container">
+  <div id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  <div id="progress-status" aria-live="polite"></div>
+</div>
+```
+
+```javascript
+// Update progress
+function updateProgress(percent) {
+  const progressBar = document.getElementById('progress-bar');
+  const progressStatus = document.getElementById('progress-status');
+  
+  progressBar.setAttribute('aria-valuenow', percent);
+  progressBar.style.width = `${percent}%`;
+  progressStatus.textContent = `Progress: ${percent}%`;
+}
+```
+
+### Best Practices
+
+- Use `role="progressbar"` for semantic clarity
+- Update `aria-valuenow` with current progress
+- Set `aria-valuemin` and `aria-valuemax` for range
+- Use `aria-live="polite"` for progress updates
+- Consider throttling announcements for rapid updates
+
+## Notification System
+
+Notification systems display temporary messages that need to be announced. Use polite live regions for non-critical notifications.
+
+### Implementation
+
+```html
+<!-- Good: Notification system -->
+<div id="notifications" aria-live="polite" aria-atomic="true">
+  <!-- Notifications -->
+</div>
+```
+
+```javascript
+// Show notification
+function showNotification(message, type = 'info') {
+  const notifications = document.getElementById('notifications');
+  
+  const notification = document.createElement('div');
+  notification.setAttribute('role', type === 'error' ? 'alert' : 'status');
+  notification.textContent = message;
+  
+  notifications.appendChild(notification);
+  
+  // Remove after 5 seconds
+  setTimeout(() => {
+    notifications.removeChild(notification);
+  }, 5000);
+}
+```
+
+### Best Practices
+
+- Use `role="alert"` for error notifications
+- Use `role="status"` for info notifications
+- Set `aria-atomic="true"` for complete messages
+- Provide clear, actionable messages
+- Consider using `aria-label` to identify notification type
+
+## Auto-Complete Suggestions
+
+Auto-complete components need to announce suggestions without interrupting typing. Use polite live regions with careful timing.
+
+### Implementation
+
+```html
+<!-- Good: Auto-complete with live region -->
+<div id="autocomplete-container">
+  <input type="text" id="search" aria-autocomplete="list" aria-controls="suggestions">
+  <ul id="suggestions" role="listbox" aria-live="polite">
+    <!-- Suggestions -->
+  </ul>
+</div>
+```
+
+```javascript
+// Update suggestions
+function updateSuggestions(query) {
+  const suggestions = document.getElementById('suggestions');
+  const matches = findMatches(query);
+  
+  suggestions.innerHTML = '';
+  matches.forEach(match => {
+    const item = document.createElement('li');
+    item.setAttribute('role', 'option');
+    item.textContent = match;
+    suggestions.appendChild(item);
+  });
+}
+```
+
+### Best Practices
+
+- Use `role="listbox"` for suggestion containers
+- Use `role="option"` for individual suggestions
+- Set `aria-live="polite"` for suggestion updates
+- Consider using `aria-atomic="false"` for incremental updates
+- Manage focus appropriately for keyboard navigation
+
+## Real-Time Data Updates
+
+Real-time data feeds need to announce updates without overwhelming users. Use polite live regions with throttling.
+
+### Implementation
+
+```html
+<!-- Good: Real-time data with live region -->
+<div id="data-feed" aria-live="polite" aria-atomic="false">
+  <!-- Data updates -->
+</div>
+```
+
+```javascript
+// Update data feed
+let lastUpdate = 0;
+const UPDATE_INTERVAL = 1000; // Throttle to 1 second
+
+function updateDataFeed(data) {
+  const now = Date.now();
+  if (now - lastUpdate < UPDATE_INTERVAL) {
+    return; // Skip update if too recent
+  }
+  
+  const feed = document.getElementById('data-feed');
+  const update = document.createElement('div');
+  update.textContent = data.message;
+  feed.appendChild(update);
+  
+  lastUpdate = now;
+}
+```
+
+### Best Practices
+
+- Throttle updates to avoid overwhelming users
+- Use `aria-live="polite"` for non-critical updates
+- Set `aria-atomic="false"` for incremental updates
+- Consider using `aria-busy` during batch updates
+- Provide controls to pause/resume updates
+
+## Related Resources
+
+- [ARIA Live Regions](https://www.w3.org/WAI/ARIA/apg/practices/live-regions/)
+- [MDN aria-live](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [WebAIM Dynamic Content](https://webaim.org/techniques/aria/)

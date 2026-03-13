@@ -1,0 +1,215 @@
+---
+title: "Focus Management Principles"
+description: "Core principles for managing focus in accessible web applications"
+---
+
+# Focus Management Principles
+
+Proper focus management is essential for keyboard accessibility. Custom components must manage focus correctly to ensure all users can interact with them.
+
+## Overview
+
+Focus management involves controlling which element has keyboard focus and ensuring focus moves logically through interactive elements.
+
+### Why Focus Management Matters
+
+- **Keyboard Users**: Rely on focus to navigate
+- **Screen Reader Users**: Need focus to understand context
+- **Motor Impaired Users**: Use keyboard for navigation
+- **All Users**: Benefit from clear focus indicators
+
+## Core Principles
+
+### 1. Maintain Logical Focus Order
+
+Focus should follow a logical, predictable order that matches the visual layout and reading order of the page.
+
+```javascript
+// Good: Logical focus order
+const focusableElements = document.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+focusableElements.forEach((element, index) => {
+  element.setAttribute('tabindex', index);
+});
+```
+
+**Key Points:**
+- Focus should move in a logical sequence
+- Follow the visual reading order (left-to-right, top-to-bottom)
+- Avoid jumping focus around the page
+- Use DOM order for natural tab navigation
+
+### 2. Trap Focus in Modals
+
+Focus should be trapped within modal dialogs to prevent keyboard users from navigating outside the modal while it's open.
+
+```javascript
+// Good: Focus trap for modals
+function trapFocus(element) {
+  const focusableElements = element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const firstFocusable = focusableElements[0];
+  const lastFocusable = focusableElements[focusableElements.length - 1];
+
+  element.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      if (e.shiftKey) {
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
+  });
+}
+```
+
+**Key Points:**
+- Trap focus within modal dialogs
+- Cycle focus when Tab is pressed at boundaries
+- Allow Escape key to close modal
+- Remove focus trap when modal closes
+
+### 3. Restore Focus After Closing
+
+Focus should return to the element that opened a modal or menu, maintaining the user's context.
+
+```javascript
+// Good: Restore focus
+let previousFocus = null;
+
+function openModal(modalId) {
+  previousFocus = document.activeElement;
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'none';
+  if (previousFocus) {
+    previousFocus.focus();
+  }
+}
+```
+
+**Key Points:**
+- Store the element that had focus before opening
+- Restore focus to that element when closing
+- Ensure the element is still focusable
+- Handle cases where the element may have been removed
+
+### 4. Move Focus to Dynamic Content
+
+Focus should move to newly revealed content to ensure users are aware of changes.
+
+```javascript
+// Good: Move focus to new content
+function showContent(contentId) {
+  const content = document.getElementById(contentId);
+  content.style.display = 'block';
+  content.focus();
+}
+```
+
+**Key Points:**
+- Move focus to newly shown content
+- Ensure the element is focusable
+- Announce the change to screen readers
+- Consider using `aria-live` for non-focusable content
+
+## Focusable Elements
+
+### What Elements Can Receive Focus?
+
+By default, these elements can receive focus:
+- `<a>` with `href` attribute
+- `<button>`
+- `<input>` (except `type="hidden"`)
+- `<select>`
+- `<textarea>`
+- Elements with `tabindex="0"` or positive value
+
+### Making Elements Focusable
+
+```javascript
+// Make an element focusable
+element.setAttribute('tabindex', '0');
+
+// Make an element not focusable
+element.setAttribute('tabindex', '-1');
+
+// Set custom tab order (use sparingly)
+element.setAttribute('tabindex', '5');
+```
+
+**Best Practices:**
+- Use `tabindex="0"` to make non-interactive elements focusable
+- Use `tabindex="-1"` to remove elements from tab order
+- Avoid positive `tabindex` values (they disrupt natural order)
+- Prefer DOM order over custom tab order
+
+## Focus Indicators
+
+### Visual Focus Indicators
+
+Focus indicators must be clearly visible and distinguishable.
+
+```css
+/* Good: Clear focus indicator */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Alternative: Custom focus indicator */
+button:focus-visible {
+  box-shadow: 0 0 0 3px #005fcc;
+}
+```
+
+**Requirements:**
+- Focus indicator must be visible
+- Must have sufficient contrast (3:1 minimum)
+- Must be distinguishable from non-focused state
+- Should not rely on color alone
+
+### Focus Management APIs
+
+```javascript
+// Set focus
+element.focus();
+
+// Check if element has focus
+document.activeElement === element;
+
+// Move focus to next element
+element.nextElementSibling.focus();
+
+// Move focus to previous element
+element.previousElementSibling.focus();
+
+// Blur (remove focus)
+element.blur();
+```
+
+## Related Resources
+
+- [Focus Management Overview](./focus-management.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Custom Button Focus Management](./custom-button-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)
+- [Focus Testing Checklist](./focus-testing.mdx)

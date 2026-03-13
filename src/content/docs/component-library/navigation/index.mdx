@@ -1,0 +1,239 @@
+---
+title: "Navigation Overview"
+description: "Introduction to accessible navigation components and patterns"
+---
+
+# Navigation Overview
+
+Navigation components help users find and move through content. Accessible navigation ensures all users can efficiently locate and access information regardless of ability or assistive technology use.
+
+## Why Accessible Navigation Matters
+
+- **Screen Reader Users**: Need to understand site structure and navigate efficiently
+- **Keyboard Users**: Must be able to navigate without a mouse
+- **Cognitive Users**: Benefit from consistent, predictable navigation
+- **Low Vision Users**: Need clear, high-contrast navigation
+- **All Users**: Benefit from intuitive, efficient navigation
+
+## WCAG Requirements
+
+### Operable
+- **2.4.1 Bypass Blocks**: Provide skip links to bypass repeated content
+- **2.4.2 Page Titled**: Each page must have a descriptive title
+- **2.4.3 Focus Order**: Navigation must follow logical order
+- **2.4.4 Link Purpose (In Context)**: Links must have descriptive text
+- **2.4.5 Multiple Ways**: Provide multiple navigation methods
+- **2.4.6 Headings and Labels**: Navigation must have descriptive labels
+- **2.4.7 Focus Visible**: Focus indicators must be visible
+
+### Understandable
+- **3.2.3 Consistent Navigation**: Navigation must be consistent across pages
+
+## Navigation Components
+
+### Skip Links
+
+Skip links allow keyboard users to bypass repeated navigation and jump directly to main content.
+
+[Learn about skip links →](./skip-links.mdx)
+
+### Breadcrumb Navigation
+
+Breadcrumbs show hierarchical page location and help users understand where they are in the site structure.
+
+[Learn about breadcrumb navigation →](./breadcrumb-navigation.mdx)
+
+### Main Navigation
+
+Main navigation provides primary site navigation and should be consistent across all pages.
+
+```html
+<header>
+  <nav aria-label="Main navigation">
+    <ul>
+      <li><a href="/" aria-current="page">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+### Secondary Navigation
+
+Secondary navigation provides additional navigation options, often in sidebars or related content areas.
+
+```html
+<aside>
+  <nav aria-label="Secondary navigation">
+    <h2>Related Links</h2>
+    <ul>
+      <li><a href="/support">Support</a></li>
+      <li><a href="/faq">FAQ</a></li>
+      <li><a href="/blog">Blog</a></li>
+    </ul>
+  </nav>
+</aside>
+```
+
+### Footer Navigation
+
+Footer navigation provides site-wide links and legal information.
+
+```html
+<footer>
+  <nav aria-label="Footer navigation">
+    <ul>
+      <li><a href="/about">About Us</a></li>
+      <li><a href="/privacy">Privacy Policy</a></li>
+      <li><a href="/terms">Terms of Service</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</footer>
+```
+
+## Best Practices
+
+### 1. Use Semantic HTML
+
+Use appropriate HTML elements for navigation.
+
+```html
+<!-- Good: Semantic HTML -->
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+```
+
+### 2. Provide Descriptive Labels
+
+Use `aria-label` to describe navigation regions.
+
+```html
+<!-- Good: Descriptive labels -->
+<nav aria-label="Main navigation">
+  <!-- Navigation content -->
+</nav>
+```
+
+### 3. Indicate Current Page
+
+Use `aria-current="page"` to indicate current page.
+
+```html
+<!-- Good: Current page indicated -->
+<nav>
+  <ul>
+    <li><a href="/" aria-current="page">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+```
+
+### 4. Provide Multiple Navigation Methods
+
+Offer multiple ways to find content.
+
+```html
+<!-- Main navigation -->
+<nav aria-label="Main navigation">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<!-- Breadcrumb navigation -->
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+  </ol>
+</nav>
+```
+
+## Common Pitfalls
+
+### Non-Descriptive Link Text
+
+```html
+<!-- Bad: Non-descriptive links -->
+<a href="/about">Click here</a>
+
+<!-- Good: Descriptive links -->
+<a href="/about">Learn about our company</a>
+```
+
+### Missing Skip Links
+
+```html
+<!-- Bad: No skip link -->
+<header>
+  <nav>
+    <!-- Long navigation -->
+  </nav>
+</header>
+
+<!-- Good: Skip link provided -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+<header>
+  <nav>
+    <!-- Long navigation -->
+  </nav>
+</header>
+```
+
+### Inconsistent Navigation
+
+Keep navigation order and structure consistent across all pages.
+
+### Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+a:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+a:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate all links using Tab
+- [ ] Skip link is visible on focus
+- [ ] Focus order is logical
+- [ ] Can activate links using Enter
+- [ ] Focus indicators are visible
+
+### Screen Reader Testing
+- [ ] Navigation is announced with labels
+- [ ] Current page is identified
+- [ ] Breadcrumb hierarchy is clear
+- [ ] Link purposes are understandable
+- [ ] Skip link is announced
+
+### Visual Testing
+- [ ] Navigation is visually organized
+- [ ] Current page is visually indicated
+- [ ] Focus indicators are visible
+- [ ] Color contrast is sufficient
+- [ ] Navigation is consistent across pages
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Navigation](https://www.w3.org/WAI/ARIA/apg/patterns/navigation/)
+- [WebAIM Navigation Accessibility](https://webaim.org/techniques/navigation/)
+- [MDN HTML Navigation Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/nav)

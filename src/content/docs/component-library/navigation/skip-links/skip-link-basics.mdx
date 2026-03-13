@@ -1,0 +1,221 @@
+---
+title: "Skip Link Basics"
+description: "Basic implementation of skip links for keyboard navigation"
+---
+
+# Skip Link Basics
+
+Skip links allow keyboard users to bypass repeated content like navigation menus and jump directly to main content. They're essential for efficient keyboard navigation.
+
+## Component Overview
+
+Skip links are hidden links that become visible when they receive keyboard focus. They provide a way for keyboard users to skip over repetitive navigation and go straight to main content.
+
+### Why Skip Links Matter
+
+- **Keyboard Users**: Don't have to tab through entire navigation on every page
+- **Screen Reader Users**: Can quickly jump to main content
+- **Motor Impaired Users**: Reduce the number of keystrokes needed to reach content
+- **All Users**: Provide faster navigation for experienced users
+
+## WCAG Requirements
+
+### Operable
+- **2.4.1 Bypass Blocks**: Provide a mechanism to bypass blocks of content that are repeated on multiple pages
+
+## Basic Implementation
+
+### Simple Skip Link
+
+The most basic skip link implementation consists of a link at the top of the page that targets the main content area.
+
+```html
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <!-- Navigation content -->
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <!-- Main content -->
+  </main>
+</body>
+```
+
+### CSS for Hiding and Showing
+
+The skip link should be hidden by default and become visible when it receives focus.
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+```
+
+### How It Works
+
+1. **Hidden by Default**: The skip link is positioned off-screen (`top: -40px`) so it's not visible
+2. **Visible on Focus**: When the user tabs to the link, the `:focus` pseudo-class moves it into view (`top: 0`)
+3. **Jumps to Target**: When activated, the link scrolls to the element with the matching ID (`#main-content`)
+
+## Complete Example
+
+Here's a complete working example of a basic skip link:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessible Page with Skip Link</title>
+  <style>
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #000;
+      color: #fff;
+      padding: 8px 16px;
+      z-index: 100;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    
+    .skip-link:focus {
+      top: 0;
+    }
+    
+    /* Additional styles for demo */
+    nav {
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    
+    main {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main id="main-content">
+    <h1>Welcome to Our Site</h1>
+    <p>This is the main content of the page.</p>
+  </main>
+</body>
+</html>
+```
+
+## Key Requirements
+
+### 1. First Focusable Element
+
+The skip link must be the first focusable element on the page so keyboard users encounter it immediately.
+
+```html
+<body>
+  <!-- Skip link must be first -->
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+  
+  <!-- Everything else comes after -->
+  <header>...</header>
+</body>
+```
+
+### 2. Target ID Required
+
+The target element must have an ID that matches the skip link's href.
+
+```html
+<!-- Skip link -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<!-- Target element -->
+<main id="main-content">
+  <!-- Content -->
+</main>
+```
+
+### 3. Descriptive Text
+
+The skip link text should clearly describe what it does.
+
+```html
+<!-- Good: Descriptive -->
+<a href="#main-content" class="skip-link">
+  Skip to main content
+</a>
+
+<!-- Bad: Vague -->
+<a href="#main-content" class="skip-link">
+  Skip
+</a>
+```
+
+### 4. Visible on Focus
+
+The skip link must be visible when it receives keyboard focus.
+
+```css
+.skip-link:focus {
+  top: 0; /* Move into view */
+}
+```
+
+## Testing
+
+### Keyboard Testing
+1. Press Tab to navigate through the page
+2. The skip link should be the first element to receive focus
+3. The skip link should become visible when focused
+4. Press Enter to activate the skip link
+5. Focus should move to the main content area
+
+### Screen Reader Testing
+1. Navigate to the page with a screen reader
+2. The skip link should be announced
+3. The skip link purpose should be clear
+4. Activate the skip link
+5. Focus should move to the main content area
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Skip Links](https://www.w3.org/WAI/WCAG21/Techniques/general/G1)
+- [WebAIM Skip Navigation Links](https://webaim.org/techniques/skipnav/)
+- [MDN HTML Anchor Links](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a)

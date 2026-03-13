@@ -1,0 +1,302 @@
+---
+title: "Text Content Elements"
+description: "HTML elements for text content including headings, paragraphs, and lists"
+---
+
+# Text Content Elements
+
+Text content elements provide structure and meaning to text-based content, making it accessible and understandable.
+
+## Headings (h1-h6)
+
+Headings create a hierarchical document structure that helps users navigate and understand content.
+
+### Heading Hierarchy
+
+```html
+<h1>Main Page Title</h1>
+
+<h2>Section Title</h2>
+<p>Section content...</p>
+
+<h3>Subsection Title</h3>
+<p>Subsection content...</p>
+
+<h4>Sub-subsection Title</h4>
+<p>Sub-subsection content...</p>
+```
+
+### Best Practices
+
+- **Use only one `<h1>` per page**: The main page title should be the only h1
+- **Don't skip heading levels**: Follow proper hierarchy (h1 → h2 → h3)
+- **Use headings for structure, not styling**: Choose heading level based on content hierarchy
+- **Make headings descriptive**: Headings should clearly describe the content that follows
+
+```html
+<!-- Good: Proper heading hierarchy -->
+<h1>Accessibility Guidelines</h1>
+<h2>Introduction</h2>
+<p>Introduction content...</p>
+<h2>Core Principles</h2>
+<p>Principles content...</p>
+<h3>Perceivable</h3>
+<p>Perceivable content...</p>
+
+<!-- Bad: Skipping heading levels -->
+<h1>Accessibility Guidelines</h1>
+<h3>Introduction</h3>
+<p>Introduction content...</p>
+
+<!-- Bad: Multiple h1 elements -->
+<h1>Accessibility Guidelines</h1>
+<h1>Introduction</h1>
+<p>Introduction content...</p>
+```
+
+### Why Headings Matter
+
+- **Screen Reader Users**: Can navigate by headings to find content quickly
+- **Keyboard Users**: Can jump between sections using heading shortcuts
+- **All Users**: Benefit from clear content structure and organization
+- **SEO**: Search engines use headings to understand content structure
+
+### Heading Navigation
+
+Screen readers provide shortcuts for navigating by headings:
+- **NVDA**: H (next heading), Shift+H (previous heading), 1-6 (specific heading level)
+- **JAWS**: H (next heading), Shift+H (previous heading), 1-6 (specific heading level)
+- **VoiceOver**: VO+Command+H (next heading), VO+Command+Shift+H (previous heading)
+
+## Paragraphs (p)
+
+Paragraphs group related sentences together, creating logical blocks of text.
+
+```html
+<p>This is a paragraph of text. It contains multiple sentences that are related to each other. Paragraphs help organize content and make it easier to read.</p>
+
+<p>This is another paragraph. It's separate from the first paragraph, indicating a change in topic or idea.</p>
+```
+
+### Best Practices
+
+- Use paragraphs to group related sentences
+- Keep paragraphs focused on a single topic
+- Use appropriate paragraph length (not too long, not too short)
+- Avoid using `<br>` for paragraph breaks
+
+```html
+<!-- Good: Using paragraphs -->
+<p>This is the first paragraph about accessibility.</p>
+<p>This is the second paragraph about a different aspect.</p>
+
+<!-- Bad: Using line breaks -->
+This is the first paragraph about accessibility.<br><br>
+This is the second paragraph about a different aspect.
+```
+
+## Lists
+
+Lists create structured collections of items, making content easier to scan and understand.
+
+### Unordered Lists (ul)
+
+Unordered lists are for items where order doesn't matter.
+
+```html
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+```
+
+**Use cases:**
+- Bullet points
+- Features or benefits
+- Items with no inherent order
+
+### Ordered Lists (ol)
+
+Ordered lists are for items where order matters.
+
+```html
+<ol>
+  <li>First step</li>
+  <li>Second step</li>
+  <li>Third step</li>
+</ol>
+```
+
+**Use cases:**
+- Instructions or steps
+- Sequential items
+- Ranked items
+
+### Definition Lists (dl)
+
+Definition lists are for terms and their definitions.
+
+```html
+<dl>
+  <dt>HTML</dt>
+  <dd>HyperText Markup Language - the standard markup language for creating web pages</dd>
+  
+  <dt>CSS</dt>
+  <dd>Cascading Style Sheets - used for describing the presentation of a document</dd>
+  
+  <dt>WCAG</dt>
+  <dd>Web Content Accessibility Guidelines - international standards for web accessibility</dd>
+</dl>
+```
+
+**Use cases:**
+- Glossaries
+- Key-value pairs
+- Terms and definitions
+
+### Nested Lists
+
+Lists can be nested to create hierarchical structures.
+
+```html
+<ul>
+  <li>Main item 1</li>
+  <li>
+    Main item 2
+    <ul>
+      <li>Subitem 2.1</li>
+      <li>Subitem 2.2</li>
+    </ul>
+  </li>
+  <li>Main item 3</li>
+</ul>
+```
+
+### Best Practices
+
+- Choose the correct list type for your content
+- Keep list items concise and focused
+- Use nested lists for hierarchical content
+- Don't use lists for layout purposes
+
+```html
+<!-- Good: Correct list usage -->
+<ul>
+  <li>Accessibility benefit 1</li>
+  <li>Accessibility benefit 2</li>
+  <li>Accessibility benefit 3</li>
+</ul>
+
+<!-- Bad: Using divs instead of lists -->
+<div class="list">
+  <div class="item">Accessibility benefit 1</div>
+  <div class="item">Accessibility benefit 2</div>
+  <div class="item">Accessibility benefit 3</div>
+</div>
+```
+
+### Why Lists Matter
+
+- **Screen Reader Users**: Announced as lists, making it clear how many items there are
+- **Keyboard Users**: Can navigate between list items
+- **All Users**: Easier to scan and understand content
+- **Semantic Meaning**: Conveys that items are related
+
+## Text Formatting Elements
+
+Use semantic text formatting elements to convey meaning, not just appearance.
+
+### Emphasis (em)
+
+The `<em>` element indicates emphasis.
+
+```html
+<p>This is <em>important</em> information.</p>
+```
+
+### Strong Importance (strong)
+
+The `<strong>` element indicates strong importance.
+
+```html
+<p>This is <strong>critical</strong> information.</p>
+```
+
+### Best Practices
+
+- Use `<em>` for emphasis (typically rendered as italic)
+- Use `<strong>` for strong importance (typically rendered as bold)
+- Don't use `<i>` or `<b>` for semantic emphasis
+- Use text formatting for meaning, not just styling
+
+```html
+<!-- Good: Semantic text formatting -->
+<p>This is <em>emphasized</em> text.</p>
+<p>This is <strong>important</strong> text.</p>
+
+<!-- Bad: Non-semantic text formatting -->
+<p>This is <i>italic</i> text.</p>
+<p>This is <b>bold</b> text.</p>
+```
+
+## Common Mistakes
+
+### 1. Skipping Heading Levels
+
+```html
+<!-- Bad: Skipping levels -->
+<h1>Title</h1>
+<h3>Subtitle</h3>
+
+<!-- Good: Proper hierarchy -->
+<h1>Title</h1>
+<h2>Subtitle</h2>
+```
+
+### 2. Using Headings for Styling
+
+```html
+<!-- Bad: Using headings for styling -->
+<h3 class="small-text">This is not a heading</h3>
+
+<!-- Good: Using appropriate element -->
+<p class="small-text">This is not a heading</p>
+```
+
+### 3. Multiple H1 Elements
+
+```html
+<!-- Bad: Multiple h1 elements -->
+<h1>Page Title</h1>
+<h2>Section Title</h2>
+<h1>Another Main Title</h1>
+
+<!-- Good: Single h1 element -->
+<h1>Page Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+```
+
+### 4. Using Divs Instead of Lists
+
+```html
+<!-- Bad: Using divs -->
+<div class="list">
+  <div class="item">Item 1</div>
+  <div class="item">Item 2</div>
+</div>
+
+<!-- Good: Using semantic lists -->
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+</ul>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Document Structure Elements](./document-structure.mdx) - HTML document structure
+- [Links and Navigation Elements](./links-navigation.mdx) - Links and navigation
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

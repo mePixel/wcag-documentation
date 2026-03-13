@@ -1,0 +1,297 @@
+---
+title: "Focus Management Testing Checklist"
+description: "Testing checklist for focus management in accessible web applications"
+---
+
+# Focus Management Testing Checklist
+
+Use this checklist to verify that your focus management implementation is accessible and works correctly for all users.
+
+## Keyboard Testing
+
+### Basic Navigation
+
+- [ ] Can navigate all interactive elements using Tab key
+- [ ] Can navigate backwards using Shift+Tab
+- [ ] Focus order is logical and follows visual layout
+- [ ] Focus order matches reading order (left-to-right, top-to-bottom)
+- [ ] No interactive elements are skipped
+- [ ] Focus does not jump around unexpectedly
+
+### Modal Dialogs
+
+- [ ] Focus moves to modal when opened
+- [ ] Focus is trapped within modal (Tab cycles through modal elements)
+- [ ] Focus returns to element that opened modal when closed
+- [ ] Escape key closes modal
+- [ ] Focus moves to first focusable element in modal
+- [ ] Focus trap is removed when modal closes
+
+### Dropdown Menus
+
+- [ ] Focus moves to first menu item when menu opens
+- [ ] Arrow Down moves to next menu item
+- [ ] Arrow Up moves to previous menu item
+- [ ] Home key moves to first menu item
+- [ ] End key moves to last menu item
+- [ ] Escape key closes menu
+- [ ] Focus returns to trigger button when menu closes
+- [ ] Enter/Space activates menu items
+
+### Tabs
+
+- [ ] Focus moves to activated tab
+- [ ] Arrow Right moves to next tab
+- [ ] Arrow Left moves to previous tab
+- [ ] Home key moves to first tab
+- [ ] End key moves to last tab
+- [ ] Tab key moves focus out of tab list
+- [ ] Activated tab shows associated panel
+- [ ] Inactive tabs hide associated panels
+- [ ] Only one tab is selected at a time
+
+### Custom Buttons
+
+- [ ] Custom buttons are focusable with Tab key
+- [ ] Enter key activates custom button
+- [ ] Space key activates custom button
+- [ ] Activation works correctly
+- [ ] Focus indicator is visible
+
+### Dynamic Content
+
+- [ ] Focus moves to newly revealed content
+- [ ] Focus moves to updated content
+- [ ] Focus is announced by screen readers
+- [ ] Content changes are announced
+
+## Screen Reader Testing
+
+### Focus Announcement
+
+- [ ] Focused element is announced correctly
+- [ ] Element role is announced (button, link, etc.)
+- [ ] Element label is announced
+- [ ] Element state is announced (selected, expanded, etc.)
+
+### Focus Changes
+
+- [ ] Focus changes are announced
+- [ ] Focus movement is announced
+- [ ] Context is maintained when focus moves
+- [ ] Screen reader follows focus correctly
+
+### Navigation
+
+- [ ] Can navigate using screen reader commands
+- [ ] Can navigate by element type (buttons, links, etc.)
+- [ ] Can navigate by heading
+- [ ] Can navigate by landmark
+- [ ] Focus management works with screen reader
+
+### Component-Specific Testing
+
+#### Modals
+
+- [ ] Modal opening is announced
+- [ ] Modal title is announced
+- [ ] Modal content is accessible
+- [ ] Modal closing is announced
+- [ ] Focus trap works with screen reader
+
+#### Menus
+
+- [ ] Menu opening is announced
+- [ ] Menu items are announced
+- [ ] Menu navigation works with screen reader
+- [ ] Menu closing is announced
+
+#### Tabs
+
+- [ ] Tab activation is announced
+- [ ] Panel content is announced
+- [ ] Tab navigation works with screen reader
+
+## Visual Testing
+
+### Focus Indicators
+
+- [ ] Focus indicator is visible on all focusable elements
+- [ ] Focus indicator is clearly visible
+- [ ] Focus indicator has sufficient contrast (3:1 minimum)
+- [ ] Focus indicator is distinguishable from non-focused state
+- [ ] Focus indicator does not rely on color alone
+
+### Focus States
+
+- [ ] Focus state is visible on buttons
+- [ ] Focus state is visible on links
+- [ ] Focus state is visible on form controls
+- [ ] Focus state is visible on custom components
+- [ ] Focus state is consistent across components
+
+### Active States
+
+- [ ] Active state is visible when activating elements
+- [ ] Active state provides feedback
+- [ ] Active state is distinguishable from focus state
+
+## Cross-Browser Testing
+
+### Desktop Browsers
+
+- [ ] Focus management works in Chrome
+- [ ] Focus management works in Firefox
+- [ ] Focus management works in Safari
+- [ ] Focus management works in Edge
+
+### Mobile Browsers
+
+- [ ] Focus management works on iOS Safari
+- [ ] Focus management works on Android Chrome
+- [ ] Touch interactions work correctly
+- [ ] Virtual keyboard interactions work correctly
+
+## Edge Cases
+
+### Focus Restoration
+
+- [ ] Focus is restored after closing modals
+- [ ] Focus is restored after closing menus
+- [ ] Focus is restored after navigating away and back
+- [ ] Focus is restored even if previous element was removed
+
+### Empty Components
+
+- [ ] Focus management works when component has no focusable elements
+- [ ] Appropriate fallback behavior is provided
+
+### Disabled Elements
+
+- [ ] Disabled elements are not focusable
+- [ ] Disabled elements are announced as disabled
+- [ ] Focus skips disabled elements
+
+### Hidden Elements
+
+- [ ] Hidden elements are not focusable
+- [ ] Focus skips hidden elements
+- [ ] Showing hidden elements updates focus correctly
+
+## Performance Testing
+
+- [ ] Focus management does not cause performance issues
+- [ ] Focus changes are smooth and responsive
+- [ ] No lag when navigating with keyboard
+- [ ] No lag when opening/closing components
+
+## Accessibility Tools Testing
+
+### Automated Testing
+
+- [ ] Automated accessibility tools pass
+- [ ] No focus-related errors detected
+- [ ] No keyboard accessibility errors detected
+
+### Manual Testing Tools
+
+- [ ] Works with accessibility inspector tools
+- [ ] Works with keyboard testing tools
+- [ ] Works with screen reader testing tools
+
+## Documentation Testing
+
+- [ ] Focus behavior is documented
+- [ ] Keyboard shortcuts are documented
+- [ ] Component usage is documented
+- [ ] Accessibility features are documented
+
+## User Testing
+
+- [ ] Keyboard users can complete tasks
+- [ ] Screen reader users can complete tasks
+- [ ] Focus behavior is intuitive
+- [ ] No confusion about focus location
+- [ ] No frustration with focus management
+
+## Common Issues to Check
+
+### Focus Traps
+
+- [ ] No unintended focus traps
+- [ ] Focus can escape from non-modal components
+- [ ] Focus trap is properly removed when component closes
+
+### Focus Loss
+
+- [ ] Focus is never lost unexpectedly
+- [ ] Focus is always on an interactive element
+- [ ] Focus is never on non-interactive elements
+
+### Focus Jumping
+
+- [ ] Focus does not jump around the page
+- [ ] Focus moves in a predictable order
+- [ ] Focus follows visual layout
+
+### Missing Focus Indicators
+
+- [ ] All focusable elements have focus indicators
+- [ ] Focus indicators are visible
+- [ ] Focus indicators have sufficient contrast
+
+## Testing Tools
+
+### Keyboard Testing
+
+- **Native keyboard**: Use Tab, Shift+Tab, Arrow keys, Enter, Space, Escape
+- **Browser dev tools**: Use accessibility inspector to check focus
+
+### Screen Reader Testing
+
+- **NVDA** (Windows): Free screen reader
+- **JAWS** (Windows): Commercial screen reader
+- **VoiceOver** (macOS/iOS): Built-in screen reader
+- **TalkBack** (Android): Built-in screen reader
+
+### Automated Testing
+
+- **axe DevTools**: Browser extension for accessibility testing
+- **WAVE**: Web accessibility evaluation tool
+- **Lighthouse**: Built-in Chrome accessibility audit
+
+### Manual Testing Tools
+
+- **Accessibility Inspector**: Built-in browser tool
+- **Keyboard Navigation**: Manual testing with keyboard
+- **Screen Reader**: Manual testing with screen reader
+
+## Testing Frequency
+
+### During Development
+
+- Test focus management after implementing each component
+- Test keyboard navigation regularly
+- Test with screen reader periodically
+
+### Before Release
+
+- Complete full keyboard testing
+- Complete full screen reader testing
+- Complete cross-browser testing
+- Complete edge case testing
+
+### After Changes
+
+- Test focus management after any changes
+- Test keyboard navigation after any changes
+- Test with screen reader after any changes
+
+## Related Resources
+
+- [Focus Management Principles](./focus-principles.mdx)
+- [Modal Focus Management](./modal-focus.mdx)
+- [Dropdown Focus Management](./dropdown-focus.mdx)
+- [Tabs Focus Management](./tabs-focus.mdx)
+- [Custom Button Focus Management](./custom-button-focus.mdx)
+- [Focus Best Practices](./focus-best-practices.mdx)

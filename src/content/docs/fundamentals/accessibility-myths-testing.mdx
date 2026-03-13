@@ -1,0 +1,370 @@
+---
+title: "Accessibility Myths and Testing"
+description: "Common accessibility myths, testing strategies, semantic HTML, and ARIA fundamentals"
+---
+
+# Accessibility Myths and Testing
+
+Understanding common accessibility myths, testing strategies, and fundamental technologies like semantic HTML and ARIA is essential for creating accessible web experiences.
+
+## Common Accessibility Myths
+
+### Myth 1: Accessibility is only for blind users
+
+**Reality**: Accessibility benefits users with diverse disabilities, including visual, hearing, motor, and cognitive impairments. It also benefits users with temporary disabilities and situational limitations.
+
+**Who Benefits from Accessibility:**
+- **Visual disabilities**: Blindness, low vision, color blindness
+- **Hearing disabilities**: Deafness, hard of hearing
+- **Motor disabilities**: Limited mobility, tremors, paralysis
+- **Cognitive disabilities**: Learning disabilities, attention deficits, memory issues
+- **Temporary disabilities**: Broken arm, lost glasses, ear infection
+- **Situational limitations**: Bright sunlight, noisy environment, holding a baby
+
+**Key Takeaway**: Accessibility benefits everyone, not just users with permanent disabilities.
+
+### Myth 2: Accessibility makes websites ugly
+
+**Reality**: Accessible websites can be beautiful and modern. Accessibility is about inclusive design, not sacrificing aesthetics.
+
+**Beautiful and Accessible:**
+- **Color**: Use accessible color palettes with sufficient contrast
+- **Typography**: Use readable fonts with appropriate sizing
+- **Layout**: Create clean, organized layouts
+- **Animations**: Use subtle, purposeful animations
+- **Images**: Use high-quality images with alt text
+- **Icons**: Use clear, recognizable icons with labels
+
+**Key Takeaway**: Accessibility and good design go hand in hand.
+
+### Myth 3: Accessibility is too expensive
+
+**Reality**: Building accessibility from the start is cost-effective. Retrofitting accessibility is more expensive than building it in from the beginning.
+
+**Cost Considerations:**
+- **Building from start**: Minimal additional cost, integrated into development
+- **Retrofitting**: Significant cost, requires redesign and reimplementation
+- **Legal costs**: Accessibility lawsuits can be expensive
+- **Market opportunity**: Accessible websites reach more users
+
+**Key Takeaway**: Build accessibility from the beginning to save time and money.
+
+### Myth 4: Accessibility is only about compliance
+
+**Reality**: While legal compliance is important, accessibility is fundamentally about providing equal access and creating better user experiences for everyone.
+
+**Beyond Compliance:**
+- **User experience**: Better experience for all users
+- **Market reach**: Reach more potential customers
+- **Brand reputation**: Demonstrate commitment to inclusion
+- **Innovation**: Accessible design often leads to innovation
+- **Social responsibility**: Provide equal access to information
+
+**Key Takeaway**: Accessibility is about people, not just compliance.
+
+### Myth 5: Automated testing is enough
+
+**Reality**: Automated tools can catch about 30-40% of accessibility issues. Manual testing and user testing are essential for comprehensive accessibility.
+
+**Testing Limitations:**
+- **Automated tools**: Catch about 30-40% of issues
+- **Manual testing**: Catches issues requiring human judgment
+- **User testing**: Reveals real-world usage patterns
+- **Combined approach**: Most comprehensive testing strategy
+
+**Key Takeaway**: Use automated, manual, and user testing together.
+
+## Semantic HTML
+
+Semantic HTML is the foundation of web accessibility. Using the right HTML elements for the right purpose provides meaning and structure that assistive technologies can understand.
+
+### Why Semantic HTML Matters
+
+- **Meaning**: Conveys the purpose of content
+- **Structure**: Creates a logical hierarchy
+- **Navigation**: Enables efficient navigation
+- **Compatibility**: Works with all assistive technologies
+- **SEO**: Improves search engine optimization
+
+### Common Semantic Elements
+
+#### Document Structure
+
+```html
+<!-- Document structure -->
+<header>
+  <nav>
+    <main>
+      <article>
+        <section>
+          <aside>
+            <footer>
+```
+
+**Benefits:**
+- Provides clear document structure
+- Enables landmark navigation
+- Improves screen reader experience
+- Enhances SEO
+
+#### Text Structure
+
+```html
+<!-- Text structure -->
+<h1>Main Heading</h1>
+<h2>Subheading</h2>
+<p>Paragraph text</p>
+<ul>
+  <li>List item</li>
+</ul>
+<blockquote>Quoted text</blockquote>
+<code>Inline code</code>
+<pre>Code block</pre>
+```
+
+**Benefits:**
+- Creates logical hierarchy
+- Enables heading navigation
+- Improves readability
+- Provides semantic meaning
+
+#### Interactive Elements
+
+```html
+<!-- Interactive elements -->
+<button type="button">Submit</button>
+<a href="/about">About</a>
+<input type="text" name="email" id="email">
+<select name="country">
+  <option value="us">United States</option>
+</select>
+<textarea name="message"></textarea>
+```
+
+**Benefits:**
+- Built-in keyboard accessibility
+- Built-in screen reader support
+- Built-in focus management
+- Built-in form validation
+
+#### Tables
+
+```html
+<!-- Tables -->
+<table>
+  <thead>
+    <tr>
+      <th>Header</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Data</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Footer</td>
+    </tr>
+  </tfoot>
+</table>
+```
+
+**Benefits:**
+- Proper table structure
+- Screen reader navigation
+- Header associations
+- Footer associations
+
+### Semantic HTML Best Practices
+
+1. **Use appropriate elements**: Choose the right element for the right purpose
+2. **Maintain heading hierarchy**: Use h1-h6 in logical order
+3. **Use landmarks**: Provide landmark regions for navigation
+4. **Avoid div soup**: Use semantic elements instead of generic divs
+5. **Test with screen readers**: Verify semantic structure is announced correctly
+
+## ARIA (Accessible Rich Internet Applications)
+
+ARIA is a set of attributes that define ways to make web content and web applications more accessible to people with disabilities, especially with dynamic content and advanced user interface controls.
+
+### When to Use ARIA
+
+**Use ARIA when:**
+- HTML doesn't provide the needed semantics
+- Creating custom interactive components
+- Managing dynamic content updates
+- Providing additional context or descriptions
+
+**Don't use ARIA when:**
+- Native HTML elements already provide the needed accessibility
+- You can use semantic HTML instead
+- ARIA would duplicate native functionality
+
+### Common ARIA Attributes
+
+#### Roles
+
+```html
+<!-- Roles -->
+<div role="button">Custom Button</div>
+<div role="navigation">...</div>
+<div role="alert">Error message</div>
+<div role="dialog">Modal dialog</div>
+<div role="tablist">Tab list</div>
+```
+
+**Common Roles:**
+- **button**: Custom button
+- **navigation**: Navigation region
+- **main**: Main content region
+- **alert**: Alert message
+- **dialog**: Modal dialog
+- **tablist**: Tab list
+- **tabpanel**: Tab panel
+
+#### States and Properties
+
+```html
+<!-- States and properties -->
+<button aria-expanded="false">Toggle</button>
+<input aria-required="true">
+<div aria-live="polite">Dynamic content</div>
+<div aria-hidden="true">Hidden content</div>
+<button aria-pressed="false">Toggle button</button>
+```
+
+**Common States and Properties:**
+- **aria-expanded**: Expanded/collapsed state
+- **aria-required**: Required form field
+- **aria-live**: Live region for dynamic content
+- **aria-hidden**: Hidden from assistive technologies
+- **aria-pressed**: Pressed state of toggle button
+
+#### Labels
+
+```html
+<!-- Labels -->
+<button aria-label="Close dialog">×</button>
+<div aria-labelledby="heading">Content</div>
+<div aria-describedby="help-text">...</div>
+<input aria-label="Email address" type="email">
+```
+
+**Common Labeling Attributes:**
+- **aria-label**: Direct label for element
+- **aria-labelledby**: Reference to label element
+- **aria-describedby**: Reference to description element
+
+### ARIA Best Practices
+
+1. **Use semantic HTML first**: Prefer native HTML over ARIA
+2. **Use ARIA to enhance**: Add ARIA when HTML isn't enough
+3. **Keep ARIA in sync**: Update ARIA attributes when state changes
+4. **Test with screen readers**: Verify ARIA is announced correctly
+5. **Don't overuse ARIA**: Use only when necessary
+
+## Testing Accessibility
+
+Accessibility testing should be part of your development process.
+
+### Automated Testing
+
+Tools that can automatically detect many accessibility issues:
+
+**Popular Tools:**
+- **axe DevTools**: Browser extension for automated testing
+- **WAVE**: Web accessibility evaluation tool
+- **Lighthouse**: Built into Chrome DevTools
+- **Pa11y**: Command-line accessibility testing tool
+
+**What Automated Tools Catch:**
+- Missing alt text
+- Low color contrast
+- Missing form labels
+- Empty links
+- Duplicate IDs
+- Invalid HTML
+
+**What Automated Tools Miss:**
+- Alt text quality
+- Heading appropriateness
+- Logical reading order
+- Keyboard traps
+- Usability issues
+
+### Manual Testing
+
+Testing that requires human judgment:
+
+**Keyboard Navigation:**
+- Test all functionality with keyboard only
+- Verify tab order is logical
+- Check for keyboard traps
+- Verify focus indicators are visible
+- Test all interactive elements
+
+**Screen Reader Testing:**
+- Navigate with a screen reader
+- Verify announcements are clear
+- Check heading structure
+- Verify landmarks are announced
+- Test form interactions
+
+**Visual Testing:**
+- Check color contrast
+- Verify text is readable
+- Check for color-only indicators
+- Verify focus indicators are visible
+- Test text resizing
+
+**Cognitive Testing:**
+- Evaluate clarity and understandability
+- Check for consistent patterns
+- Verify error messages are helpful
+- Test with different user scenarios
+
+### User Testing
+
+Testing with actual users with disabilities:
+
+**Benefits:**
+- Provides most accurate feedback
+- Reveals issues automated tools miss
+- Helps understand real-world usage patterns
+- Validates design decisions
+
+**How to Conduct:**
+- Recruit users with diverse disabilities
+- Provide clear tasks
+- Observe without interfering
+- Ask for feedback
+- Iterate based on findings
+
+## Key Takeaways
+
+1. **POUR Principles**: Perceivable, Operable, Understandable, Robust form the foundation of WCAG
+2. **Diverse Users**: Accessibility benefits people with various disabilities, temporary limitations, and situational constraints
+3. **Semantic HTML**: Use appropriate HTML elements to provide meaning and structure
+4. **ARIA**: Use ARIA to enhance accessibility when HTML alone isn't sufficient
+5. **Testing**: Combine automated, manual, and user testing for comprehensive accessibility
+6. **Inclusive Design**: Accessibility is about creating better experiences for everyone
+
+## Next Steps
+
+- Review the [POUR Principles](./pour-principles.mdx) for a deeper understanding
+- Learn about [Types of Disabilities](./disabilities-types.mdx) to understand diverse user needs
+- Explore [Assistive Technologies](./assistive-technologies.mdx) to understand how users access content
+- Review the [Quick Start Guide](./quick-start-guide.mdx) for immediate implementation steps
+- Explore [Component Guides](../components-patterns/) for specific implementations
+- Learn about [HTML Elements](../html-elements/) and their accessibility features
+- Set up [Testing Tools](../testing-auditing/) to validate your implementations
+
+## Resources
+
+- [WAI Introduction to Web Accessibility](https://www.w3.org/WAI/fundamentals/accessibility-intro/)
+- [WebAIM Accessibility Introduction](https://webaim.org/intro/)
+- [A11Y Project Checklist](https://www.a11yproject.com/checklist/)
+- [Inclusive Design Principles](https://inclusivedesignprinciples.org/)
+- [axe DevTools](https://www.deque.com/axe/)
+- [WAVE Web Accessibility Evaluator](https://wave.webaim.org/)

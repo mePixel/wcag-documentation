@@ -1,0 +1,181 @@
+---
+title: "JavaScript & ARIA"
+description: "JavaScript and ARIA for accessible dynamic content"
+---
+
+# JavaScript & ARIA
+
+JavaScript and ARIA (Accessible Rich Internet Applications) work together to create accessible dynamic content and custom components.
+
+## Overview
+
+This section covers how to use JavaScript and ARIA to create accessible dynamic content, custom components, and interactive elements.
+
+### Key Topics
+
+- **Dynamic Content**: Updating content without page reloads
+- **Focus Management**: Managing focus for custom components
+- **ARIA Attributes**: Using ARIA to enhance accessibility
+- **Live Regions**: Announcing dynamic content changes
+- **Custom Components**: Building accessible custom widgets
+
+## Why JavaScript & ARIA Matter
+
+- **Dynamic Content**: Modern web applications update content dynamically
+- **Custom Components**: Need to be accessible to all users
+- **Screen Readers**: Rely on ARIA attributes for context
+- **Keyboard Users**: Need proper focus management
+- **All Users**: Benefit from accessible interactive elements
+
+## Quick Reference
+
+### ARIA Roles
+
+| Role | Description | When to Use |
+|------|-------------|-------------|
+| `button` | Button-like behavior | Custom buttons |
+| `link` | Link-like behavior | Custom links |
+| `dialog` | Dialog window | Modal dialogs |
+| `alert` | Alert message | Important alerts |
+| `status` | Status message | Status updates |
+| `progressbar` | Progress indicator | Progress bars |
+| `slider` | Slider control | Range inputs |
+| `tablist` | Tab container | Tab interfaces |
+| `menu` | Menu container | Navigation menus |
+| `combobox` | Combobox control | Select inputs |
+
+### ARIA States and Properties
+
+| Attribute | Description | Values |
+|-----------|-------------|--------|
+| `aria-expanded` | Expanded state | `true`, `false` |
+| `aria-selected` | Selected state | `true`, `false` |
+| `aria-checked` | Checked state | `true`, `false`, `mixed` |
+| `aria-disabled` | Disabled state | `true`, `false` |
+| `aria-hidden` | Hidden state | `true`, `false` |
+| `aria-label` | Accessible label | Text string |
+| `aria-labelledby` | Label reference | Element ID |
+| `aria-describedby` | Description reference | Element ID |
+| `aria-live` | Live region politeness | `polite`, `assertive`, `off` |
+| `aria-atomic` | Atomic updates | `true`, `false` |
+
+### Live Region Types
+
+| Type | Description | When to Use |
+|------|-------------|-------------|
+| `aria-live="polite"` | Announces when user is idle | Status updates, notifications |
+| `aria-live="assertive"` | Announces immediately | Critical alerts, errors |
+| `aria-live="off"` | No announcements | Non-essential updates |
+| `role="status"` | Status message | Status updates |
+| `role="alert"` | Alert message | Important alerts |
+| `role="log"` | Log of updates | Chat messages, logs |
+
+## Common Patterns
+
+### Dynamic Content Updates
+
+```javascript
+// Good: Using ARIA live regions
+const statusElement = document.getElementById('status');
+statusElement.setAttribute('aria-live', 'polite');
+statusElement.textContent = 'Update complete';
+```
+
+### Focus Management
+
+```javascript
+// Good: Managing focus for modals
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = 'block';
+  const focusableElements = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  if (focusableElements.length > 0) {
+    focusableElements[0].focus();
+  }
+}
+```
+
+### Custom Buttons
+
+```javascript
+// Good: Custom button with ARIA
+const customButton = document.createElement('div');
+customButton.setAttribute('role', 'button');
+customButton.setAttribute('tabindex', '0');
+customButton.setAttribute('aria-label', 'Submit form');
+customButton.addEventListener('click', handleSubmit);
+customButton.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handleSubmit();
+  }
+});
+```
+
+## Best Practices
+
+### 1. Use Semantic HTML First
+
+```javascript
+// Bad: Creating everything with divs
+const button = document.createElement('div');
+button.setAttribute('role', 'button');
+
+// Good: Using semantic elements
+const button = document.createElement('button');
+```
+
+### 2. Update ARIA Attributes Dynamically
+
+```javascript
+// Good: Updating ARIA attributes
+function toggleExpanded(element) {
+  const isExpanded = element.getAttribute('aria-expanded') === 'true';
+  element.setAttribute('aria-expanded', !isExpanded);
+}
+```
+
+### 3. Announce Dynamic Content
+
+```javascript
+// Good: Using live regions
+function announceMessage(message) {
+  const liveRegion = document.getElementById('live-region');
+  liveRegion.textContent = message;
+}
+```
+
+### 4. Manage Focus Properly
+
+```javascript
+// Good: Managing focus
+function moveFocusToElement(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    element.focus();
+  }
+}
+```
+
+## Testing Checklist
+
+### JavaScript Testing
+- [ ] Dynamic content updates are announced
+- [ ] ARIA attributes are updated correctly
+- [ ] Focus is managed properly
+- [ ] Keyboard navigation works
+- [ ] Screen readers announce changes
+
+### ARIA Testing
+- [ ] ARIA roles are correct
+- [ ] ARIA states are accurate
+- [ ] ARIA properties are appropriate
+- [ ] Live regions work correctly
+- [ ] Labels are descriptive
+
+## Related Resources
+
+- [ARIA Authoring Practices Guide](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN ARIA Documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
+- [WAI-ARIA Overview](https://www.w3.org/WAI/standards-guidelines/aria/)
+- [WebAIM ARIA Usage](https://webaim.org/techniques/aria/)

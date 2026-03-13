@@ -1,0 +1,409 @@
+---
+title: "Input Assistance Success Criteria"
+description: "WCAG 2.1 AA input assistance success criteria (3.3)"
+---
+
+# Input Assistance Success Criteria
+
+Help users avoid and correct mistakes. This means that users must be able to understand and correct input errors.
+
+## Overview
+
+The Input Assistance guideline includes 4 success criteria across Level A and AA:
+
+- **Level A**: 3 criteria
+- **Level AA**: 1 criterion
+
+## 3.3.1 Error Identification (Level A)
+
+**Requirement**: If an input error is automatically detected, the item that is in error is identified and the error is described to the user in text.
+
+**Understanding**: When form validation fails, clearly identify which fields have errors and describe the errors.
+
+**Sufficient Techniques**:
+- **G83**: Providing text descriptions to identify required fields that were not completed
+- **G84**: Providing a text description when the user provides information that is not in a list of allowed values
+- **G85**: Providing a text description when the user input falls outside the required format or values
+
+**Example**:
+```html
+<form>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required>
+    <span class="error-message" id="email-error"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required minlength="8">
+    <span class="error-message" id="password-error"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const form = document.querySelector('form');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const emailError = document.getElementById('email-error');
+const passwordError = document.getElementById('password-error');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let hasErrors = false;
+  
+  // Clear previous errors
+  emailError.textContent = '';
+  passwordError.textContent = '';
+  emailInput.setAttribute('aria-invalid', 'false');
+  passwordInput.setAttribute('aria-invalid', 'false');
+  
+  // Validate email
+  if (!emailInput.value.includes('@')) {
+    emailError.textContent = 'Please enter a valid email address';
+    emailInput.setAttribute('aria-invalid', 'true');
+    emailInput.setAttribute('aria-describedby', 'email-error');
+    hasErrors = true;
+  }
+  
+  // Validate password
+  if (passwordInput.value.length < 8) {
+    passwordError.textContent = 'Password must be at least 8 characters';
+    passwordInput.setAttribute('aria-invalid', 'true');
+    passwordInput.setAttribute('aria-describedby', 'password-error');
+    hasErrors = true;
+  }
+  
+  if (!hasErrors) {
+    form.submit();
+  }
+});
+</script>
+```
+
+### Common Mistakes
+
+```html
+<!-- Bad: No error identification -->
+<input type="email" id="email">
+<span class="error">Invalid</span>
+
+<!-- Good: Clear error identification -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error">Please enter a valid email address</span>
+```
+
+## 3.3.2 Labels or Instructions (Level A)
+
+**Requirement**: Labels or instructions are provided when content requires user input.
+
+**Understanding**: All form inputs need labels or instructions that describe what information is being requested.
+
+**Sufficient Techniques**:
+- **G131**: Providing descriptive labels
+- **G184**: Providing text instructions at the beginning of a form or set of fields that describes the necessary input
+
+**Example**:
+```html
+<!-- Good: Explicit labels -->
+<form>
+  <label for="name">Full Name</label>
+  <input type="text" id="name" name="name" required>
+  
+  <label for="email">Email Address</label>
+  <input type="email" id="email" name="email" required>
+  
+  <label for="message">Message</label>
+  <textarea id="message" name="message" required></textarea>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Good: Instructions -->
+<form>
+  <p class="instructions">
+    Please fill out all required fields marked with an asterisk (*).
+  </p>
+  
+  <label for="name">Full Name *</label>
+  <input type="text" id="name" name="name" required aria-required="true">
+  
+  <label for="email">Email Address *</label>
+  <input type="email" id="email" name="email" required aria-required="true">
+  
+  <button type="submit">Submit</button>
+</form>
+
+<!-- Bad: No labels -->
+<form>
+  <input type="text" name="name" placeholder="Name">
+  <input type="email" name="email" placeholder="Email">
+  <button type="submit">Submit</button>
+</form>
+```
+
+### Common Mistakes
+
+```html
+<!-- Bad: Placeholder as label -->
+<input type="text" placeholder="Name">
+
+<!-- Good: Proper label -->
+<label for="name">Name</label>
+<input type="text" id="name">
+```
+
+## 3.3.3 Error Suggestion (Level AA)
+
+**Requirement**: If an input error is automatically detected and suggestions for correction are known, then the suggestions are provided to the user, unless it would jeopardize the security or purpose of the content.
+
+**Understanding**: When form validation fails, provide helpful suggestions for correcting errors.
+
+**Sufficient Techniques**:
+- **G177**: Providing suggested correction text
+
+**Example**:
+```html
+<form>
+  <div class="form-group">
+    <label for="email">Email Address</label>
+    <input type="email" id="email" name="email" required>
+    <span class="error-message" id="email-error"></span>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required minlength="8">
+    <span class="error-message" id="password-error"></span>
+  </div>
+  
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+const form = document.querySelector('form');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const emailError = document.getElementById('email-error');
+const passwordError = document.getElementById('password-error');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  let hasErrors = false;
+  
+  // Clear previous errors
+  emailError.textContent = '';
+  passwordError.textContent = '';
+  
+  // Validate email with suggestions
+  if (!emailInput.value.includes('@')) {
+    emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+    hasErrors = true;
+  } else if (!emailInput.value.includes('.')) {
+    emailError.textContent = 'Email must include a domain (e.g., .com, .org)';
+    hasErrors = true;
+  }
+  
+  // Validate password with suggestions
+  if (passwordInput.value.length < 8) {
+    passwordError.textContent = 'Password must be at least 8 characters. Try adding more characters.';
+    hasErrors = true;
+  }
+  
+  if (!hasErrors) {
+    form.submit();
+  }
+});
+</script>
+```
+
+### Common Mistakes
+
+```javascript
+// Bad: Vague error
+emailError.textContent = 'Invalid email';
+
+// Good: Specific error with suggestion
+emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+```
+
+## 3.3.4 Error Prevention (Legal, Financial, Data) (Level AA)
+
+**Requirement**: For Web pages that cause legal commitments or financial transactions for the user, that modify or delete user-controllable data in data storage systems, or that submit user test responses, at least one of the following is true:
+- Reversible: Submissions are reversible
+- Checked: Data entered by the user is checked for input errors and the user is provided an opportunity to correct them
+- Confirmed: A mechanism is available for reviewing, confirming, and correcting information before finalizing the submission
+
+**Understanding**: For critical actions like financial transactions or data deletion, provide ways to review, confirm, or reverse the action.
+
+**Sufficient Techniques**:
+- **G98**: Providing the ability for the user to review and correct answers before submitting
+- **G99**: Providing the ability to recover deleted information
+
+**Example**:
+```html
+<!-- Good: Confirmation before submission -->
+<form id="checkoutForm">
+  <!-- Form fields -->
+  
+  <label for="cardNumber">Card Number</label>
+  <input type="text" id="cardNumber" name="cardNumber">
+  
+  <label for="amount">Amount</label>
+  <input type="number" id="amount" name="amount">
+  
+  <button type="button" onclick="showConfirmation()">Review Order</button>
+</form>
+
+<div id="confirmationModal" style="display: none;">
+  <h2>Confirm Your Order</h2>
+  <p>Please review your order before submitting:</p>
+  <ul>
+    <li>Card Number: <span id="confirmCard"></span></li>
+    <li>Amount: $<span id="confirmAmount"></span></li>
+  </ul>
+  <button onclick="submitOrder()">Confirm and Submit</button>
+  <button onclick="hideConfirmation()">Cancel</button>
+</div>
+
+<script>
+function showConfirmation() {
+  document.getElementById('confirmCard').textContent = 
+    document.getElementById('cardNumber').value;
+  document.getElementById('confirmAmount').textContent = 
+    document.getElementById('amount').value;
+  document.getElementById('confirmationModal').style.display = 'block';
+}
+
+function hideConfirmation() {
+  document.getElementById('confirmationModal').style.display = 'none';
+}
+
+function submitOrder() {
+  document.getElementById('checkoutForm').submit();
+}
+</script>
+
+<!-- Good: Reversible action -->
+<button onclick="deleteItem()">Delete Item</button>
+<button onclick="undoDelete()" style="display: none;" id="undoBtn">
+  Undo Delete
+</button>
+
+<script>
+let deletedItem = null;
+
+function deleteItem() {
+  deletedItem = getCurrentItem();
+  performDelete();
+  document.getElementById('undoBtn').style.display = 'inline-block';
+}
+
+function undoDelete() {
+  if (deletedItem) {
+    restoreItem(deletedItem);
+    deletedItem = null;
+    document.getElementById('undoBtn').style.display = 'none';
+  }
+}
+</script>
+```
+
+### Common Mistakes
+
+```html
+<!-- Bad: No confirmation for critical action -->
+<button onclick="deleteAccount()">Delete Account</button>
+
+<!-- Good: Confirmation before critical action -->
+<button onclick="showDeleteConfirmation()">Delete Account</button>
+
+<!-- Bad: No way to reverse action -->
+<button onclick="deleteItem()">Delete Item</button>
+
+<!-- Good: Reversible action -->
+<button onclick="deleteItem()">Delete Item</button>
+<button onclick="undoDelete()">Undo Delete</button>
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Errors are clearly identified
+- [ ] Error messages are specific and helpful
+- [ ] Labels are present for all inputs
+- [ ] Confirmation is provided for critical actions
+
+### Screen Reader Testing
+- [ ] Error messages are announced
+- [ ] Error messages are associated with fields
+- [ ] Labels are announced
+- [ ] Instructions are announced
+- [ ] Confirmation dialogs are announced
+
+### Keyboard Testing
+- [ ] Can navigate to error fields
+- [ ] Can correct errors
+- [ ] Can confirm or cancel actions
+- [ ] Can reverse actions when available
+
+### Functional Testing
+- [ ] Error identification works correctly
+- [ ] Error suggestions are helpful
+- [ ] Labels are properly associated
+- [ ] Confirmation prevents accidental actions
+- [ ] Reversible actions work correctly
+
+## Best Practices
+
+### 1. Identify Errors Clearly
+
+Use `aria-invalid` and `aria-describedby` to identify errors.
+
+```html
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error">Please enter a valid email address</span>
+```
+
+### 2. Provide Descriptive Labels
+
+Use proper labels for all form inputs.
+
+```html
+<label for="name">Full Name</label>
+<input type="text" id="name" name="name">
+```
+
+### 3. Offer Error Suggestions
+
+Provide helpful suggestions for correcting errors.
+
+```javascript
+emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+```
+
+### 4. Provide Confirmation for Critical Actions
+
+Allow users to review and confirm critical actions.
+
+```html
+<button onclick="showConfirmation()">Delete Account</button>
+```
+
+### 5. Allow Reversal When Possible
+
+Provide ways to reverse actions when appropriate.
+
+```html
+<button onclick="deleteItem()">Delete Item</button>
+<button onclick="undoDelete()">Undo Delete</button>
+```
+
+## Related Resources
+
+- [Understandable Criteria Overview](./understandable-criteria.mdx) - Complete understandable criteria guide
+- [Readable Criteria](./readable-criteria.mdx) - Readable success criteria
+- [Predictable Criteria](./predictable-criteria.mdx) - Predictable success criteria
+- [WCAG 2.1 Input Assistance Guidelines](https://www.w3.org/WAI/WCAG21/quickref/#input-assistance)

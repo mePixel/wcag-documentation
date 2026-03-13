@@ -1,0 +1,530 @@
+---
+title: "Responsive Text Scaling"
+description: "Implementing responsive text scaling with media queries and viewport-based sizing"
+---
+
+# Responsive Text Scaling
+
+Responsive text scaling ensures your text adapts to different screen sizes and user preferences while maintaining accessibility.
+
+## Overview
+
+Responsive text scaling combines relative units with media queries and viewport-based sizing to create flexible, accessible typography that works across all devices.
+
+### Why Responsive Scaling Matters
+
+- **Mobile Users**: Text must be readable on small screens
+- **Desktop Users**: Text should scale appropriately on large screens
+- **Accessibility**: Users can adjust text size without breaking layout
+- **User Experience**: Consistent reading experience across devices
+
+## Viewport-Based Scaling
+
+### Using vw Units
+
+Viewport width (`vw`) units scale text based on viewport width.
+
+```css
+/* Good: Viewport-based scaling */
+html {
+  font-size: calc(1rem + 0.5vw);
+}
+
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: calc(2rem + 1vw);
+}
+
+h2 {
+  font-size: calc(1.5rem + 0.75vw);
+}
+```
+
+**Benefits of vw units:**
+- Scales smoothly with viewport
+- No need for multiple breakpoints
+- Continuous scaling
+- Good for large headings
+
+**Caution with vw units:**
+- Can become too small on mobile
+- Can become too large on desktop
+- Should be combined with min/max values
+- Not suitable for body text
+
+### Using vh Units
+
+Viewport height (`vh`) units scale text based on viewport height.
+
+```css
+/* Good: Viewport height-based scaling */
+.hero-title {
+  font-size: calc(2rem + 2vh);
+}
+
+.hero-subtitle {
+  font-size: calc(1rem + 1vh);
+}
+```
+
+**Benefits of vh units:**
+- Scales with viewport height
+- Good for hero sections
+- Creates dramatic effects
+- Works well with full-screen sections
+
+**Caution with vh units:**
+- Can be unpredictable
+- Affected by browser chrome
+- Not suitable for body text
+- Should be used sparingly
+
+### Using vmin and vmax
+
+`vmin` uses the smaller viewport dimension, `vmax` uses the larger.
+
+```css
+/* Good: Using vmin */
+.responsive-text {
+  font-size: calc(1rem + 1vmin);
+}
+
+/* Good: Using vmax */
+.large-heading {
+  font-size: calc(2rem + 2vmax);
+}
+```
+
+**Benefits of vmin/vmax:**
+- Adapts to both dimensions
+- Good for square layouts
+- Flexible scaling
+- Works well for decorative text
+
+## Container-Based Scaling
+
+### Using cqw Units
+
+Container query width (`cqw`) units scale text based on container width.
+
+```css
+/* Good: Container-based scaling */
+.card {
+  container-type: inline-size;
+}
+
+.card h2 {
+  font-size: clamp(1.5rem, 5cqw, 2.5rem);
+}
+
+.card p {
+  font-size: clamp(1rem, 3cqw, 1.25rem);
+}
+```
+
+**Benefits of cqw units:**
+- Scales with container, not viewport
+- Perfect for component-based design
+- Independent of page layout
+- Works well with card layouts
+
+**Browser Support:**
+- Modern browsers only
+- Requires container queries
+- Fallback needed for older browsers
+
+### Using cqh Units
+
+Container query height (`cqh`) units scale text based on container height.
+
+```css
+/* Good: Container height-based scaling */
+.sidebar {
+  container-type: inline-size;
+}
+
+.sidebar h2 {
+  font-size: clamp(1.25rem, 4cqh, 2rem);
+}
+```
+
+## Text Resizing with Media Queries
+
+### Breakpoint-Based Scaling
+
+Use media queries to adjust text size at specific breakpoints.
+
+```css
+/* Good: Media query-based scaling */
+html {
+  font-size: 100%;
+}
+
+/* Mobile first */
+@media (min-width: 768px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+/* Tablet */
+@media (min-width: 1024px) {
+  html {
+    font-size: 120%;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1280px) {
+  html {
+    font-size: 125%;
+  }
+}
+```
+
+**Benefits of breakpoint-based scaling:**
+- Predictable sizing
+- Easy to control
+- Works across all browsers
+- Familiar approach
+
+### User Preference Media Queries
+
+Respect user preferences with media queries.
+
+```css
+/* Good: Respecting user preferences */
+html {
+  font-size: 100%;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    font-size: calc(100% + 0.5vw);
+  }
+}
+
+/* High contrast preference */
+@media (prefers-contrast: high) {
+  html {
+    font-size: 110%;
+  }
+}
+
+/* Reduced data preference */
+@media (prefers-reduced-data: reduce) {
+  html {
+    font-size: 100%;
+  }
+}
+```
+
+## Component-Specific Text Sizing
+
+### Buttons
+
+```css
+/* Good: Button text sizing */
+.button {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .button {
+    font-size: 1.125rem;
+    padding: 0.875rem 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .button {
+    font-size: 1.25rem;
+    padding: 1rem 2rem;
+  }
+}
+```
+
+### Form Inputs
+
+```css
+/* Good: Form input text sizing */
+input,
+select,
+textarea {
+  font-size: 1rem;
+  padding: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 1.125rem;
+    padding: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  input,
+  select,
+  textarea {
+    font-size: 1.25rem;
+    padding: 1rem;
+  }
+}
+```
+
+### Navigation
+
+```css
+/* Good: Navigation text sizing */
+.nav-link {
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .nav-link {
+    font-size: 1.125rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-link {
+    font-size: 1.25rem;
+    padding: 1rem 1.25rem;
+  }
+}
+```
+
+### Cards
+
+```css
+/* Good: Card text sizing */
+.card {
+  container-type: inline-size;
+}
+
+.card h2 {
+  font-size: clamp(1.25rem, 4cqw, 2rem);
+}
+
+.card p {
+  font-size: clamp(1rem, 3cqw, 1.125rem);
+}
+
+.card .button {
+  font-size: clamp(0.875rem, 2.5cqw, 1rem);
+}
+```
+
+## Common Mistakes
+
+### 1. Not Testing on Mobile
+
+```css
+/* Bad: Text too small on mobile */
+h1 {
+  font-size: 2vw;
+}
+
+/* Good: Minimum size with viewport scaling */
+h1 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+```
+
+### 2. Too Many Breakpoints
+
+```css
+/* Bad: Too many breakpoints */
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 400px) {
+  html {
+    font-size: 105%;
+  }
+}
+
+@media (min-width: 500px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (min-width: 600px) {
+  html {
+    font-size: 115%;
+  }
+}
+
+/* Good: Fewer, strategic breakpoints */
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 120%;
+  }
+}
+```
+
+### 3. Ignoring User Preferences
+
+```css
+/* Bad: Ignoring user preferences */
+html {
+  font-size: 18px;
+}
+
+/* Good: Respecting user preferences */
+html {
+  font-size: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    font-size: calc(100% + 0.5vw);
+  }
+}
+```
+
+### 4. Not Using Container Queries
+
+```css
+/* Bad: Scaling based on viewport */
+.card h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+/* Good: Scaling based on container */
+.card {
+  container-type: inline-size;
+}
+
+.card h2 {
+  font-size: clamp(1.5rem, 5cqw, 2rem);
+}
+```
+
+## Best Practices
+
+### 1. Use Mobile-First Approach
+
+Start with mobile styles and enhance for larger screens.
+
+```css
+/* Mobile first */
+html {
+  font-size: 100%;
+}
+
+/* Enhance for larger screens */
+@media (min-width: 768px) {
+  html {
+    font-size: 110%;
+  }
+}
+```
+
+### 2. Set Minimum and Maximum Sizes
+
+Use clamp() to prevent text from becoming too small or too large.
+
+```css
+/* Good: Min and max sizes */
+h1 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+```
+
+### 3. Test on Real Devices
+
+Test your text sizing on actual devices, not just browser dev tools.
+
+- Test on phones
+- Test on tablets
+- Test on desktops
+- Test with different browsers
+
+### 4. Respect User Preferences
+
+Use media queries to honor user preferences.
+
+```css
+/* Good: Respecting preferences */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    font-size: calc(100% + 0.5vw);
+  }
+}
+```
+
+### 5. Use Container Queries for Components
+
+Use container queries for component-based scaling.
+
+```css
+/* Good: Container queries */
+.card {
+  container-type: inline-size;
+}
+
+.card h2 {
+  font-size: clamp(1.5rem, 5cqw, 2rem);
+}
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Text is readable on mobile devices
+- [ ] Text scales appropriately on tablets
+- [ ] Text looks good on desktop
+- [ ] No horizontal scrolling at any size
+- [ ] All content remains visible
+
+### Browser Testing
+- [ ] Test in Chrome
+- [ ] Test in Firefox
+- [ ] Test in Safari
+- [ ] Test in Edge
+- [ ] Test on mobile browsers
+
+### Device Testing
+- [ ] Test on phones
+- [ ] Test on tablets
+- [ ] Test on desktops
+- [ ] Test with different screen resolutions
+- [ ] Test with different pixel densities
+
+### User Preference Testing
+- [ ] Respects browser default font size
+- [ ] Works with browser zoom
+- [ ] Works with system font size settings
+- [ ] Works with accessibility settings
+- [ ] Respects prefers-reduced-motion
+- [ ] Respects prefers-contrast
+
+## Related Resources
+
+- [WCAG 2.1 Resize Text](https://www.w3.org/WAI/WCAG21/quickref/#resize-text)
+- [WCAG 2.1 Reflow](https://www.w3.org/WAI/WCAG21/quickref/#reflow)
+- [MDN CSS Media Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries)
+- [MDN Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries)
+- [Modern Fluid Typography Editor](https://modern-fluid-typography.vercel.app/)

@@ -1,0 +1,212 @@
+---
+title: "Components & Patterns"
+description: "Accessible UI components and implementation patterns for common web elements"
+---
+
+# Components & Patterns
+
+This section provides comprehensive guidance for implementing accessible UI components and reusable patterns. Each component guide includes WCAG requirements, implementation patterns, code examples, and testing checklists.
+
+## Component Categories
+
+### Form Components
+
+Accessible form components for collecting user input:
+
+- [Forms Overview](./forms/index.mdx) - Introduction to accessible forms
+- [Accessible Inputs](./forms/accessible-inputs.mdx) - Text inputs, checkboxes, radio buttons, selects
+- [Form Validation](./forms/form-validation.mdx) - Client-side and server-side validation
+- [Error Handling](./forms/error-handling.mdx) - Error messages and recovery
+
+### Navigation Components
+
+Navigation components for site structure and movement:
+
+- [Navigation Overview](./navigation/index.mdx) - Introduction to accessible navigation
+- [Skip Links](./navigation/skip-links.mdx) - Bypass repeated content
+- [Breadcrumb Navigation](./navigation/breadcrumb-navigation.mdx) - Hierarchical navigation
+
+### Media Components
+
+Components for presenting audio and video content:
+
+- [Images](./media/images.mdx) - Accessible images and graphics
+- [Video](./media/video.mdx) - Video players and captions
+- [Audio](./media/audio.mdx) - Audio players and transcripts
+
+### Content Components
+
+Components for structuring and presenting content:
+
+- [Headings](./content/headings.mdx) - Proper heading hierarchy
+- [Lists](./content/lists.mdx) - Ordered, unordered, and definition lists
+- [Tables](./content/tables.mdx) - Data tables and layout tables
+
+### Interactive Components
+
+Dynamic and interactive UI components:
+
+- [Modals](./interactive/modals.mdx) - Dialog boxes and overlays
+- [Tabs](./interactive/tabs.mdx) - Tabbed interfaces
+- [Accordions](./interactive/accordions.mdx) - Expandable/collapsible content
+- [Carousels](./interactive/carousels.mdx) - Image sliders and galleries
+
+## Component Guide Structure
+
+Each component guide follows a consistent structure:
+
+### Component Overview
+Description of the component and its purpose
+
+### WCAG Requirements
+List of applicable success criteria
+
+### Implementation Pattern
+Detailed implementation guidance with code examples
+
+### Common Pitfalls
+Anti-patterns to avoid
+
+### Testing Checklist
+Verification steps for the component
+
+### Related Components
+Links to related components and patterns
+
+## Implementation Patterns
+
+Implementation patterns provide reusable solutions for common accessibility scenarios:
+
+- [Form Patterns](./patterns/form-patterns.mdx) - Common form accessibility patterns
+- [Navigation Patterns](./patterns/navigation-patterns.mdx) - Navigation design patterns
+- [Interactive Patterns](./patterns/interactive-patterns.mdx) - Dynamic content patterns
+
+## Quick Reference
+
+### Form Components
+
+| Component | Difficulty | Time | Key Criteria |
+|-----------|-------------|------|--------------|
+| Text Inputs | Beginner | 15 min | 1.3.1, 3.3.2, 4.1.2 |
+| Checkboxes | Beginner | 10 min | 1.3.1, 4.1.2 |
+| Radio Buttons | Beginner | 15 min | 1.3.1, 4.1.2 |
+| Select Dropdowns | Beginner | 10 min | 1.3.1, 4.1.2 |
+| Form Validation | Intermediate | 30 min | 3.3.1, 3.3.3, 3.3.4 |
+
+### Navigation Components
+
+| Component | Difficulty | Time | Key Criteria |
+|-----------|-------------|------|--------------|
+| Skip Links | Beginner | 10 min | 2.4.1 |
+| Breadcrumbs | Beginner | 15 min | 2.4.5, 2.4.6 |
+| Navigation Menus | Intermediate | 30 min | 1.3.1, 2.4.1, 2.4.6 |
+| Pagination | Beginner | 15 min | 2.4.4, 2.4.6 |
+
+### Interactive Components
+
+| Component | Difficulty | Time | Key Criteria |
+|-----------|-------------|------|--------------|
+| Modals | Intermediate | 45 min | 1.3.1, 2.1.1, 2.4.3 |
+| Tabs | Intermediate | 30 min | 1.3.1, 2.1.1, 2.4.1 |
+| Accordions | Intermediate | 30 min | 1.3.1, 2.1.1, 2.4.1 |
+| Carousels | Advanced | 60 min | 1.2.2, 2.1.1, 2.2.1 |
+
+## Getting Started
+
+1. **Start with Forms**: Forms are fundamental to most web applications
+2. **Learn Navigation**: Navigation components are essential for site structure
+3. **Master Interactive**: Dynamic components require more advanced techniques
+4. **Test Thoroughly**: Always test components with assistive technologies
+
+## Best Practices
+
+### 1. Use Native HTML Elements
+
+Prefer native HTML elements over custom implementations:
+
+```html
+<!-- Good: Native button -->
+<button type="button">Submit</button>
+
+<!-- Avoid: Custom button -->
+<div class="button" onclick="submitForm()">Submit</div>
+```
+
+### 2. Provide Complete Information
+
+Ensure all components have necessary labels and descriptions:
+
+```html
+<!-- Good: Complete information -->
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email" required>
+<span id="email-help">We'll never share your email.</span>
+
+<!-- Avoid: Incomplete information -->
+<input type="email" placeholder="Email">
+```
+
+### 3. Maintain Keyboard Accessibility
+
+Ensure all interactive components are keyboard accessible:
+
+```html
+<!-- Good: Keyboard accessible -->
+<button type="button" onclick="toggleMenu()">Menu</button>
+
+<!-- Avoid: Not keyboard accessible -->
+<div onclick="toggleMenu()">Menu</div>
+```
+
+### 4. Test with Assistive Technologies
+
+Verify components work with screen readers and other assistive technologies:
+
+- Screen readers (NVDA, JAWS, VoiceOver, TalkBack)
+- Keyboard navigation
+- Screen magnifiers
+
+## Common Mistakes
+
+### 1. Using Divs Instead of Semantic Elements
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+
+<!-- Good: Using button element -->
+<button type="button">Submit</button>
+```
+
+### 2. Missing Labels
+
+```html
+<!-- Bad: No label -->
+<input type="text" name="email">
+
+<!-- Good: Proper label -->
+<label for="email">Email Address</label>
+<input type="email" id="email">
+```
+
+### 3. Hiding Focus Indicators
+
+```css
+/* Bad: Hiding focus */
+button:focus {
+  outline: none;
+}
+
+/* Good: Visible focus */
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+```
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [Inclusive Components](https://inclusive-components.design/)
+- [A11Y Project Component Library](https://www.a11yproject.com/patterns/)
+- [WebAIM Component Guides](https://webaim.org/techniques/)

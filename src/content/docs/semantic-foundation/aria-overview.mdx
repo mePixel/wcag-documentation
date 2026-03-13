@@ -1,0 +1,201 @@
+---
+title: "ARIA Attributes"
+description: "Using ARIA attributes to enhance accessibility of HTML elements"
+---
+
+# ARIA Attributes
+
+ARIA (Accessible Rich Internet Applications) attributes enhance accessibility of HTML elements when semantic HTML alone isn't sufficient. They provide additional information to assistive technologies.
+
+## Overview
+
+ARIA attributes fill gaps in HTML accessibility, especially for dynamic content and custom widgets. However, **no ARIA is better than bad ARIA**, and semantic HTML should always be preferred.
+
+### When to Use ARIA
+
+- **Use ARIA when**: HTML doesn't provide the needed semantics or functionality
+- **Don't use ARIA when**: Native HTML elements already provide the needed accessibility
+
+### ARIA Categories
+
+1. **Roles**: Define what an element is (e.g., button, navigation, alert)
+2. **States**: Define current condition of an element (e.g., expanded, checked, disabled)
+3. **Properties**: Define characteristics of an element (e.g., label, describedby, required)
+
+## ARIA Topics
+
+### ARIA Roles
+
+Define what an element is, providing semantic information to assistive technologies.
+
+- [ARIA Roles](./aria/aria-roles.mdx) - Complete reference for ARIA roles including landmark, widget, and document structure roles
+
+**Key Topics:**
+- Landmark roles for page navigation
+- Widget roles for interactive components
+- Document structure roles
+- Live region roles
+- Composite widget roles
+
+### ARIA States
+
+Define the current condition of an element, indicating its status to assistive technologies.
+
+- [ARIA States](./aria/aria-states.mdx) - Complete reference for ARIA states that can change through user interaction
+
+**Key Topics:**
+- Expanded/collapsed states
+- Checked/unchecked states
+- Disabled states
+- Selected states
+- Invalid states
+- Pressed states
+- Grabbed states
+- Modal states
+
+### ARIA Properties
+
+Define characteristics of an element that are less likely to change than states.
+
+- [ARIA Properties](./aria/aria-properties.mdx) - Complete reference for ARIA properties that define element characteristics
+
+**Key Topics:**
+- Labels (aria-label, aria-labelledby, aria-describedby)
+- Live regions (aria-live)
+- Controls (aria-controls)
+- Current item (aria-current)
+- Required fields (aria-required)
+- Autocomplete behavior
+- Orientation
+- Sort order
+- Popup indicators
+
+### Common ARIA Patterns
+
+Implement common accessible widgets using ARIA attributes.
+
+- [Common ARIA Patterns](./aria/aria-patterns.mdx) - Practical examples of implementing accessible widgets
+
+**Key Patterns:**
+- Custom buttons
+- Custom checkboxes
+- Radio button groups
+- Tabs
+- Accordions
+- Modal dialogs
+- Menus
+
+## Best Practices
+
+### 1. Prefer Semantic HTML
+
+Use native HTML elements when possible.
+
+```html
+<!-- Good: Native HTML -->
+<button type="button">Submit</button>
+<a href="/about">About</a>
+<input type="checkbox">
+
+<!-- Avoid: Custom widgets with ARIA -->
+<div role="button">Submit</div>
+<div role="link">About</div>
+<div role="checkbox">Checkbox</div>
+```
+
+### 2. Use ARIA to Enhance, Not Replace
+
+ARIA should enhance accessibility, not replace semantic HTML.
+
+```html
+<!-- Good: Enhancing with ARIA -->
+<button aria-label="Close dialog">×</button>
+
+<!-- Bad: Replacing with ARIA -->
+<div role="button" aria-label="Close dialog">×</div>
+```
+
+### 3. Keep ARIA in Sync
+
+Ensure ARIA attributes reflect current state.
+
+```javascript
+// Good: Keeping ARIA in sync
+function toggleMenu() {
+  const menu = document.getElementById('menu');
+  const button = document.getElementById('menu-button');
+  
+  const isExpanded = menu.hidden === false;
+  menu.hidden = isExpanded;
+  button.setAttribute('aria-expanded', !isExpanded);
+}
+```
+
+### 4. Test with Assistive Technologies
+
+Verify ARIA works with screen readers.
+
+- Test with NVDA, JAWS, VoiceOver, TalkBack
+- Verify roles are announced correctly
+- Verify states are updated correctly
+- Verify labels are announced
+
+## Common Mistakes
+
+### 1. Using ARIA When HTML Works
+
+```html
+<!-- Bad: Using ARIA on native button -->
+<button role="button">Submit</button>
+
+<!-- Good: Using native button -->
+<button type="button">Submit</button>
+```
+
+### 2. Forgetting tabindex on Custom Widgets
+
+```html
+<!-- Bad: No tabindex -->
+<div role="button" onclick="handleClick()">
+  Custom Button
+</div>
+
+<!-- Good: With tabindex -->
+<div role="button" tabindex="0" onclick="handleClick()">
+  Custom Button
+</div>
+```
+
+### 3. Not Updating ARIA States
+
+```html
+<!-- Bad: Not updating aria-expanded -->
+<button onclick="toggleMenu()">Toggle Menu</button>
+
+<!-- Good: Updating aria-expanded -->
+<button aria-expanded="false" onclick="toggleMenu()">Toggle Menu</button>
+```
+
+### 4. Using aria-hidden on Focusable Elements
+
+```html
+<!-- Bad: Hiding focusable element -->
+<button aria-hidden="true">Hidden Button</button>
+
+<!-- Good: Using hidden attribute -->
+<button hidden>Hidden Button</button>
+```
+
+## Quick Reference
+
+| Category | Purpose | Examples |
+|-----------|---------|----------|
+| Roles | Define element type | button, navigation, alert |
+| States | Define current condition | expanded, checked, disabled |
+| Properties | Define characteristics | label, describedby, required |
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [ARIA Specification](https://www.w3.org/TR/wai-aria-1.2/)
+- [MDN ARIA Documentation](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)

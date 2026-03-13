@@ -1,0 +1,313 @@
+---
+title: "Interactive Elements"
+description: "HTML elements for interactive content"
+---
+
+# Interactive Elements
+
+Interactive elements enable users to interact with and control content. Proper use of interactive elements is essential for accessibility.
+
+## Button (button)
+
+The `<button>` element creates clickable buttons.
+
+### Button Types
+
+```html
+<button type="button">Cancel</button>
+<button type="submit">Submit</button>
+<button type="reset">Reset</button>
+```
+
+- `type="button"`: Standard button with no default behavior
+- `type="submit"`: Submits the form it's in
+- `type="reset"`: Resets the form it's in to default values
+
+### Button Best Practices
+
+- **Always specify the `type` attribute** to prevent unexpected behavior
+- **Use descriptive button text** that clearly indicates the button's purpose
+- **Use `<button>` instead of `<input type="button">`** for better accessibility
+- **Ensure buttons are keyboard accessible** (they are by default)
+- **Provide visual feedback** for hover, focus, and active states
+
+```html
+<!-- Good: Using button element -->
+<button type="submit">Submit Form</button>
+<button type="button" onclick="handleClick()">Click Me</button>
+
+<!-- Bad: Using input element -->
+<input type="submit" value="Submit Form">
+<input type="button" value="Click Me">
+```
+
+### Button States
+
+Buttons have different states that should be styled appropriately:
+
+```css
+/* Default state */
+button {
+  background-color: #005fcc;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+}
+
+/* Hover state */
+button:hover {
+  background-color: #004a99;
+}
+
+/* Focus state */
+button:focus {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
+/* Active state */
+button:active {
+  background-color: #003366;
+}
+
+/* Disabled state */
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+```
+
+### Disabled Buttons
+
+```html
+<button type="submit" disabled>Submit</button>
+```
+
+Disabled buttons:
+- Cannot be clicked or focused
+- Should have visual indication of disabled state
+- Should not be used for decorative purposes
+
+## Details and Summary
+
+The `<details>` and `<summary>` elements create expandable/collapsible content.
+
+### Basic Details
+
+```html
+<details>
+  <summary>Click to expand</summary>
+  <p>This content is hidden by default and shown when the summary is clicked.</p>
+</details>
+```
+
+### Open by Default
+
+```html
+<details open>
+  <summary>Click to collapse</summary>
+  <p>This content is shown by default and can be collapsed.</p>
+</details>
+```
+
+### Nested Details
+
+```html
+<details>
+  <summary>Main Section</summary>
+  <p>Main content...</p>
+  
+  <details>
+    <summary>Nested Section</summary>
+    <p>Nested content...</p>
+  </details>
+</details>
+```
+
+### Best Practices
+
+- **Use `<summary>` for the visible content** that users click to expand/collapse
+- **Provide descriptive summary text** that indicates what content will be shown
+- **Consider the initial state** - should content be expanded or collapsed by default?
+- **Test with keyboard navigation** to ensure proper behavior
+
+```html
+<!-- Good: Descriptive summary -->
+<details>
+  <summary>Learn more about accessibility</summary>
+  <p>Accessibility ensures that all users can access and use your content...</p>
+</details>
+
+<!-- Bad: Non-descriptive summary -->
+<details>
+  <summary>Click here</summary>
+  <p>Accessibility ensures that all users can access and use your content...</p>
+</details>
+```
+
+### Why Details and Summary Matter
+
+- **Screen Reader Users**: Can navigate to and interact with expandable content
+- **Keyboard Users**: Can expand and collapse content using Enter or Space
+- **All Users**: Benefit from progressive disclosure of content
+- **No JavaScript Required**: Native HTML behavior without custom code
+
+## Dialog (dialog)
+
+The `<dialog>` element creates a modal dialog.
+
+### Basic Dialog
+
+```html
+<dialog id="myDialog">
+  <p>This is a dialog.</p>
+  <button id="closeDialog">Close</button>
+</dialog>
+
+<button id="openDialog">Open Dialog</button>
+
+<script>
+  const dialog = document.getElementById('myDialog');
+  const openButton = document.getElementById('openDialog');
+  const closeButton = document.getElementById('closeDialog');
+
+  openButton.addEventListener('click', () => {
+    dialog.showModal();
+  });
+
+  closeButton.addEventListener('click', () => {
+    dialog.close();
+  });
+</script>
+```
+
+### Dialog with Form
+
+```html
+<dialog id="formDialog">
+  <form method="dialog">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <button type="submit">Submit</button>
+    <button type="button" id="cancelDialog">Cancel</button>
+  </form>
+</dialog>
+
+<button id="openFormDialog">Open Form Dialog</button>
+
+<script>
+  const dialog = document.getElementById('formDialog');
+  const openButton = document.getElementById('openFormDialog');
+  const cancelButton = document.getElementById('cancelDialog');
+
+  openButton.addEventListener('click', () => {
+    dialog.showModal();
+  });
+
+  cancelButton.addEventListener('click', () => {
+    dialog.close();
+  });
+</script>
+```
+
+### Best Practices
+
+- **Use `showModal()`** to create a modal dialog (blocks interaction with other content)
+- **Use `show()`** to create a non-modal dialog
+- **Provide a close button** within the dialog
+- **Support Escape key** for closing the dialog (automatic with `showModal()`)
+- **Manage focus** appropriately (automatic with `showModal()`)
+- **Use `method="dialog"`** for forms in dialogs to handle submission
+
+### Why Dialog Matters
+
+- **Screen Reader Users**: Announced as a dialog with proper focus management
+- **Keyboard Users**: Focus is trapped within the dialog
+- **All Users**: Clear indication that a dialog is open
+- **Built-in Accessibility**: Native focus management and keyboard support
+
+## Progress and Meter
+
+The `<progress>` and `<meter>` elements display progress and measurement values.
+
+### Progress Element
+
+```html
+<label for="fileProgress">File Upload Progress:</label>
+<progress id="fileProgress" value="70" max="100">70%</progress>
+```
+
+### Meter Element
+
+```html
+<label for="diskUsage">Disk Usage:</label>
+<meter id="diskUsage" value="0.6" min="0" max="1" low="0.3" high="0.7" optimum="0.5">
+  60% used
+</meter>
+```
+
+### Best Practices
+
+- **Provide labels** for progress and meter elements
+- **Include fallback content** for browsers that don't support these elements
+- **Use appropriate attributes** to provide context (min, max, low, high, optimum)
+
+## Common Mistakes
+
+### 1. Using Divs Instead of Buttons
+
+```html
+<!-- Bad: Using divs -->
+<div class="button" onclick="submitForm()">Submit</div>
+
+<!-- Good: Using button element -->
+<button type="button">Submit</button>
+```
+
+### 2. Missing Button Type
+
+```html
+<!-- Bad: Missing type attribute -->
+<button>Submit</button>
+
+<!-- Good: With type attribute -->
+<button type="submit">Submit</button>
+```
+
+### 3. Non-Descriptive Button Text
+
+```html
+<!-- Bad: Non-descriptive button text -->
+<button type="button">Click</button>
+<button type="button">Go</button>
+
+<!-- Good: Descriptive button text -->
+<button type="button">Submit Form</button>
+<button type="button">View Details</button>
+```
+
+### 4. Using JavaScript for Expandable Content
+
+```html
+<!-- Bad: Using JavaScript -->
+<div class="expandable">
+  <div class="header" onclick="toggle()">Click to expand</div>
+  <div class="content" style="display: none;">
+    Content...
+  </div>
+</div>
+
+<!-- Good: Using details and summary -->
+<details>
+  <summary>Click to expand</summary>
+  <p>Content...</p>
+</details>
+```
+
+## Related Resources
+
+- [Semantic HTML Overview](./semantic-html.mdx) - Complete semantic HTML reference
+- [Form Elements](./form-elements.mdx) - Form controls and inputs
+- [Links and Navigation Elements](./links-navigation.mdx) - Links and navigation
+- [HTML Elements Overview](./index.mdx) - Complete HTML elements reference

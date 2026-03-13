@@ -1,0 +1,295 @@
+---
+title: "Breadcrumb Variations"
+description: "Advanced breadcrumb implementations including icons, Schema.org, and mobile optimization"
+---
+
+# Breadcrumb Variations
+
+Explore advanced breadcrumb implementations including icons, Schema.org markup, and mobile-optimized solutions.
+
+## Breadcrumb with Icons
+
+Add visual icons to breadcrumb items for better recognition and aesthetics.
+
+### Implementation
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li>
+      <a href="/">
+        <span aria-hidden="true">🏠</span>
+        Home
+      </a>
+    </li>
+    <li>
+      <a href="/products">
+        <span aria-hidden="true">📦</span>
+        Products
+      </a>
+    </li>
+    <li>
+      <a href="/products/electronics">
+        <span aria-hidden="true">💻</span>
+        Electronics
+      </a>
+    </li>
+    <li aria-current="page">
+      <span aria-hidden="true">💻</span>
+      Laptops
+    </li>
+  </ol>
+</nav>
+```
+
+### CSS Styling
+
+```css
+nav[aria-label="Breadcrumb"] ol {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+}
+
+nav[aria-label="Breadcrumb"] li {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+  content: "›";
+  color: #666;
+  font-size: 1.25rem;
+}
+
+nav[aria-label="Breadcrumb"] a {
+  color: #005fcc;
+  text-decoration: none;
+}
+
+nav[aria-label="Breadcrumb"] a:hover,
+nav[aria-label="Breadcrumb"] a:focus {
+  text-decoration: underline;
+}
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: #333;
+  font-weight: 500;
+}
+```
+
+### Best Practices for Icons
+
+- Use `aria-hidden="true"` on decorative icons
+- Keep icons consistent across breadcrumb items
+- Ensure icons are meaningful and recognizable
+- Consider using SVG icons for better scalability
+
+## Breadcrumb with Schema.org
+
+Add structured data to breadcrumbs for SEO benefits.
+
+### Implementation
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="/">
+        <span itemprop="name">Home</span>
+      </a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="/products">
+        <span itemprop="name">Products</span>
+      </a>
+      <meta itemprop="position" content="2">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="/products/electronics">
+        <span itemprop="name">Electronics</span>
+      </a>
+      <meta itemprop="position" content="3">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+      <span itemprop="name">Laptops</span>
+      <meta itemprop="position" content="4">
+    </li>
+  </ol>
+</nav>
+```
+
+### Benefits of Schema.org
+
+- **SEO**: Search engines understand page hierarchy
+- **Rich Snippets**: May appear in search results
+- **Structured Data**: Provides machine-readable information
+- **Better Indexing**: Helps search engines crawl site structure
+
+## Mobile Breadcrumb
+
+Optimize breadcrumbs for mobile devices with responsive design.
+
+### Implementation
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li><a href="/products">Products</a></li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### CSS Styling
+
+```css
+nav[aria-label="Breadcrumb"] ol {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+nav[aria-label="Breadcrumb"] li {
+  display: flex;
+  align-items: center;
+}
+
+nav[aria-label="Breadcrumb"] li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.5rem;
+  color: #666;
+}
+
+nav[aria-label="Breadcrumb"] a {
+  color: #005fcc;
+  text-decoration: none;
+}
+
+nav[aria-label="Breadcrumb"] a:hover,
+nav[aria-label="Breadcrumb"] a:focus {
+  text-decoration: underline;
+}
+
+nav[aria-label="Breadcrumb"] [aria-current="page"] {
+  color: #333;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  nav[aria-label="Breadcrumb"] {
+    font-size: 0.875rem;
+  }
+  
+  nav[aria-label="Breadcrumb"] ol {
+    gap: 0.25rem;
+  }
+}
+```
+
+### Mobile Considerations
+
+- **Touch Targets**: Ensure links are large enough for touch (44x44px minimum)
+- **Text Size**: Use readable font sizes on mobile
+- **Spacing**: Provide adequate spacing between items
+- **Wrapping**: Allow breadcrumbs to wrap on small screens
+- **Truncation**: Consider truncating long breadcrumb items
+
+## Advanced Patterns
+
+### Collapsible Breadcrumb
+
+Collapse intermediate breadcrumb items on mobile.
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li class="collapsed">
+      <button aria-expanded="false" aria-controls="breadcrumb-items">
+        ...
+      </button>
+      <ul id="breadcrumb-items" hidden>
+        <li><a href="/products">Products</a></li>
+        <li><a href="/products/electronics">Electronics</a></li>
+      </ul>
+    </li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+### Breadcrumb with Dropdown
+
+Add dropdown functionality for complex hierarchies.
+
+```html
+<nav aria-label="Breadcrumb">
+  <ol>
+    <li><a href="/">Home</a></li>
+    <li>
+      <button aria-haspopup="true" aria-expanded="false">
+        Products
+      </button>
+      <ul hidden>
+        <li><a href="/products/electronics">Electronics</a></li>
+        <li><a href="/products/clothing">Clothing</a></li>
+      </ul>
+    </li>
+    <li aria-current="page">Laptops</li>
+  </ol>
+</nav>
+```
+
+## Best Practices for Variations
+
+### 1. Maintain Accessibility
+
+Regardless of visual enhancements, ensure breadcrumbs remain accessible:
+
+- Use semantic HTML elements
+- Provide ARIA labels
+- Indicate current page
+- Ensure keyboard navigation works
+- Maintain sufficient color contrast
+
+### 2. Test Across Devices
+
+Test breadcrumbs on:
+
+- Desktop browsers
+- Mobile browsers
+- Tablet devices
+- Different screen sizes
+- Different input methods
+
+### 3. Consider Performance
+
+- Keep icons lightweight
+- Optimize images
+- Minimize JavaScript
+- Use CSS for animations
+- Test load times
+
+### 4. Maintain Consistency
+
+- Keep breadcrumb style consistent across site
+- Use same separator characters
+- Maintain consistent icon usage
+- Follow established design patterns
+
+## Related Resources
+
+- [WAI-ARIA Authoring Practices - Breadcrumb](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)
+- [WebAIM Breadcrumb Navigation](https://webaim.org/techniques/breadcrumb/)
+- [Schema.org BreadcrumbList](https://schema.org/BreadcrumbList)

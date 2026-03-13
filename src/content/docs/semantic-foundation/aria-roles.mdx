@@ -1,0 +1,188 @@
+---
+title: "ARIA Roles"
+description: "Using ARIA roles to define element types and structure"
+---
+
+# ARIA Roles
+
+ARIA roles define what an element is, providing semantic information to assistive technologies when native HTML elements don't provide the needed semantics.
+
+## Landmark Roles
+
+Define major regions of a page, helping users navigate quickly to different sections.
+
+```html
+<!-- Banner (header) -->
+<header role="banner">
+  <!-- Header content -->
+</header>
+
+<!-- Navigation -->
+<nav role="navigation">
+  <!-- Navigation content -->
+</nav>
+
+<!-- Main content -->
+<main role="main">
+  <!-- Main content -->
+</main>
+
+<!-- Complementary content (sidebar) -->
+<aside role="complementary">
+  <!-- Sidebar content -->
+</aside>
+
+<!-- Content info (footer) -->
+<footer role="contentinfo">
+  <!-- Footer content -->
+</footer>
+```
+
+**Note**: When using semantic HTML5 elements like `<header>`, `<nav>`, `<main>`, `<aside>`, and `<footer>`, the landmark roles are implied and don't need to be explicitly added.
+
+## Widget Roles
+
+Define interactive components that aren't available as native HTML elements.
+
+```html
+<!-- Button -->
+<div role="button" tabindex="0" onclick="handleClick()">
+  Custom Button
+</div>
+
+<!-- Checkbox -->
+<div role="checkbox" aria-checked="false" tabindex="0" onclick="toggle()">
+  Custom Checkbox
+</div>
+
+<!-- Radio button -->
+<div role="radio" aria-checked="false" tabindex="0" onclick="select()">
+  Custom Radio
+</div>
+
+<!-- Tablist -->
+<div role="tablist">
+  <button role="tab" aria-selected="true" aria-controls="panel1">
+    Tab 1
+  </button>
+  <button role="tab" aria-selected="false" aria-controls="panel2">
+    Tab 2
+  </button>
+</div>
+
+<!-- Tabpanel -->
+<div role="tabpanel" id="panel1" aria-labelledby="tab1">
+  Panel 1 content
+</div>
+```
+
+## Document Structure Roles
+
+Define document structure and organization.
+
+```html
+<!-- Article -->
+<article role="article">
+  <!-- Self-contained content -->
+</article>
+
+<!-- Document -->
+<div role="document">
+  <!-- Document content -->
+</div>
+
+<!-- Application -->
+<div role="application">
+  <!-- Application content -->
+</div>
+
+<!-- Note -->
+<div role="note">
+  <!-- Note content -->
+</div>
+
+<!-- Region -->
+<section role="region" aria-labelledby="region-title">
+  <h2 id="region-title">Region Title</h2>
+  <!-- Region content -->
+</section>
+```
+
+## Live Region Roles
+
+Define regions that announce dynamic content changes.
+
+```html
+<!-- Alert -->
+<div role="alert">
+  Important message that should be announced immediately
+</div>
+
+<!-- Status -->
+<div role="status">
+  Status update that will be announced when user is idle
+</div>
+
+<!-- Log -->
+<div role="log">
+  Log of events that will be announced in order
+</div>
+
+<!-- Marquee -->
+<div role="marquee">
+  Scrolling content that will be announced
+</div>
+
+<!-- Timer -->
+<div role="timer">
+  Countdown or timer that will be announced
+</div>
+```
+
+## Composite Widget Roles
+
+Define complex widgets that manage their own focus and contain child widgets.
+
+```html
+<!-- Grid -->
+<div role="grid">
+  <!-- Grid cells -->
+</div>
+
+<!-- Listbox -->
+<div role="listbox">
+  <!-- Listbox options -->
+</div>
+
+<!-- Menu -->
+<div role="menu">
+  <!-- Menu items -->
+</div>
+
+<!-- Menubar -->
+<div role="menubar">
+  <!-- Menu items -->
+</div>
+
+<!-- Tree -->
+<div role="tree">
+  <!-- Tree items -->
+</div>
+```
+
+## When to Use Roles
+
+**Use roles when:**
+- Creating custom widgets that don't have native HTML equivalents
+- Adding landmark navigation to pages without semantic HTML5 elements
+- Defining document structure that isn't clear from HTML alone
+
+**Don't use roles when:**
+- Native HTML elements already provide the needed semantics
+- The role would duplicate native element behavior
+
+## Related Resources
+
+- [WAI-ARIA Roles](https://www.w3.org/TR/wai-aria-1.2/#role_definitions)
+- [ARIA Authoring Practices - Roles](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN ARIA Roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles)

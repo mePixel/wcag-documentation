@@ -1,0 +1,277 @@
+---
+title: "Form Validation"
+description: "Implementing accessible client-side and server-side form validation"
+---
+
+# Form Validation
+
+Form validation ensures users provide correct and complete information. Accessible validation provides clear, specific error messages and helps users correct mistakes efficiently.
+
+## Component Overview
+
+Accessible form validation identifies errors clearly, provides helpful suggestions for correction, and ensures users can successfully complete forms regardless of ability or assistive technology use.
+
+### Why Accessible Validation Matters
+
+- **Screen Reader Users**: Need error messages announced and associated with problematic fields
+- **Keyboard Users**: Must be able to navigate to and correct errors efficiently
+- **Cognitive Users**: Benefit from clear, specific error messages
+- **All Users**: Benefit from helpful validation and easy error correction
+
+## WCAG Requirements
+
+### Understandable
+- **3.3.1 Error Identification**: Errors must be identified and described in text
+- **3.3.2 Labels or Instructions**: Provide labels and instructions for all inputs
+- **3.3.3 Error Suggestion**: Provide suggestions for correcting errors when possible
+- **3.3.4 Error Prevention**: For critical forms, provide review/confirmation
+
+## Validation Types
+
+### [Client-Side Validation](./client-side-validation.mdx)
+
+Validate input in browser before submission.
+
+**When to use:**
+- For immediate feedback
+- To reduce server load
+- To improve user experience
+
+**Key features:**
+- Validates before form submission
+- Provides immediate feedback
+- Uses `aria-invalid` and `aria-describedby`
+- Focuses first error field
+
+### [Server-Side Validation](./server-side-validation.mdx)
+
+Validate input on server and return errors.
+
+**When to use:**
+- For security and data integrity
+- For business logic validation
+- For database constraints
+
+**Key features:**
+- Essential for security
+- Validates on server
+- Returns errors to client
+- Displays errors inline with fields
+
+### [Real-Time Validation](./real-time-validation.mdx)
+
+Validate input as user types.
+
+**When to use:**
+- For complex password requirements
+- For real-time feedback
+- When you want to guide users as they type
+
+**Key features:**
+- Validates as user types
+- Uses debouncing to avoid excessive feedback
+- Shows password strength
+- Updates visual indicators
+
+## Error Message Patterns
+
+### Inline Error Messages
+
+Display errors directly below problematic fields.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    aria-invalid="true"
+    aria-describedby="email-error"
+  >
+  <span id="email-error" class="error-message" role="alert">
+    Please enter a valid email address
+  </span>
+</div>
+```
+
+### Error Summary
+
+Display all errors at the top of the form.
+
+```html
+<div id="error-summary" class="error-summary" role="alert" aria-labelledby="error-summary-title">
+  <h2 id="error-summary-title">There are errors in your form</h2>
+  <ul>
+    <li><a href="#email">Email address is required</a></li>
+    <li><a href="#password">Password must be at least 8 characters</a></li>
+  </ul>
+</div>
+```
+
+### Toast Notifications
+
+Display errors in a temporary notification.
+
+```html
+<div id="toast" class="toast" role="alert" aria-live="polite">
+  <span id="toast-message"></span>
+  <button onclick="hideToast()" aria-label="Close notification">×</button>
+</div>
+```
+
+## Common Pitfalls
+
+### 1. Vague Error Messages
+
+```html
+<!-- Bad: Vague error -->
+<span class="error">Invalid input</span>
+
+<!-- Good: Specific error -->
+<span class="error">Please enter a valid email address (e.g., user@example.com)</span>
+```
+
+### 2. Not Associating Errors with Fields
+
+```html
+<!-- Bad: Error not associated -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: Error associated -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+### 3. Not Focusing First Error
+
+```javascript
+// Bad: Doesn't focus error
+if (hasErrors) {
+  // Just show errors
+}
+
+// Good: Focuses first error
+if (hasErrors) {
+  const firstError = form.querySelector('[aria-invalid="true"]');
+  if (firstError) {
+    firstError.focus();
+  }
+}
+```
+
+### 4. Using Color Alone for Errors
+
+```css
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+## Testing Checklist
+
+### Error Identification
+- [ ] Errors are clearly identified
+- [ ] Error messages are specific and helpful
+- [ ] Errors are associated with problematic fields
+- [ ] First error receives focus after validation
+
+### Screen Reader Testing
+- [ ] Error messages are announced
+- [ ] Error messages are associated with fields
+- [ ] Users can navigate to errors
+- [ ] Error summary is announced (if used)
+
+### Keyboard Testing
+- [ ] Can navigate to error fields
+- [ ] Can correct errors
+- [ ] Can resubmit form after corrections
+- [ ] Focus moves to first error
+
+### Visual Testing
+- [ ] Error messages are clearly visible
+- [ ] Error fields are visually indicated
+- [ ] Color contrast is sufficient
+- [ ] Errors are not indicated by color alone
+
+## Best Practices
+
+### 1. Provide Specific Error Messages
+
+Tell users exactly what's wrong and how to fix it.
+
+```javascript
+// Bad: Vague
+if (!emailInput.value.includes('@')) {
+  emailError.textContent = 'Invalid email';
+}
+
+// Good: Specific
+if (!emailInput.value.includes('@')) {
+  emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+}
+```
+
+### 2. Associate Errors with Fields
+
+Use ARIA to link errors to their fields.
+
+```html
+<input 
+  type="email" 
+  id="email" 
+  aria-invalid="true"
+  aria-describedby="email-error"
+>
+<span id="email-error" class="error" role="alert">
+  Please enter a valid email address
+</span>
+```
+
+### 3. Focus First Error
+
+Help users find and fix errors quickly.
+
+```javascript
+if (hasErrors) {
+  const firstError = form.querySelector('[aria-invalid="true"]');
+  if (firstError) {
+    firstError.focus();
+  }
+}
+```
+
+### 4. Clear Errors on Input
+
+Remove errors as users correct them.
+
+```javascript
+emailInput.addEventListener('input', () => {
+  if (emailInput.getAttribute('aria-invalid') === 'true') {
+    emailError.textContent = '';
+    emailInput.setAttribute('aria-invalid', 'false');
+  }
+});
+```
+
+## Related Components
+
+- [Accessible Inputs](./accessible-inputs.mdx) - Form input types
+- [Error Handling](./error-handling.mdx) - Error message patterns
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Forms](https://www.w3.org/WAI/ARIA/apg/patterns/form/)
+- [WebAIM Form Validation](https://webaim.org/techniques/formvalidation/)
+- [MDN Form Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)

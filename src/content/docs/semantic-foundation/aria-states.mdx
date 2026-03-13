@@ -1,0 +1,226 @@
+---
+title: "ARIA States"
+description: "Using ARIA states to define current element conditions"
+---
+
+# ARIA States
+
+ARIA states define the current condition of an element, indicating its status to assistive technologies. Unlike properties, states can change through user interaction or application logic.
+
+## Expanded/Collapsed
+
+Indicate whether an element is expanded or collapsed, typically used with accordions, menus, and tree views.
+
+```html
+<button aria-expanded="false" aria-controls="menu">
+  Toggle Menu
+</button>
+
+<div id="menu" hidden>
+  <!-- Menu content -->
+</div>
+```
+
+**Values:**
+- `true`: Element is expanded
+- `false`: Element is collapsed
+- `undefined`: Element is not expandable
+
+## Checked/Unchecked
+
+Indicate whether a checkbox or radio button is checked.
+
+```html
+<div role="checkbox" aria-checked="false" tabindex="0" onclick="toggle()">
+  Custom Checkbox
+</div>
+
+<div role="radio" aria-checked="false" tabindex="0" onclick="select()">
+  Custom Radio
+</div>
+```
+
+**Values:**
+- `true`: Element is checked
+- `false`: Element is unchecked
+- `mixed`: Checkbox is in a mixed state (some children checked, some not)
+- `undefined`: Element is not checkable
+
+## Disabled
+
+Indicate whether an element is disabled and cannot be interacted with.
+
+```html
+<button aria-disabled="true" disabled>
+  Disabled Button
+</button>
+```
+
+**Values:**
+- `true`: Element is disabled
+- `false`: Element is enabled
+- `undefined`: Element is not disableable
+
+**Note:** Always use the native `disabled` attribute in addition to `aria-disabled` for form elements.
+
+## Selected
+
+Indicate whether an element is selected, typically used with tabs, listbox options, and tree items.
+
+```html
+<button role="tab" aria-selected="true" aria-controls="panel1">
+  Selected Tab
+</button>
+```
+
+**Values:**
+- `true`: Element is selected
+- `false`: Element is not selected
+- `undefined`: Element is not selectable
+
+## Invalid
+
+Indicate whether a form field has an error or invalid value.
+
+```html
+<input type="email" aria-invalid="true" aria-describedby="error-message">
+<span id="error-message">Please enter a valid email</span>
+```
+
+**Values:**
+- `true`: Element has an error
+- `false`: Element is valid
+- `grammar`: Element has a grammar error
+- `spelling`: Element has a spelling error
+- `undefined`: Element validity is unknown
+
+## Pressed
+
+Indicate whether a toggle button is pressed.
+
+```html
+<button aria-pressed="false" onclick="toggle()">
+  Toggle Button
+</button>
+```
+
+**Values:**
+- `true`: Button is pressed
+- `false`: Button is not pressed
+- `mixed`: Button is in a mixed state
+- `undefined`: Button is not a toggle
+
+## Grabbed
+
+Indicate whether a draggable element is being dragged.
+
+```html
+<div role="listitem" aria-grabbed="false" draggable="true">
+  Draggable Item
+</div>
+```
+
+**Values:**
+- `true`: Element is being dragged
+- `false`: Element is not being dragged
+- `undefined`: Element is not draggable
+
+## Busy
+
+Indicate whether an element is being updated and may not be ready for interaction.
+
+```html
+<div aria-busy="true">
+  Loading content...
+</div>
+```
+
+**Values:**
+- `true`: Element is being updated
+- `false`: Element is not being updated
+- `undefined`: Element update status is unknown
+
+## Modal
+
+Indicate whether an element is a modal dialog that traps focus.
+
+```html
+<div role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Dialog Title</h2>
+  <!-- Dialog content -->
+</div>
+```
+
+**Values:**
+- `true`: Element is a modal
+- `false`: Element is not a modal
+- `undefined`: Element modality is unknown
+
+## Updating States Dynamically
+
+Always update ARIA states when the element's condition changes.
+
+```javascript
+// Good: Updating aria-expanded
+function toggleMenu() {
+  const menu = document.getElementById('menu');
+  const button = document.getElementById('menu-button');
+  
+  const isExpanded = menu.hidden === false;
+  menu.hidden = isExpanded;
+  button.setAttribute('aria-expanded', !isExpanded);
+}
+
+// Good: Updating aria-checked
+function toggleCheckbox() {
+  const checkbox = document.getElementById('custom-checkbox');
+  const isChecked = checkbox.getAttribute('aria-checked') === 'true';
+  checkbox.setAttribute('aria-checked', !isChecked);
+}
+
+// Good: Updating aria-selected
+function selectTab(index) {
+  const tabs = document.querySelectorAll('[role="tab"]');
+  tabs.forEach((tab, i) => {
+    tab.setAttribute('aria-selected', i === index);
+  });
+}
+```
+
+## Common Mistakes
+
+### 1. Not Updating States
+
+```html
+<!-- Bad: Not updating aria-expanded -->
+<button onclick="toggleMenu()">Toggle Menu</button>
+
+<!-- Good: Updating aria-expanded -->
+<button aria-expanded="false" onclick="toggleMenu()">Toggle Menu</button>
+```
+
+### 2. Using Wrong State Type
+
+```html
+<!-- Bad: Using aria-checked on a button -->
+<button aria-checked="true">Submit</button>
+
+<!-- Good: Using aria-pressed on a button -->
+<button aria-pressed="true">Submit</button>
+```
+
+### 3. Forgetting Native Attributes
+
+```html
+<!-- Bad: Only using ARIA -->
+<button aria-disabled="true">Disabled</button>
+
+<!-- Good: Using both native and ARIA -->
+<button aria-disabled="true" disabled>Disabled</button>
+```
+
+## Related Resources
+
+- [WAI-ARIA States](https://www.w3.org/TR/wai-aria-1.2/#state_prop_def)
+- [ARIA Authoring Practices - States](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN ARIA States](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes)

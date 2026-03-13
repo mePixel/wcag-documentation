@@ -1,0 +1,277 @@
+---
+title: "Inline Error Messages"
+description: "Displaying errors directly below problematic form fields"
+---
+
+# Inline Error Messages
+
+Inline error messages display errors directly below problematic form fields, providing immediate feedback to users.
+
+## Overview
+
+Inline error messages are the most common and effective way to display form errors. They appear directly below the field with the error, making it clear which field needs attention.
+
+## Basic Inline Error
+
+Display errors directly below problematic fields.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    aria-invalid="true"
+    aria-describedby="email-error"
+  >
+  <span id="email-error" class="error-message" role="alert">
+    Please enter a valid email address (e.g., user@example.com)
+  </span>
+</div>
+
+<style>
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+  
+  .error-message::before {
+    content: "⚠ ";
+  }
+  
+  [aria-invalid="true"] {
+    border-color: #d32f2f;
+  }
+</style>
+```
+
+### Key Attributes
+
+- `aria-invalid="true"`: Indicates the input has an error
+- `aria-describedby`: Associates the error message with the input
+- `role="alert"`: Announces the error to screen readers
+
+## Multiple Inline Errors
+
+Display multiple errors for a single field.
+
+```html
+<div class="form-group">
+  <label for="password">Password</label>
+  <input 
+    type="password" 
+    id="password" 
+    name="password"
+    aria-invalid="true"
+    aria-describedby="password-errors"
+  >
+  <div id="password-errors" class="error-messages" role="alert">
+    <p class="error-message">Password must be at least 8 characters</p>
+    <p class="error-message">Password must contain at least one number</p>
+  </div>
+</div>
+
+<style>
+  .error-messages {
+    margin-top: 0.25rem;
+  }
+  
+  .error-message {
+    color: #d32f2f;
+    font-size: 0.875rem;
+    margin: 0.25rem 0;
+    display: block;
+  }
+  
+  .error-message::before {
+    content: "⚠ ";
+  }
+</style>
+```
+
+## Dynamic Inline Errors
+
+Show errors dynamically based on validation.
+
+```html
+<div class="form-group">
+  <label for="email">Email Address</label>
+  <input 
+    type="email" 
+    id="email" 
+    name="email"
+    aria-invalid="false"
+    aria-describedby="email-error"
+    onblur="validateEmail()"
+  >
+  <span id="email-error" class="error-message" role="alert"></span>
+</div>
+
+<script>
+function validateEmail() {
+  const emailInput = document.getElementById('email');
+  const emailError = document.getElementById('email-error');
+  const email = emailInput.value;
+  
+  // Simple email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+  if (email && !emailRegex.test(email)) {
+    emailInput.setAttribute('aria-invalid', 'true');
+    emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+  } else {
+    emailInput.setAttribute('aria-invalid', 'false');
+    emailError.textContent = '';
+  }
+}
+</script>
+```
+
+## Common Mistakes
+
+### 1. Not Using aria-invalid
+
+```html
+<!-- Bad: No aria-invalid -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: With aria-invalid -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+### 2. Not Associating Error with Field
+
+```html
+<!-- Bad: Error not associated -->
+<input type="email" id="email">
+<span class="error">Invalid email</span>
+
+<!-- Good: Error associated -->
+<input type="email" id="email" aria-invalid="true" aria-describedby="email-error">
+<span id="email-error" class="error" role="alert">Invalid email</span>
+```
+
+### 3. Vague Error Messages
+
+```html
+<!-- Bad: Vague error -->
+<span class="error">Invalid input</span>
+
+<!-- Good: Specific error -->
+<span class="error">Please enter a valid email address (e.g., user@example.com)</span>
+```
+
+### 4. Using Color Alone
+
+```css
+/* Bad: Color alone */
+.error {
+  color: red;
+}
+
+/* Good: Color + text + icon */
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+## Testing Checklist
+
+### Visual Testing
+- [ ] Error messages appear below the field
+- [ ] Error messages are clearly visible
+- [ ] Error fields have visual indicators
+- [ ] Color contrast is sufficient
+- [ ] Errors are not indicated by color alone
+
+### Screen Reader Testing
+- [ ] Error messages are announced
+- [ ] Error messages are associated with fields
+- [ ] aria-invalid state is announced
+- [ ] Error messages are specific and helpful
+
+### Keyboard Testing
+- [ ] Can navigate to error fields
+- [ ] Can correct errors
+- [ ] Focus remains on field after error
+
+## Best Practices
+
+### 1. Provide Specific, Actionable Messages
+
+Tell users exactly what's wrong and how to fix it.
+
+```javascript
+// Bad: Vague
+emailError.textContent = 'Invalid email';
+
+// Good: Specific and actionable
+emailError.textContent = 'Please enter a valid email address (e.g., user@example.com)';
+```
+
+### 2. Associate Errors with Fields
+
+Use ARIA to link errors to their fields.
+
+```html
+<input 
+  type="email" 
+  id="email" 
+  aria-invalid="true"
+  aria-describedby="email-error"
+>
+<span id="email-error" class="error" role="alert">
+  Please enter a valid email address
+</span>
+```
+
+### 3. Use Multiple Indicators
+
+Don't rely on color alone to indicate errors.
+
+```css
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+  border-left: 3px solid #d32f2f;
+  padding-left: 0.5rem;
+}
+.error::before {
+  content: "⚠ ";
+}
+```
+
+### 4. Show Errors at the Right Time
+
+Display errors at appropriate times (on blur, on submit, or as user types).
+
+```javascript
+// Show error on blur
+input.addEventListener('blur', validate);
+
+// Show error on submit
+form.addEventListener('submit', (e) => {
+  if (!validate()) {
+    e.preventDefault();
+  }
+});
+
+// Show error as user types (with debounce)
+input.addEventListener('input', debounce(validate, 300));
+```
+
+## Related Resources
+
+- [Error Handling Overview](./error-handling.mdx) - Complete error handling guide
+- [Error Summary](./error-summary.mdx) - Displaying all errors at the top of the form
+- [Toast Notifications](./toast-notifications.mdx) - Temporary error notifications
+- [Validation Feedback](./validation-feedback.mdx) - Real-time validation feedback

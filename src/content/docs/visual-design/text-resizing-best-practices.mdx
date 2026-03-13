@@ -1,0 +1,588 @@
+---
+title: "Text Resizing Best Practices"
+description: "Best practices, common mistakes, and testing for accessible text resizing"
+---
+
+# Text Resizing Best Practices
+
+Implementing text resizing correctly requires understanding common mistakes, following best practices, and thorough testing.
+
+## Overview
+
+Text resizing is essential for accessibility. Following best practices ensures your content remains readable and functional for all users, regardless of their text size preferences.
+
+### Why Best Practices Matter
+
+- **Accessibility Compliance**: Meet WCAG 2.1 Level AA requirements
+- **User Experience**: Better experience for all users
+- **Legal Compliance**: Avoid accessibility lawsuits
+- **Inclusive Design**: Serve users with diverse needs
+
+## Common Mistakes
+
+### 1. Using Fixed Units
+
+```css
+/* Bad: Using fixed units */
+body {
+  font-size: 16px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+/* Good: Using relative units */
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+```
+
+**Why it's a problem:**
+- Fixed units don't scale with user preferences
+- Browser zoom may not work correctly
+- Users can't adjust text size
+- Violates WCAG 1.4.4 Resize Text
+
+### 2. Not Testing Text Resizing
+
+```css
+/* Bad: Not considering text resizing */
+.container {
+  width: 1200px;
+  font-size: 16px;
+}
+
+.card {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+}
+
+/* Good: Flexible container */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  min-height: 200px;
+  overflow: auto;
+}
+```
+
+**Why it's a problem:**
+- Content may overflow at larger text sizes
+- Users may lose access to content
+- Layout may break
+- Violates WCAG 1.4.10 Reflow
+
+### 3. Text Overflow on Resizing
+
+```css
+/* Bad: Text overflows on resizing */
+.card {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+}
+
+.button {
+  width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Good: Flexible card */
+.card {
+  width: 100%;
+  max-width: 300px;
+  min-height: 200px;
+  overflow: auto;
+}
+
+.button {
+  width: auto;
+  min-width: 100px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+```
+
+**Why it's a problem:**
+- Text may be cut off
+- Users can't read all content
+- Buttons may become unusable
+- Poor user experience
+
+### 4. Not Respecting User Preferences
+
+```css
+/* Bad: Ignoring user preferences */
+html {
+  font-size: 18px; /* Overrides user preference */
+}
+
+body {
+  font-size: 1rem;
+}
+
+/* Good: Respecting user preferences */
+html {
+  font-size: 100%; /* Respects user preference */
+}
+
+body {
+  font-size: 1rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    font-size: calc(100% + 0.5vw);
+  }
+}
+```
+
+**Why it's a problem:**
+- Ignores user's accessibility settings
+- May cause discomfort for users
+- Violates user control principles
+- Poor accessibility practice
+
+### 5. Not Setting Minimum Sizes
+
+```css
+/* Bad: No minimum size */
+h1 {
+  font-size: 5vw;
+}
+
+h2 {
+  font-size: 3vw;
+}
+
+/* Good: Minimum size with viewport scaling */
+h1 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+h2 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+}
+```
+
+**Why it's a problem:**
+- Text may become too small on mobile
+- Text may become too large on desktop
+- Unpredictable sizing
+- Poor readability
+
+### 6. Using Too Many Breakpoints
+
+```css
+/* Bad: Too many breakpoints */
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 400px) {
+  html {
+    font-size: 105%;
+  }
+}
+
+@media (min-width: 500px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (min-width: 600px) {
+  html {
+    font-size: 115%;
+  }
+}
+
+@media (min-width: 700px) {
+  html {
+    font-size: 120%;
+  }
+}
+
+/* Good: Fewer, strategic breakpoints */
+html {
+  font-size: 100%;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 120%;
+  }
+}
+```
+
+**Why it's a problem:**
+- Difficult to maintain
+- Unnecessary complexity
+- Hard to test
+- Performance impact
+
+## Best Practices
+
+### 1. Use Relative Units
+
+Always use relative units for text sizing.
+
+```css
+/* Good: Relative units */
+html {
+  font-size: 100%;
+}
+
+body {
+  font-size: 1rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+```
+
+**Benefits:**
+- Scales with user preferences
+- Works with browser zoom
+- Meets WCAG requirements
+- Better accessibility
+
+### 2. Set a Root Font Size
+
+Always set a root font size to establish a baseline.
+
+```css
+/* Good: Set root font size */
+html {
+  font-size: 100%; /* 16px default */
+}
+```
+
+**Benefits:**
+- Establishes consistent baseline
+- Makes calculations easier
+- Ensures predictable sizing
+- Works with browser defaults
+
+### 3. Use rem for Base Sizing
+
+Use rem for body text and headings for consistency.
+
+```css
+/* Good: rem for base sizing */
+body {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+```
+
+**Benefits:**
+- Consistent sizing across document
+- Easy to maintain
+- Predictable results
+- Good for accessibility
+
+### 4. Use em for Component Sizing
+
+Use em for text within components to maintain proportions.
+
+```css
+/* Good: em for component sizing */
+.button {
+  font-size: 1em;
+  padding: 0.5em 1em;
+}
+
+.card {
+  font-size: 1em;
+}
+
+.card h2 {
+  font-size: 1.5em;
+}
+
+.card p {
+  font-size: 1em;
+}
+```
+
+**Benefits:**
+- Maintains proportions
+- Scales with component
+- Good for reusable components
+- Flexible design
+
+### 5. Use Fluid Typography for Headings
+
+Use clamp() for responsive heading sizing.
+
+```css
+/* Good: Fluid typography */
+h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  line-height: 1.3;
+}
+```
+
+**Benefits:**
+- Smooth scaling
+- No horizontal scrolling
+- Minimum and maximum bounds
+- Better user experience
+
+### 6. Ensure Flexible Layouts
+
+Layouts should accommodate text resizing.
+
+```css
+/* Good: Flexible layout */
+.container {
+  max-width: 1200px;
+  width: 100%;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  min-height: 200px;
+  overflow: auto;
+}
+
+.button {
+  width: auto;
+  min-width: 100px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+```
+
+**Benefits:**
+- Adapts to text resizing
+- No content overflow
+- Better accessibility
+- Responsive design
+
+### 7. Respect User Preferences
+
+Honor user's text size preferences.
+
+```css
+/* Good: Respecting preferences */
+html {
+  font-size: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    font-size: calc(100% + 0.5vw);
+  }
+}
+
+@media (prefers-contrast: high) {
+  html {
+    font-size: 110%;
+  }
+}
+
+@media (prefers-reduced-data: reduce) {
+  html {
+    font-size: 100%;
+  }
+}
+```
+
+**Benefits:**
+- Honors user settings
+- Better accessibility
+- Improved user experience
+- WCAG compliance
+
+### 8. Test Text Resizing
+
+Verify content works at 200% text size.
+
+```css
+/* Good: Testable design */
+body {
+  font-size: 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+```
+
+**Testing steps:**
+1. Set browser zoom to 200%
+2. Verify all text is readable
+3. Verify no horizontal scrolling
+4. Verify all functionality works
+5. Test on different devices
+
+## Testing Checklist
+
+### Visual Testing
+
+- [ ] Text can be resized to 200%
+- [ ] No horizontal scrolling at 200%
+- [ ] All content remains visible at 200%
+- [ ] All functionality works at 200%
+- [ ] Layout adapts to text resizing
+- [ ] Text remains readable at all sizes
+- [ ] No text overflow or clipping
+- [ ] Buttons remain clickable
+- [ ] Form inputs remain usable
+- [ ] Navigation remains accessible
+
+### Browser Testing
+
+- [ ] Test in Chrome
+- [ ] Test in Firefox
+- [ ] Test in Safari
+- [ ] Test in Edge
+- [ ] Test on mobile devices
+- [ ] Test on tablets
+- [ ] Test on desktops
+- [ ] Test with different screen resolutions
+- [ ] Test with different pixel densities
+
+### User Preference Testing
+
+- [ ] Respects browser default font size
+- [ ] Works with browser zoom
+- [ ] Works with system font size settings
+- [ ] Works with accessibility settings
+- [ ] Respects prefers-reduced-motion
+- [ ] Respects prefers-contrast
+- [ ] Respects prefers-reduced-data
+- [ ] Works with high contrast mode
+
+### Accessibility Testing
+
+- [ ] Test with screen readers
+- [ ] Test with screen magnifiers
+- [ ] Test with voice recognition
+- [ ] Test with alternative input devices
+- [ ] Test with keyboard navigation
+- [ ] Test with touch devices
+- [ ] Test with different browsers
+- [ ] Test with different operating systems
+
+### WCAG Compliance Testing
+
+- [ ] Meets WCAG 1.4.4 Resize Text
+- [ ] Meets WCAG 1.4.10 Reflow
+- [ ] Text can be resized to 200%
+- [ ] No loss of content at 200%
+- [ ] No loss of functionality at 200%
+- [ ] No two-dimensional scrolling
+- [ ] Content is accessible at all sizes
+- [ ] Layout is flexible and responsive
+
+## Tools and Resources
+
+### Browser DevTools
+
+- **Chrome DevTools**: Device emulation and responsive design mode
+- **Firefox DevTools**: Responsive design mode and accessibility inspector
+- **Safari Web Inspector**: Responsive design mode and accessibility features
+- **Edge DevTools**: Device emulation and accessibility tools
+
+### Testing Tools
+
+- **WAVE**: Web accessibility evaluation tool
+- **axe DevTools**: Accessibility testing browser extension
+- **Lighthouse**: Automated accessibility testing
+- **Pa11y**: Automated accessibility testing tool
+
+### Online Validators
+
+- **W3C Markup Validation Service**: HTML validation
+- **W3C CSS Validation Service**: CSS validation
+- **Nu HTML Checker**: HTML5 validation
+
+### Learning Resources
+
+- [WCAG 2.1 Resize Text](https://www.w3.org/WAI/WCAG21/quickref/#resize-text)
+- [WCAG 2.1 Reflow](https://www.w3.org/WAI/WCAG21/quickref/#reflow)
+- [MDN CSS Units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [WebAIM Font Size](https://webaim.org/techniques/fonts/)
+- [Modern Fluid Typography Editor](https://modern-fluid-typography.vercel.app/)
+
+## Related Resources
+
+- [Text Resizing Units](./text-resizing-units.mdx)
+- [Responsive Text Scaling](./text-resizing-responsive.mdx)
+- [WCAG 2.1 Resize Text](https://www.w3.org/WAI/WCAG21/quickref/#resize-text)
+- [WCAG 2.1 Reflow](https://www.w3.org/WAI/WCAG21/quickref/#reflow)
+- [MDN CSS Units](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Values_and_units)
+- [WebAIM Font Size](https://webaim.org/techniques/fonts/)
