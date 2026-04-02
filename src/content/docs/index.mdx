@@ -8,31 +8,46 @@ hero:
   image:
     file: ../../assets/houston.webp
   actions:
-    - text: Quick Start Guide
-      link: /fundamentals/quick-start-guide/
+    - text: Getting Started
+      link: /fundamentals/
     - text: Accessibility Fundamentals
       link: /fundamentals/accessibility-fundamentals/
       variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import {Card, CardGrid, LinkButton} from '@astrojs/starlight/components';
 
 ## Explore the Documentation
 
 <CardGrid stagger>
   <Card title="Quick Start Guide" icon="rocket">
     Get started with 8 immediate accessibility improvements you can implement in under 15 minutes.
+      <LinkButton href="/fundamentals/quick-start-guide/" variant="secondary">
+          Quick Start Guide
+      </LinkButton>
   </Card>
   <Card title="Accessibility Fundamentals" icon="open-book">
     Learn the core concepts, POUR principles, and foundational knowledge of web accessibility.
+      <LinkButton href="/fundamentals/" variant="secondary">
+            Accessibility Fundamentals
+      </LinkButton>
   </Card>
   <Card title="Component Library" icon="puzzle">
     Explore accessible patterns and implementations for common UI components.
+      <LinkButton href="/component-library/" variant="secondary">
+            Component Library
+      </LinkButton>
   </Card>
   <Card title="WCAG Reference" icon="list-format">
     Comprehensive reference for WCAG 2.1 AA success criteria and techniques.
+      <LinkButton href="/wcag-reference/" variant="secondary">
+            WCAG Reference
+      </LinkButton>
   </Card>
   <Card title="Testing & Validation" icon="approve-check-circle">
     Learn automated and manual testing methods to validate your accessibility implementations.
+      <LinkButton href="/testing-validation/" variant="secondary">
+            Testing & Validation
+      </LinkButton>
   </Card>
 </CardGrid>

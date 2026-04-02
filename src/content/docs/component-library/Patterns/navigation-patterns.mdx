@@ -1,0 +1,594 @@
+---
+title: "Navigation Accessibility Patterns"
+description: "Common accessibility patterns for site navigation and wayfinding"
+---
+
+# Navigation Accessibility Patterns
+
+Navigation is how users find and move between content on your site. Accessible navigation ensures all users — including those using keyboards, screen readers, and other assistive technologies — can discover, understand, and operate navigation menus, links, and wayfinding elements.
+
+## Overview
+
+Accessible navigation combines semantic HTML landmarks, proper ARIA attributes, and keyboard support. This guide covers landmark navigation, mega menus, mobile navigation toggles, search with suggestions, and current page indication patterns.
+
+### Patterns Covered
+
+- **Landmark navigation**: Using HTML5 landmarks for page structure
+- **Mega menu accessibility**: Large dropdown menus with keyboard support
+- **Mobile navigation toggle**: Hamburger menu with ARIA states
+- **Search with suggestions**: Autocomplete search with screen reader support
+- **Current page indication**: Using `aria-current` for wayfinding
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Navigation structure must be programmatically determinable
+
+### Operable
+- **2.4.1 Bypass Blocks**: A mechanism must be available to bypass repeated navigation blocks
+- **2.4.5 Multiple Ways**: Multiple ways to locate pages within a set of web pages
+- **2.4.6 Headings and Labels**: Navigation labels must describe the topic or purpose
+- **2.4.8 Location**: The user's location within a set of web pages must be indicated (Level AAA)
+
+## Implementation Patterns
+
+### Landmark-Based Navigation
+
+HTML5 landmark elements provide built-in navigation regions that screen reader users can jump between. Use them to define the page structure.
+
+```html
+<body>
+  <!-- Banner landmark: site-wide header -->
+  <header>
+    <a href="/" class="logo" aria-label="Company homepage">
+      <img src="logo.svg" alt="" width="120" height="40">
+      <span>Company Name</span>
+    </a>
+
+    <!-- Navigation landmark: primary navigation -->
+    <nav aria-label="Primary navigation">
+      <ul>
+        <li><a href="/products" aria-current="page">Products</a></li>
+        <li><a href="/solutions">Solutions</a></li>
+        <li><a href="/resources">Resources</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <!-- Complementary navigation -->
+    <nav aria-label="User account">
+      <ul>
+        <li><a href="/login">Sign In</a></li>
+        <li><a href="/signup" class="btn-primary">Get Started</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main landmark: primary content -->
+  <main>
+    <h1>Products</h1>
+    <p>Explore our suite of accessibility tools.</p>
+    <!-- Page content -->
+  </main>
+
+  <!-- Complementary landmark: sidebar -->
+  <aside aria-label="Related resources">
+    <h2>Related Resources</h2>
+    <ul>
+      <li><a href="/docs">Documentation</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/support">Support</a></li>
+    </ul>
+  </aside>
+
+  <!-- Contentinfo landmark: site-wide footer -->
+  <footer>
+    <nav aria-label="Footer navigation">
+      <div>
+        <h3>Products</h3>
+        <ul>
+          <li><a href="/products/a11y-checker">Accessibility Checker</a></li>
+          <li><a href="/products/color-contrast">Color Contrast Tool</a></li>
+          <li><a href="/products/screen-reader">Screen Reader Testing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/careers">Careers</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </nav>
+    <p>&copy; 2024 Company Name. All rights reserved.</p>
+  </footer>
+</body>
+```
+
+### Accessible Mega Menu
+
+Mega menus present many navigation options in a large dropdown panel. They require careful keyboard handling, proper ARIA attributes, and clear open/close behavior.
+
+```html
+<nav aria-label="Primary navigation">
+  <ul class="mega-menu" role="menubar">
+    <li class="menu-item" role="none">
+      <a href="/products" role="menuitem">Products</a>
+    </li>
+
+    <li class="menu-item has-submenu" role="none">
+      <button 
+        role="menuitem"
+        aria-expanded="false"
+        aria-haspopup="true"
+        id="solutions-btn"
+      >
+        Solutions
+        <span aria-hidden="true">▾</span>
+      </button>
+
+      <div class="mega-panel" id="solutions-panel" role="menu" aria-label="Solutions submenu" hidden>
+        <div class="mega-panel-grid">
+          <div class="mega-column">
+            <h3 id="sol-by-role">By Role</h3>
+            <ul role="menu" aria-labelledby="sol-by-role">
+              <li role="none"><a href="/solutions/developers" role="menuitem">Developers</a></li>
+              <li role="none"><a href="/solutions/designers" role="menuitem">Designers</a></li>
+              <li role="none"><a href="/solutions/managers" role="menuitem">Project Managers</a></li>
+              <li role="none"><a href="/solutions/testers" role="menuitem">QA Testers</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-column">
+            <h3 id="sol-by-industry">By Industry</h3>
+            <ul role="menu" aria-labelledby="sol-by-industry">
+              <li role="none"><a href="/solutions/healthcare" role="menuitem">Healthcare</a></li>
+              <li role="none"><a href="/solutions/education" role="menuitem">Education</a></li>
+              <li role="none"><a href="/solutions/government" role="menuitem">Government</a></li>
+              <li role="none"><a href="/solutions/finance" role="menuitem">Finance</a></li>
+            </ul>
+          </div>
+
+          <div class="mega-featured">
+            <h3>Featured</h3>
+            <a href="/solutions/enterprise" class="featured-card">
+              <strong>Enterprise Solutions</strong>
+              <p>Scalable accessibility tools for large organizations.</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <li class="menu-item" role="none">
+      <a href="/resources" role="menuitem">Resources</a>
+    </li>
+
+    <li class="menu-item" role="none">
+      <a href="/about" role="menuitem">About</a>
+    </li>
+  </ul>
+</nav>
+
+<script>
+  document.querySelectorAll('.has-submenu > button').forEach((btn) => {
+    const panel = btn.nextElementSibling;
+
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      closeAllPanels();
+      if (!expanded) {
+        btn.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+        // Focus the first link in the panel
+        const firstLink = panel.querySelector('a');
+        if (firstLink) firstLink.focus();
+      }
+    });
+
+    // Close on Escape
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded', 'false');
+        panel.hidden = true;
+        btn.focus();
+      }
+    });
+  });
+
+  function closeAllPanels() {
+    document.querySelectorAll('.has-submenu').forEach((item) => {
+      const btn = item.querySelector('button');
+      const panel = item.querySelector('.mega-panel');
+      btn.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+    });
+  }
+
+  // Close mega menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.has-submenu')) {
+      closeAllPanels();
+    }
+  });
+</script>
+```
+
+### Mobile Navigation Toggle with ARIA
+
+Mobile navigation toggles must communicate their state, control the menu visibility, and manage focus properly.
+
+```html
+<header>
+  <a href="/" class="logo" aria-label="Company homepage">
+    <img src="logo.svg" alt="" width="120" height="40">
+  </a>
+
+  <button 
+    type="button"
+    class="mobile-nav-toggle"
+    aria-expanded="false"
+    aria-controls="mobile-nav"
+    aria-label="Open navigation menu"
+  >
+    <span class="hamburger-icon" aria-hidden="true">☰</span>
+  </button>
+
+  <nav 
+    id="mobile-nav" 
+    aria-label="Primary navigation"
+    class="mobile-nav"
+    hidden
+  >
+    <ul>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/solutions">Solutions</a></li>
+      <li><a href="/resources">Resources</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector('.mobile-nav-toggle');
+  const nav = document.getElementById('mobile-nav');
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+
+    toggle.setAttribute('aria-expanded', String(!expanded));
+    toggle.setAttribute(
+      'aria-label',
+      expanded ? 'Open navigation menu' : 'Close navigation menu'
+    );
+    nav.hidden = expanded;
+
+    if (!expanded) {
+      // Focus the first link when opening
+      const firstLink = nav.querySelector('a');
+      if (firstLink) firstLink.focus();
+    } else {
+      // Return focus to the toggle button when closing
+      toggle.focus();
+    }
+  });
+
+  // Close on Escape
+  nav.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation menu');
+      nav.hidden = true;
+      toggle.focus();
+    }
+  });
+</script>
+```
+
+### aria-current="page" Pattern
+
+Use `aria-current="page"` to indicate the current page in navigation. This helps screen reader users understand their location within the site.
+
+```html
+<nav aria-label="Primary navigation">
+  <ul>
+    <li>
+      <a href="/" aria-current="page">
+        <span class="visually-hidden">Current page: </span>Home
+      </a>
+    </li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<style>
+  /* Visual indication of current page */
+  a[aria-current="page"] {
+    font-weight: 700;
+    border-bottom: 3px solid #005fcc;
+    padding-bottom: 2px;
+  }
+
+  /* Hide the "Current page:" text visually but keep for screen readers */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+```
+
+### Search with Suggestions
+
+An accessible search field with autocomplete suggestions requires proper ARIA roles, keyboard navigation through results, and live region announcements.
+
+```html
+<form role="search" aria-label="Site search">
+  <div class="search-container">
+    <label for="site-search">Search the site</label>
+    <div class="search-input-wrapper">
+      <input 
+        type="search" 
+        id="site-search" 
+        name="q"
+        autocomplete="off"
+        aria-describedby="search-help"
+        aria-autocomplete="list"
+        aria-controls="search-results"
+        aria-expanded="false"
+        aria-activedescendant=""
+        placeholder="Search documentation..."
+      >
+      <button type="submit" aria-label="Submit search">
+        <span aria-hidden="true">🔍</span>
+      </button>
+    </div>
+    <span id="search-help" class="form-hint">Start typing to see suggestions.</span>
+
+    <ul 
+      id="search-results" 
+      role="listbox" 
+      aria-label="Search suggestions"
+      class="search-dropdown"
+      hidden
+    >
+      <!-- Dynamically populated -->
+    </ul>
+  </div>
+</form>
+
+<script>
+  const searchInput = document.getElementById('site-search');
+  const resultsList = document.getElementById('search-results');
+  let selectedIndex = -1;
+
+  searchInput.addEventListener('input', async () => {
+    const query = searchInput.value.trim();
+    if (query.length < 2) {
+      resultsList.hidden = true;
+      searchInput.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    // Fetch suggestions (replace with your data source)
+    const suggestions = await fetchSuggestions(query);
+
+    if (suggestions.length === 0) {
+      resultsList.hidden = true;
+      searchInput.setAttribute('aria-expanded', 'false');
+      return;
+    }
+
+    resultsList.innerHTML = '';
+    suggestions.forEach((suggestion, index) => {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'option');
+      li.setAttribute('id', `suggestion-${index}`);
+      li.textContent = suggestion;
+      li.addEventListener('click', () => {
+        searchInput.value = suggestion;
+        resultsList.hidden = true;
+        searchInput.setAttribute('aria-expanded', 'false');
+      });
+      resultsList.appendChild(li);
+    });
+
+    resultsList.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+    selectedIndex = -1;
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    const items = resultsList.querySelectorAll('[role="option"]');
+    if (items.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+        updateSelection(items);
+        break;
+
+      case 'ArrowUp':
+        e.preventDefault();
+        selectedIndex = Math.max(selectedIndex - 1, -1);
+        updateSelection(items);
+        break;
+
+      case 'Enter':
+        if (selectedIndex >= 0) {
+          e.preventDefault();
+          searchInput.value = items[selectedIndex].textContent;
+          resultsList.hidden = true;
+          searchInput.setAttribute('aria-expanded', 'false');
+        }
+        break;
+
+      case 'Escape':
+        resultsList.hidden = true;
+        searchInput.setAttribute('aria-expanded', 'false');
+        break;
+    }
+  });
+
+  function updateSelection(items) {
+    items.forEach((item, i) => {
+      if (i === selectedIndex) {
+        item.setAttribute('aria-selected', 'true');
+        searchInput.setAttribute('aria-activedescendant', item.id);
+      } else {
+        item.removeAttribute('aria-selected');
+      }
+    });
+
+    if (selectedIndex === -1) {
+      searchInput.setAttribute('aria-activedescendant', '');
+    }
+  }
+
+  async function fetchSuggestions(query) {
+    // Replace with actual API call
+    const allItems = [
+      'Accessibility fundamentals',
+      'Accessible forms',
+      'ARIA roles',
+      'Color contrast',
+      'Keyboard navigation',
+      'Screen reader testing'
+    ];
+    return allItems.filter(item => 
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+  }
+</script>
+```
+
+## Common Pitfalls
+
+### 1. Navigation Only Accessible by Mouse
+
+```html
+<!-- Bad: Hover-only dropdown menus -->
+<li onmouseover="showDropdown()" onmouseout="hideDropdown()">
+  Products
+  <ul class="dropdown">...</ul>
+</li>
+
+<!-- Good: Click and keyboard accessible -->
+<li class="has-submenu">
+  <button 
+    aria-expanded="false" 
+    aria-haspopup="true"
+  >
+    Products
+  </button>
+  <ul class="dropdown" hidden>...</ul>
+</li>
+```
+
+### 2. No Current Page Indication
+
+```html
+<!-- Bad: No way to tell which page is current -->
+<nav>
+  <a href="/">Home</a>
+  <a href="/about">About</a>
+  <a href="/contact">Contact</a>
+</nav>
+
+<!-- Good: aria-current indicates the current page -->
+<nav aria-label="Main navigation">
+  <a href="/" aria-current="page">Home</a>
+  <a href="/about">About</a>
+  <a href="/contact">Contact</a>
+</nav>
+```
+
+### 3. Mobile Nav Not Keyboard Accessible
+
+```html
+<!-- Bad: Toggle only works with touch/click -->
+<div class="hamburger" onclick="toggleNav()">☰</div>
+
+<!-- Good: Button element with ARIA state -->
+<button 
+  type="button"
+  aria-expanded="false" 
+  aria-controls="mobile-nav"
+  aria-label="Open navigation menu"
+>
+  <span aria-hidden="true">☰</span>
+</button>
+```
+
+### 4. Mega Menus Without Proper ARIA
+
+```html
+<!-- Bad: No ARIA roles or states -->
+<div class="mega-menu">
+  <div class="menu-item" onmouseover="showPanel(1)">
+    Products
+    <div class="panel">...</div>
+  </div>
+</div>
+
+<!-- Good: Proper ARIA with keyboard support -->
+<nav aria-label="Primary navigation">
+  <ul role="menubar">
+    <li role="none">
+      <button role="menuitem" aria-expanded="false" aria-haspopup="true">
+        Products
+      </button>
+      <div role="menu" hidden>...</div>
+    </li>
+  </ul>
+</nav>
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Tab key reaches all navigation links and controls
+- [ ] Enter/Space activates buttons and links
+- [ ] Arrow keys navigate within dropdown menus (if using menubar pattern)
+- [ ] Escape closes dropdown menus and returns focus to the trigger
+- [ ] Focus order follows the visual layout
+
+### Screen Reader Landmark Navigation
+- [ ] All landmarks are announced with their labels
+- [ ] Users can jump between landmarks (e.g., D key in NVDA)
+- [ ] Navigation regions have distinct labels when multiple exist
+- [ ] `aria-current="page"` is announced for the current page link
+
+### Mobile Navigation
+- [ ] Toggle button announces "open" or "close" state
+- [ ] Menu opens and closes with keyboard
+- [ ] Focus moves into the menu when opened
+- [ ] Focus returns to the toggle when closed
+- [ ] Escape key closes the menu
+
+## Related Components
+
+- [Skip Links](../navigation/skip-links/skip-link-basics.mdx) - Bypass blocks pattern
+- [Breadcrumbs](../navigation/breadcrumbs/breadcrumb-basics.mdx) - Wayfinding with breadcrumbs
+- [Accessible Tabs](../interactive/tabs.mdx) - Tabbed navigation patterns
+- [Interactive Patterns](./interactive-patterns.mdx) - Dynamic interaction patterns
+
+## Resources
+
+- [W3C WAI Menu Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/menu/)
+- [W3C WAI Navigation Tutorial](https://www.w3.org/WAI/tutorials/menus/)
+- [MDN Landmark Roles](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles#landmark_roles)
+- [WebAIM Keyboard Navigation](https://webaim.org/techniques/keyboard/)

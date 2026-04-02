@@ -1,0 +1,482 @@
+---
+title: "Accessible Accordions"
+description: "Expandable and collapsible content sections with proper accessibility"
+---
+
+# Accessible Accordions
+
+Accordions are interactive components that expand and collapse content sections. They help users scan page content by showing summaries while hiding details until needed. When built accessibly, accordions communicate their expanded or collapsed state to assistive technologies and support keyboard interaction.
+
+## Overview
+
+Accessible accordions use buttons as triggers with `aria-expanded` to indicate state and `aria-controls` to associate triggers with their panels. The pattern supports both single-section and multi-section expansion, and preserves heading structure within panels for screen reader navigation.
+
+### Key Concepts
+
+- **Trigger button**: The interactive control that toggles a section's visibility
+- **Panel**: The content area that is shown or hidden
+- **Expanded state**: Whether the panel is currently visible (`aria-expanded`)
+- **Multi-expandable**: Whether multiple sections can be open simultaneously
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: The relationship between triggers and panels must be programmatically determinable
+
+### Operable
+- **2.1.1 Keyboard**: All accordion sections must be operable via keyboard (Enter and Space)
+- **2.4.1 Bypass Blocks**: Accordions can help users skip over content blocks by collapsing them
+
+### Robust
+- **4.1.2 Name, Role, Value**: Triggers must expose their role (button), expanded state, and control relationships
+
+## Implementation Patterns
+
+### Basic Accordion with ARIA
+
+Each accordion section consists of a button trigger and a content panel. The button uses `aria-expanded` to communicate state and `aria-controls` to reference the panel.
+
+```html
+<div class="accordion">
+  <h3>
+    <button 
+      type="button"
+      class="accordion-trigger"
+      aria-expanded="true"
+      aria-controls="section-1"
+      id="trigger-1"
+    >
+      What is web accessibility?
+      <span class="accordion-icon" aria-hidden="true">▼</span>
+    </button>
+  </h3>
+
+  <div 
+    class="accordion-panel"
+    id="section-1"
+    role="region"
+    aria-labelledby="trigger-1"
+  >
+    <p>
+      Web accessibility means that websites, tools, and technologies are 
+      designed and developed so that people with disabilities can use them. 
+      More specifically, people can perceive, understand, navigate, and 
+      interact with the web.
+    </p>
+  </div>
+
+  <h3>
+    <button 
+      type="button"
+      class="accordion-trigger"
+      aria-expanded="false"
+      aria-controls="section-2"
+      id="trigger-2"
+    >
+      Why is accessibility important?
+      <span class="accordion-icon" aria-hidden="true">▼</span>
+    </button>
+  </h3>
+
+  <div 
+    class="accordion-panel"
+    id="section-2"
+    role="region"
+    aria-labelledby="trigger-2"
+    hidden
+  >
+    <p>
+      Accessibility is essential for developers and organizations that want 
+      to create high-quality websites and web tools, and not exclude people 
+      from using their products and services.
+    </p>
+  </div>
+
+  <h3>
+    <button 
+      type="button"
+      class="accordion-trigger"
+      aria-expanded="false"
+      aria-controls="section-3"
+      id="trigger-3"
+    >
+      How do I test for accessibility?
+      <span class="accordion-icon" aria-hidden="true">▼</span>
+    </button>
+  </h3>
+
+  <div 
+    class="accordion-panel"
+    id="section-3"
+    role="region"
+    aria-labelledby="trigger-3"
+    hidden
+  >
+    <p>
+      Accessibility testing combines automated tools, manual testing, and 
+      user testing with people who have disabilities. Start with automated 
+      scanners, then verify with keyboard navigation and screen reader testing.
+    </p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.accordion-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = document.getElementById(panelId);
+
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      panel.hidden = expanded;
+    });
+  });
+</script>
+
+<style>
+  .accordion-trigger {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f5f5f5;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .accordion-trigger:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+  }
+
+  .accordion-trigger[aria-expanded="true"] .accordion-icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion-panel {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-top: none;
+  }
+</style>
+```
+
+### Accordion with Multiple Sections (Multi-Expandable)
+
+By default, each section operates independently — opening one does not close others. This is the simplest and most user-friendly pattern.
+
+```html
+<div class="accordion" role="presentation">
+  <h3>
+    <button 
+      type="button"
+      aria-expanded="false"
+      aria-controls="faq-shipping"
+      id="faq-shipping-trigger"
+    >
+      Shipping Information
+    </button>
+  </h3>
+  <div 
+    id="faq-shipping" 
+    role="region" 
+    aria-labelledby="faq-shipping-trigger"
+    hidden
+  >
+    <p>We ship to all 50 states. Standard shipping takes 3–5 business days.</p>
+  </div>
+
+  <h3>
+    <button 
+      type="button"
+      aria-expanded="false"
+      aria-controls="faq-returns"
+      id="faq-returns-trigger"
+    >
+      Return Policy
+    </button>
+  </h3>
+  <div 
+    id="faq-returns" 
+    role="region" 
+    aria-labelledby="faq-returns-trigger"
+    hidden
+  >
+    <p>You may return items within 30 days of purchase for a full refund.</p>
+  </div>
+
+  <h3>
+    <button 
+      type="button"
+      aria-expanded="false"
+      aria-controls="faq-contact"
+      id="faq-contact-trigger"
+    >
+      Contact Us
+    </button>
+  </h3>
+  <div 
+    id="faq-contact" 
+    role="region" 
+    aria-labelledby="faq-contact-trigger"
+    hidden
+  >
+    <p>Reach our support team at support@example.com or call 1-800-555-0199.</p>
+  </div>
+</div>
+```
+
+### Accordion with Nested Content
+
+Accordions can contain rich content including headings, lists, and even nested accordions. Maintain proper heading hierarchy within panels.
+
+```html
+<div class="accordion">
+  <h2>
+    <button 
+      type="button"
+      aria-expanded="false"
+      aria-controls="course-module-1"
+      id="module-1-trigger"
+    >
+      Module 1: Introduction to HTML
+    </button>
+  </h2>
+
+  <div 
+    id="course-module-1" 
+    role="region" 
+    aria-labelledby="module-1-trigger"
+    hidden
+  >
+    <p>This module covers the fundamentals of HTML structure and semantics.</p>
+    
+    <h3>Lesson Topics</h3>
+    <ul>
+      <li>HTML document structure</li>
+      <li>Semantic elements</li>
+      <li>Forms and inputs</li>
+      <li>Tables and lists</li>
+    </ul>
+
+    <h3>Learning Objectives</h3>
+    <p>By the end of this module, you will be able to:</p>
+    <ul>
+      <li>Create a well-structured HTML document</li>
+      <li>Use semantic elements for accessibility</li>
+      <li>Build accessible forms with proper labels</li>
+    </ul>
+
+    <p>
+      <a href="/courses/html/module-1">Start Module 1</a>
+    </p>
+  </div>
+
+  <h2>
+    <button 
+      type="button"
+      aria-expanded="false"
+      aria-controls="course-module-2"
+      id="module-2-trigger"
+    >
+      Module 2: CSS Fundamentals
+    </button>
+  </h2>
+
+  <div 
+    id="course-module-2" 
+    role="region" 
+    aria-labelledby="module-2-trigger"
+    hidden
+  >
+    <p>Learn the core concepts of CSS for styling web pages.</p>
+    
+    <h3>Lesson Topics</h3>
+    <ul>
+      <li>Selectors and specificity</li>
+      <li>Box model</li>
+      <li>Flexbox and Grid</li>
+      <li>Responsive design</li>
+    </ul>
+  </div>
+</div>
+```
+
+### Single-Expand Accordion (Collapsible)
+
+In a single-expand pattern, opening one section closes all others. This is useful when only one piece of information should be visible at a time.
+
+```javascript
+function initSingleExpandAccordion(accordionContainer) {
+  const triggers = accordionContainer.querySelectorAll('.accordion-trigger');
+
+  triggers.forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = document.getElementById(panelId);
+
+      // Close all sections first
+      triggers.forEach((otherTrigger) => {
+        otherTrigger.setAttribute('aria-expanded', 'false');
+        const otherPanelId = otherTrigger.getAttribute('aria-controls');
+        document.getElementById(otherPanelId).hidden = true;
+      });
+
+      // If the clicked section was not already open, open it
+      if (!isExpanded) {
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+      }
+    });
+  });
+}
+```
+
+## Common Pitfalls
+
+### 1. Using Divs Instead of Buttons for Triggers
+
+```html
+<!-- Bad: Div is not interactive by default -->
+<div class="accordion-header" onclick="toggleSection()">
+  Section Title
+</div>
+
+<!-- Good: Button is natively keyboard-accessible -->
+<button 
+  type="button"
+  class="accordion-trigger"
+  aria-expanded="false"
+  aria-controls="section-1"
+>
+  Section Title
+</button>
+```
+
+### 2. Missing `aria-expanded` State
+
+```html
+<!-- Bad: No state indication for assistive technologies -->
+<button class="accordion-trigger" aria-controls="section-1">
+  Section Title
+</button>
+
+<!-- Good: State is clearly communicated -->
+<button 
+  class="accordion-trigger"
+  aria-expanded="false"
+  aria-controls="section-1"
+>
+  Section Title
+</button>
+```
+
+### 3. No Keyboard Support
+
+```html
+<!-- Bad: Only mouse click works -->
+<div class="trigger" onclick="toggle()">Title</div>
+
+<!-- Good: Button handles Enter and Space natively -->
+<button type="button" aria-expanded="false" aria-controls="panel-1">
+  Title
+</button>
+
+<script>
+  // If you must use a non-button element, add keyboard handlers
+  trigger.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      togglePanel();
+    }
+  });
+</script>
+```
+
+### 4. Animating with `display: none`
+
+```css
+/* Bad: display:none cannot be animated, causing abrupt transitions */
+.panel-closed {
+  display: none;
+}
+.panel-open {
+  display: block;
+}
+
+/* Good: Use height/opacity for smooth animations */
+.accordion-panel {
+  overflow: hidden;
+  transition: height 0.3s ease, opacity 0.3s ease;
+}
+
+.accordion-panel[closed] {
+  height: 0;
+  opacity: 0;
+}
+
+/* Note: Use the hidden attribute for accessibility, 
+   and manage animation via JavaScript */
+```
+
+### 5. Missing Heading Structure
+
+```html
+<!-- Bad: No heading — screen readers lose navigation context -->
+<button aria-expanded="false" aria-controls="panel-1">
+  Section Title
+</button>
+<div id="panel-1" role="region">Content</div>
+
+<!-- Good: Button wrapped in a heading for structure -->
+<h3>
+  <button aria-expanded="false" aria-controls="panel-1">
+    Section Title
+  </button>
+</h3>
+<div id="panel-1" role="region" aria-labelledby="trigger-1">Content</div>
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Enter key expands a collapsed section
+- [ ] Space key expands a collapsed section
+- [ ] Enter key collapses an expanded section
+- [ ] Space key collapses an expanded section
+- [ ] Tab key moves between accordion triggers
+- [ ] Focus indicators are visible on all triggers
+
+### Screen Reader Testing
+- [ ] Screen reader announces the button role for each trigger
+- [ ] Expanded/collapsed state is announced when toggling
+- [ ] Panel content is announced after expanding
+- [ ] Heading structure is preserved (triggers are inside headings)
+- [ ] The `region` role identifies the panel content area
+
+### Functional Testing
+- [ ] Clicking a trigger toggles the associated panel
+- [ ] Only the correct panel opens (not all panels)
+- [ ] Multi-expand allows multiple open sections
+- [ ] Single-expand closes other sections when opening a new one
+- [ ] Animations (if any) do not cause layout shifts or content overflow
+
+## Related Components
+
+- [Accessible Tabs](./tabs.mdx) - Tabbed interface patterns
+- [Accessible Modals](./modals.mdx) - Dialog and overlay patterns
+- [Accessible Headings](../content/headings.mdx) - Heading hierarchy best practices
+- [Interactive Patterns](../patterns/interactive-patterns.mdx) - Disclosure and toggle patterns
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Accordion](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/)
+- [MDN ARIA Button Role](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/button_role)
+- [Inclusive Components - Collapsible Sections](https://inclusive-components.design/collapsible-sections/)
+- [WebAIM Keyboard Accessibility](https://webaim.org/techniques/keyboard/)

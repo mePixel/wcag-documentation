@@ -1,0 +1,657 @@
+---
+title: "Form Accessibility Patterns"
+description: "Common accessibility patterns and solutions for web forms"
+---
+
+# Form Accessibility Patterns
+
+Forms are one of the most common interactive elements on the web. From login screens to checkout flows, accessible forms ensure all users can complete tasks independently and efficiently. This guide covers patterns for multi-step forms, validation, grouping, and submission feedback.
+
+## Overview
+
+Accessible forms combine semantic HTML, proper labeling, clear error handling, and logical tab order. Each pattern in this guide addresses a specific form challenge and provides practical implementation guidance that meets WCAG success criteria.
+
+### Patterns Covered
+
+- **Multi-step forms**: Progress indication and step navigation
+- **Inline validation**: Real-time feedback as users complete fields
+- **Required field indication**: Clear visual and programmatic markers
+- **Grouped form elements**: Using fieldset and legend for related inputs
+- **Submission feedback**: Confirming successful form submission
+- **Autocomplete attributes**: Helping users fill in known information
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Form labels, groups, and instructions must be programmatically determinable
+
+### Understandable
+- **3.3.1 Error Identification**: Errors must be automatically detected and described to the user
+- **3.3.2 Labels or Instructions**: Labels or instructions must be provided for user input
+- **3.3.3 Error Suggestion**: Suggestions must be provided for fixing input errors (when known)
+- **3.3.4 Error Prevention**: For important submissions, the user must be able to review, correct, or reverse the submission
+
+### Robust
+- **4.1.2 Name, Role, Value**: Form elements must have accessible names and communicate their values
+
+## Implementation Patterns
+
+### Multi-Step Form with Progress Bar
+
+Multi-step forms break long forms into manageable sections. A progress indicator shows users where they are, how far they have come, and how much remains.
+
+```html
+<form id="multi-step-form" aria-label="Account registration">
+  <!-- Progress bar -->
+  <div class="form-progress" role="navigation" aria-label="Form progress">
+    <ol class="progress-steps">
+      <li class="step completed" aria-current="step">
+        <span class="step-number" aria-hidden="true">1</span>
+        <span class="step-label">Personal Info</span>
+      </li>
+      <li class="step">
+        <span class="step-number" aria-hidden="true">2</span>
+        <span class="step-label">Address</span>
+      </li>
+      <li class="step">
+        <span class="step-number" aria-hidden="true">3</span>
+        <span class="step-label">Preferences</span>
+      </li>
+      <li class="step">
+        <span class="step-number" aria-hidden="true">4</span>
+        <span class="step-label">Review</span>
+      </li>
+    </ol>
+    <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="Form completion: 25%">
+      <div class="progress-fill" style="width: 25%"></div>
+    </div>
+  </div>
+
+  <!-- Step 1: Personal Info -->
+  <fieldset class="form-step" id="step-1">
+    <legend>Step 1: Personal Information</legend>
+
+    <div class="form-group">
+      <label for="reg-name">
+        Full Name <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input 
+        type="text" 
+        id="reg-name" 
+        name="name" 
+        required 
+        aria-required="true"
+        autocomplete="name"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="reg-email">
+        Email Address <span class="required" aria-hidden="true">*</span>
+      </label>
+      <input 
+        type="email" 
+        id="reg-email" 
+        name="email" 
+        required 
+        aria-required="true"
+        autocomplete="email"
+        aria-describedby="email-hint"
+      >
+      <span id="email-hint" class="form-hint">We will send a confirmation to this address.</span>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-next" data-next="2">Continue</button>
+    </div>
+  </fieldset>
+
+  <!-- Step 2: Address -->
+  <fieldset class="form-step" id="step-2" hidden>
+    <legend>Step 2: Address</legend>
+
+    <div class="form-group">
+      <label for="reg-street">Street Address</label>
+      <input 
+        type="text" 
+        id="reg-street" 
+        name="street" 
+        autocomplete="street-address"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="reg-city">City</label>
+      <input 
+        type="text" 
+        id="reg-city" 
+        name="city" 
+        autocomplete="address-level2"
+      >
+    </div>
+
+    <div class="form-group">
+      <label for="reg-zip">ZIP Code</label>
+      <input 
+        type="text" 
+        id="reg-zip" 
+        name="zip" 
+        autocomplete="postal-code"
+      >
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-prev" data-prev="1">Back</button>
+      <button type="button" class="btn-next" data-next="3">Continue</button>
+    </div>
+  </fieldset>
+</form>
+
+<style>
+  .progress-steps {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    counter-reset: none;
+  }
+
+  .step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .step.completed .step-number {
+    background: #005fcc;
+    color: white;
+  }
+
+  .step[aria-current="step"] .step-number {
+    background: #005fcc;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.3);
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e0e0e0;
+    color: #666;
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #005fcc;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+</style>
+```
+
+### Inline Validation with aria-live
+
+Inline validation provides immediate feedback as users fill in form fields. Use `aria-live` regions to announce validation results to screen reader users.
+
+```html
+<form id="inline-validation-form">
+  <div class="form-group">
+    <label for="val-username">
+      Username <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="text" 
+      id="val-username" 
+      name="username" 
+      required 
+      aria-required="true"
+      aria-describedby="username-feedback"
+      autocomplete="username"
+    >
+    <div id="username-feedback" class="validation-message" aria-live="polite"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="val-password">
+      Password <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="password" 
+      id="val-password" 
+      name="password" 
+      required 
+      aria-required="true"
+      aria-describedby="password-rules password-feedback"
+      autocomplete="new-password"
+    >
+    <ul id="password-rules" class="form-hint">
+      <li>At least 8 characters</li>
+      <li>One uppercase letter</li>
+      <li>One number</li>
+      <li>One special character</li>
+    </ul>
+    <div id="password-feedback" class="validation-message" aria-live="polite"></div>
+  </div>
+
+  <div class="form-group">
+    <label for="val-email">
+      Email <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="email" 
+      id="val-email" 
+      name="email" 
+      required 
+      aria-required="true"
+      aria-describedby="email-feedback"
+      autocomplete="email"
+    >
+    <div id="email-feedback" class="validation-message" aria-live="polite"></div>
+  </div>
+</form>
+
+<script>
+  function setupInlineValidation(inputId, feedbackId, validateFn) {
+    const input = document.getElementById(inputId);
+    const feedback = document.getElementById(feedbackId);
+
+    input.addEventListener('blur', () => {
+      const result = validateFn(input.value);
+      if (result.valid) {
+        input.setAttribute('aria-invalid', 'false');
+        feedback.textContent = result.message || '✓ Valid';
+        feedback.className = 'validation-message success';
+      } else {
+        input.setAttribute('aria-invalid', 'true');
+        feedback.textContent = result.message;
+        feedback.className = 'validation-message error';
+      }
+    });
+  }
+
+  setupInlineValidation('val-username', 'username-feedback', (value) => {
+    if (!value) return { valid: false, message: 'Username is required.' };
+    if (value.length < 3) return { valid: false, message: 'Username must be at least 3 characters.' };
+    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      return { valid: false, message: 'Username can only contain letters, numbers, and underscores.' };
+    }
+    return { valid: true, message: '✓ Username is available.' };
+  });
+
+  setupInlineValidation('val-password', 'password-feedback', (value) => {
+    if (!value) return { valid: false, message: 'Password is required.' };
+    const missing = [];
+    if (value.length < 8) missing.push('at least 8 characters');
+    if (!/[A-Z]/.test(value)) missing.push('an uppercase letter');
+    if (!/[0-9]/.test(value)) missing.push('a number');
+    if (!/[^a-zA-Z0-9]/.test(value)) missing.push('a special character');
+    if (missing.length > 0) {
+      return { valid: false, message: `Password needs: ${missing.join(', ')}.` };
+    }
+    return { valid: true, message: '✓ Password meets all requirements.' };
+  });
+
+  setupInlineValidation('val-email', 'email-feedback', (value) => {
+    if (!value) return { valid: false, message: 'Email is required.' };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return { valid: false, message: 'Please enter a valid email address (e.g., name@example.com).' };
+    }
+    return { valid: true, message: '✓ Valid email address.' };
+  });
+</script>
+
+<style>
+  .validation-message {
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+
+  .validation-message.success {
+    color: #15803d;
+  }
+
+  .validation-message.error {
+    color: #dc2626;
+  }
+
+  input[aria-invalid="true"] {
+    border-color: #dc2626;
+    box-shadow: 0 0 0 1px #dc2626;
+  }
+</style>
+```
+
+### Required Field Pattern with Asterisk Explanation
+
+When using asterisks to mark required fields, always explain what the asterisk means before the form begins.
+
+```html
+<form aria-label="Contact form">
+  <p class="form-intro">
+    Fields marked with <span class="required" aria-hidden="true">*</span> 
+    are required.
+  </p>
+
+  <div class="form-group">
+    <label for="contact-name">
+      Name <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="text" 
+      id="contact-name" 
+      name="name" 
+      required 
+      aria-required="true"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact-email">
+      Email <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="email" 
+      id="contact-email" 
+      name="email" 
+      required 
+      aria-required="true"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact-phone">Phone</label>
+    <input 
+      type="tel" 
+      id="contact-phone" 
+      name="phone"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact-subject">
+      Subject <span class="required" aria-hidden="true">*</span>
+    </label>
+    <input 
+      type="text" 
+      id="contact-subject" 
+      name="subject" 
+      required 
+      aria-required="true"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="contact-message">
+      Message <span class="required" aria-hidden="true">*</span>
+    </label>
+    <textarea 
+      id="contact-message" 
+      name="message" 
+      rows="5" 
+      required 
+      aria-required="true"
+    ></textarea>
+  </div>
+
+  <button type="submit">Send Message</button>
+</form>
+
+<style>
+  .required {
+    color: #dc2626;
+    font-weight: bold;
+  }
+
+  .form-intro {
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    color: #555;
+  }
+</style>
+```
+
+### Fieldset Grouping
+
+Use `<fieldset>` and `<legend>` to group related form fields. This helps screen reader users understand the context of each group.
+
+```html
+<form aria-label="Job application">
+  <fieldset>
+    <legend>Personal Information</legend>
+
+    <div class="form-group">
+      <label for="app-firstname">First Name</label>
+      <input type="text" id="app-firstname" name="firstname" autocomplete="given-name">
+    </div>
+
+    <div class="form-group">
+      <label for="app-lastname">Last Name</label>
+      <input type="text" id="app-lastname" name="lastname" autocomplete="family-name">
+    </div>
+
+    <div class="form-group">
+      <label for="app-email">Email</label>
+      <input type="email" id="app-email" name="email" autocomplete="email">
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Work Experience</legend>
+
+    <div class="form-group">
+      <label for="app-company">Company Name</label>
+      <input type="text" id="app-company" name="company" autocomplete="organization">
+    </div>
+
+    <div class="form-group">
+      <label for="app-role">Job Title</label>
+      <input type="text" id="app-role" name="role" autocomplete="organization-title">
+    </div>
+
+    <fieldset>
+      <legend>Employment Type</legend>
+      <label>
+        <input type="radio" name="employment-type" value="full-time"> Full-time
+      </label>
+      <label>
+        <input type="radio" name="employment-type" value="part-time"> Part-time
+      </label>
+      <label>
+        <input type="radio" name="employment-type" value="contract"> Contract
+      </label>
+    </fieldset>
+  </fieldset>
+
+  <button type="submit">Submit Application</button>
+</form>
+```
+
+### Form Submission Feedback
+
+After form submission, provide clear feedback about the result. Use a combination of visual indicators and live regions for screen reader announcements.
+
+```html
+<form id="submit-form" aria-label="Newsletter signup">
+  <div class="form-group">
+    <label for="newsletter-email">Email Address</label>
+    <input type="email" id="newsletter-email" name="email" required>
+  </div>
+  <button type="submit">Subscribe</button>
+</form>
+
+<!-- Success message -->
+<div 
+  id="form-success" 
+  class="alert alert-success" 
+  role="status" 
+  aria-live="polite"
+  hidden
+>
+  <h3>Successfully subscribed!</h3>
+  <p>You will receive our newsletter at the email address you provided.</p>
+</div>
+
+<!-- Error message -->
+<div 
+  id="form-error" 
+  class="alert alert-error" 
+  role="alert" 
+  aria-live="assertive"
+  hidden
+>
+  <h3>Submission failed</h3>
+  <p>Something went wrong. Please try again or contact support.</p>
+  <button type="button" id="retry-btn">Try Again</button>
+</div>
+
+<script>
+  document.getElementById('submit-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const successEl = document.getElementById('form-success');
+    const errorEl = document.getElementById('form-error');
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        body: new FormData(form)
+      });
+
+      if (response.ok) {
+        form.hidden = true;
+        successEl.hidden = false;
+        successEl.focus(); // Move focus to the success message
+      } else {
+        errorEl.hidden = false;
+        errorEl.focus(); // Move focus to the error message
+      }
+    } catch (err) {
+      errorEl.hidden = false;
+      errorEl.focus();
+    }
+  });
+</script>
+```
+
+## Common Pitfalls
+
+### 1. Required Fields Not Indicated
+
+```html
+<!-- Bad: No indication that a field is required -->
+<label for="email">Email</label>
+<input type="email" id="email" name="email" required>
+
+<!-- Good: Visual and programmatic indication -->
+<p class="form-intro">Fields marked with * are required.</p>
+<label for="email">
+  Email <span aria-hidden="true">*</span>
+</label>
+<input type="email" id="email" name="email" required aria-required="true">
+```
+
+### 2. No Submission Feedback
+
+```html
+<!-- Bad: Form submits with no confirmation -->
+<form action="/subscribe">
+  <input type="email" name="email">
+  <button type="submit">Subscribe</button>
+</form>
+
+<!-- Good: Clear success or error feedback -->
+<div id="form-feedback" role="status" aria-live="polite"></div>
+<!-- After submission, populate with success/error message and move focus -->
+```
+
+### 3. Complex Forms Without Grouping
+
+```html
+<!-- Bad: Flat form with no grouping -->
+<label for="ship-name">Shipping Name</label>
+<input type="text" id="ship-name">
+<label for="ship-address">Shipping Address</label>
+<input type="text" id="ship-address">
+<label for="bill-name">Billing Name</label>
+<input type="text" id="bill-name">
+<label for="bill-address">Billing Address</label>
+<input type="text" id="bill-address">
+
+<!-- Good: Grouped with fieldset and legend -->
+<fieldset>
+  <legend>Shipping Address</legend>
+  <label for="ship-name">Name</label>
+  <input type="text" id="ship-name" autocomplete="shipping name">
+  <label for="ship-address">Address</label>
+  <input type="text" id="ship-address" autocomplete="shipping street-address">
+</fieldset>
+
+<fieldset>
+  <legend>Billing Address</legend>
+  <label for="bill-name">Name</label>
+  <input type="text" id="bill-name" autocomplete="billing name">
+  <label for="bill-address">Address</label>
+  <input type="text" id="bill-address" autocomplete="billing street-address">
+</fieldset>
+```
+
+### 4. Placeholder-Only Labels
+
+```html
+<!-- Bad: Placeholder disappears when typing -->
+<input type="email" placeholder="Email Address">
+
+<!-- Good: Persistent visible label -->
+<label for="email">Email Address</label>
+<input type="email" id="email" name="email" placeholder="name@example.com">
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Can navigate to all form fields using Tab
+- [ ] Can activate buttons with Enter and Space
+- [ ] Can select checkboxes and radios with Space
+- [ ] Tab order follows the visual layout
+- [ ] Focus indicators are visible on all interactive elements
+
+### Screen Reader Form Navigation
+- [ ] All labels are announced when entering fields
+- [ ] Required fields are identified
+- [ ] Fieldset legends are announced when entering groups
+- [ ] Help text and descriptions are available
+- [ ] Error messages are announced when they appear
+
+### Error Recovery Flow
+- [ ] Errors are clearly identified with descriptive text
+- [ ] Focus moves to the first error or an error summary
+- [ ] Suggestions are provided for fixable errors
+- [ ] User can correct and resubmit without losing data
+- [ ] Success confirmation is announced after submission
+
+## Related Components
+
+- [Accessible Inputs](../forms/accessible-inputs.mdx) - Input field accessibility
+- [Error Handling](../forms/error-handling/error-handling.mdx) - Form error patterns
+- [Form Validation](../forms/validation/form-validation.mdx) - Validation techniques
+- [Accessible Modals](../interactive/modals.mdx) - Modal form patterns
+
+## Resources
+
+- [W3C WAI Forms Tutorial](https://www.w3.org/WAI/tutorials/forms/)
+- [MDN HTML Form Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element#forms)
+- [WebAIM Form Accessibility](https://webaim.org/techniques/forms/)
+- [WAI-ARIA Authoring Practices - Form](https://www.w3.org/WAI/ARIA/apg/patterns/form/)

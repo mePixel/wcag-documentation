@@ -1,0 +1,344 @@
+---
+title: "Accessible Video"
+description: "Video players, captions, and audio description patterns"
+---
+
+# Accessible Video
+
+Video content must be accessible to all users, including those who cannot hear the audio, see the visual content, or use a mouse. This requires captions, audio descriptions, transcripts, and keyboard-operable player controls.
+
+## Overview
+
+Accessible video ensures that the information conveyed through video is available to everyone regardless of their abilities. This includes providing text alternatives for audio content (captions), audio alternatives for visual content (audio descriptions), and ensuring the video player itself is operable via keyboard and screen reader.
+
+### Key Concepts
+
+- **Captions**: Synchronized text displays of audio content including dialogue, sound effects, and speaker identification
+- **Audio Descriptions**: Narration describing visual content that is not conveyed through the main audio track
+- **Transcripts**: Full text versions of all audio and visual information
+- **Accessible Player Controls**: Keyboard-operable, screen-reader-friendly playback controls
+
+## WCAG Requirements
+
+### Perceivable
+- **1.2.1 Audio-only and Video-only (Prerecorded)**: Prerecorded video-only content must have an audio alternative or text description
+- **1.2.2 Captions (Prerecorded)**: Captions must be provided for all prerecorded audio content
+- **1.2.3 Audio Description or Media Alternative (Prerecorded)**: An audio description or text alternative must be provided for prerecorded video
+- **1.2.5 Audio Description (Prerecorded)**: Audio description must be provided for prerecorded video (Level AA)
+- **1.2.8 Media Alternative (Prerecorded)**: A text transcript must be provided for all prerecorded media (Level AAA)
+
+### Operable
+- **2.1.1 Keyboard**: All video player controls must be keyboard accessible
+- **2.2.2 Pause, Stop, Hide**: Auto-playing video must have a mechanism to pause, stop, or hide it
+
+### Understandable
+- **1.3.1 Info and Relationships**: Player controls and their labels must be programmatically determinable
+
+## Implementation Patterns
+
+### Video Element with Captions
+
+Use the `<track>` element to provide WebVTT caption files for video content.
+
+```html
+<figure>
+  <video 
+    id="tutorial-video"
+    controls
+    width="640" 
+    height="360"
+    poster="tutorial-poster.jpg"
+    aria-describedby="video-description"
+  >
+    <source src="tutorial.mp4" type="video/mp4">
+    <source src="tutorial.webm" type="video/webm">
+    <track 
+      kind="captions" 
+      src="tutorial-captions.vtt" 
+      srclang="en" 
+      label="English captions"
+      default
+    >
+    <track 
+      kind="descriptions" 
+      src="tutorial-descriptions.vtt" 
+      srclang="en" 
+      label="English audio descriptions"
+    >
+    Your browser does not support the video element.
+  </video>
+  <figcaption id="video-description">
+    A 5-minute tutorial demonstrating how to create accessible forms, 
+    covering label association, error handling, and keyboard navigation.
+  </figcaption>
+</figure>
+```
+
+### WebVTT Caption File
+
+WebVTT files provide synchronized captions with timing information.
+
+```vtt
+WEBVTT
+
+00:00:01.000 --> 00:00:04.000
+Welcome to this tutorial on
+accessible form design.
+
+00:00:04.500 --> 00:00:08.000
+Today we'll cover three key topics:
+labels, error messages, and keyboard support.
+
+00:00:08.500 --> 00:00:12.000
+First, let's look at how to properly
+associate labels with form inputs.
+
+00:00:13.000 --> 00:00:15.000
+[typing sounds]
+
+00:00:15.500 --> 00:00:20.000
+The "for" attribute on the label element
+must match the "id" on the input.
+
+00:00:21.000 --> 00:00:24.000
+<narrator> This ensures screen readers
+can identify each field correctly.</narrator>
+```
+
+### Accessible Custom Player Controls
+
+When building custom video player controls, ensure every button has an accessible name, role, and is keyboard operable.
+
+```html
+<div class="video-player" role="region" aria-label="Video player">
+  <video id="main-video" width="640" height="360">
+    <source src="presentation.mp4" type="video/mp4">
+    <track kind="captions" src="captions.vtt" srclang="en" label="English">
+  </video>
+
+  <div class="controls" role="toolbar" aria-label="Video controls">
+    <button 
+      type="button" 
+      id="play-pause" 
+      aria-label="Play video"
+      aria-pressed="false"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <polygon id="play-icon" points="5,3 17,10 5,17" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button 
+      type="button" 
+      id="stop" 
+      aria-label="Stop video"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <rect x="3" y="3" width="14" height="14" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button 
+      type="button" 
+      id="mute-unmute" 
+      aria-label="Mute audio"
+      aria-pressed="false"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <path d="M3 7h4l5-4v14l-5-4H3z" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <div class="volume-slider" role="group" aria-label="Volume control">
+      <label for="volume-range" class="sr-only">Volume</label>
+      <input 
+        type="range" 
+        id="volume-range" 
+        min="0" 
+        max="1" 
+        step="0.1" 
+        value="1"
+        aria-label="Volume level"
+      >
+    </div>
+
+    <button 
+      type="button" 
+      id="captions-toggle" 
+      aria-label="Enable captions"
+      aria-pressed="false"
+    >
+      <span aria-hidden="true">CC</span>
+    </button>
+
+    <div class="progress-bar" role="group" aria-label="Video progress">
+      <label for="progress-range" class="sr-only">Progress</label>
+      <input 
+        type="range" 
+        id="progress-range" 
+        min="0" 
+        max="100" 
+        step="1" 
+        value="0"
+        aria-label="Video progress percentage"
+      >
+    </div>
+
+    <span id="time-display" aria-live="off" aria-label="Current time">
+      0:00 / 5:30
+    </span>
+  </div>
+</div>
+```
+
+### Transcript Markup
+
+Provide a full transcript as an alternative to the video content.
+
+```html
+<details>
+  <summary>
+    <strong>Video Transcript: Accessible Form Design Tutorial</strong>
+  </summary>
+  <div class="transcript" role="region" aria-label="Video transcript">
+    <p>
+      <strong>[0:00]</strong> Welcome to this tutorial on accessible form design.
+    </p>
+    <p>
+      <strong>[0:04]</strong> Today we'll cover three key topics: labels, 
+      error messages, and keyboard support.
+    </p>
+    <p>
+      <strong>[0:08]</strong> <em>[Screen shows a form with unlabeled inputs]</em> 
+      First, let's look at how to properly associate labels with form inputs.
+    </p>
+    <p>
+      <strong>[0:13]</strong> <em>[Typing sounds]</em> 
+      The "for" attribute on the label element must match the "id" on the input.
+    </p>
+    <p>
+      <strong>[0:21]</strong> This ensures screen readers can identify 
+      each field correctly.
+    </p>
+  </div>
+</details>
+```
+
+### Preventing Auto-play Issues
+
+Videos that auto-play can be disorienting. Always provide controls and avoid auto-play with audio.
+
+```html
+<!-- Bad: Auto-playing video with audio -->
+<video src="promo.mp4" autoplay></video>
+
+<!-- Good: No auto-play, user has control -->
+<video src="promo.mp4" controls preload="metadata">
+  <track kind="captions" src="promo-captions.vtt" srclang="en" label="English">
+</video>
+
+<!-- Acceptable: Muted auto-play with visible controls to pause -->
+<video 
+  src="background-animation.mp4" 
+  autoplay 
+  muted 
+  loop 
+  playsinline
+  aria-label="Decorative background animation of flowing particles"
+>
+  <track kind="captions" src="animation-captions.vtt" srclang="en" label="English">
+</video>
+```
+
+## Common Pitfalls
+
+### 1. Missing Captions
+
+```html
+<!-- Bad: No captions provided -->
+<video src="interview.mp4" controls></video>
+
+<!-- Good: Captions via track element -->
+<video src="interview.mp4" controls>
+  <track kind="captions" src="interview-captions.vtt" srclang="en" label="English">
+</video>
+```
+
+### 2. Inaccessible Custom Player Controls
+
+```html
+<!-- Bad: Div-based controls without accessibility -->
+<div class="play-btn" onclick="playVideo()">▶</div>
+<div class="mute-btn" onclick="toggleMute()">🔇</div>
+
+<!-- Good: Button elements with accessible labels -->
+<button type="button" aria-label="Play video" onclick="playVideo()">
+  <svg aria-hidden="true"><!-- play icon --></svg>
+</button>
+<button type="button" aria-label="Mute audio" onclick="toggleMute()">
+  <svg aria-hidden="true"><!-- mute icon --></svg>
+</button>
+```
+
+### 3. Auto-playing Video Without Controls
+
+```html
+<!-- Bad: Auto-play, no way to stop -->
+<video src="hero.mp4" autoplay loop></video>
+
+<!-- Good: Provide pause button for auto-playing video -->
+<div class="video-container">
+  <video id="hero-video" src="hero.mp4" autoplay loop muted></video>
+  <button 
+    type="button" 
+    class="pause-btn" 
+    aria-label="Pause background video"
+    onclick="document.getElementById('hero-video').pause()"
+  >
+    <svg aria-hidden="true"><!-- pause icon --></svg>
+  </button>
+</div>
+```
+
+### 4. Missing Audio Descriptions
+
+For videos where important information is conveyed visually only (e.g., a chart appearing on screen without verbal explanation), audio descriptions are essential. Without them, users who are blind miss critical content.
+
+## Testing Checklist
+
+### Caption Accuracy
+- [ ] Captions are synchronized with the audio
+- [ ] All dialogue is included in captions
+- [ ] Sound effects and speaker changes are noted
+- [ ] Captions do not obscure important visual content
+- [ ] Caption file (WebVTT) has no syntax errors
+
+### Keyboard Navigation of Controls
+- [ ] Play/pause button is reachable via Tab
+- [ ] Volume control is operable with arrow keys
+- [ ] Progress bar is operable with arrow keys
+- [ ] Captions toggle is keyboard accessible
+- [ ] All controls have visible focus indicators
+- [ ] Tab order follows a logical sequence
+
+### Screen Reader Announcement
+- [ ] Player region is announced (e.g., "Video player, region")
+- [ ] Play/pause button announces its current state
+- [ ] Mute button announces its current state
+- [ ] Volume slider announces its current value
+- [ ] Progress bar announces current position
+- [ ] Captions toggle announces on/off state
+
+## Related Components
+
+- [Accessible Images](./images.mdx) - Image alt text and graphics
+- [Accessible Audio](./audio.mdx) - Audio players and transcripts
+- [Accessible Headings](../content/headings.mdx) - Content structure
+- [Skip Links](../navigation/skip-links/skip-link-basics.mdx) - Keyboard navigation patterns
+
+## Resources
+
+- [W3C WAI Media Accessibility](https://www.w3.org/WAI/media/av/)
+- [MDN HTML Video Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video)
+- [WebVTT Specification](https://w3c.github.io/webvtt/)
+- [Inclusive Components: Media Player](https://inclusive-components.design/)

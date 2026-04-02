@@ -1,0 +1,457 @@
+---
+title: "Accessible Modals"
+description: "Dialog boxes, overlays, and modal window accessibility patterns"
+---
+
+# Accessible Modals
+
+Modals (also called dialogs) are overlay windows that appear on top of the page content, requiring user interaction before returning to the main content. When built accessibly, they ensure all users can perceive, operate, and understand the dialog's purpose and controls.
+
+## Overview
+
+Accessible modals manage focus, trap keyboard navigation within their boundaries, and communicate their presence to assistive technologies. The key challenges are ensuring users know a modal has opened, can interact with all its controls, and can close it predictably to return to where they were.
+
+### Key Concepts
+
+- **Focus trapping**: Keyboard focus must stay within the modal while it is open
+- **Focus restoration**: Focus must return to the triggering element when the modal closes
+- **Semantic role**: The modal must identify itself as a dialog to assistive technologies
+- **Background inertness**: Content behind the modal should not be interactive
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: The dialog's relationship to the page content must be programmatically determinable
+
+### Operable
+- **2.1.1 Keyboard**: All modal functionality must be operable via keyboard
+- **2.1.2 No Keyboard Trap**: Users must be able to escape the modal (e.g., via Escape key) — focus trapping within a modal is acceptable as long as a clear close mechanism exists
+- **2.4.3 Focus Order**: Focus must move to the modal when it opens and stay within it
+
+### Robust
+- **4.1.2 Name, Role, Value**: The modal must have an accessible name, dialog role, and current state
+
+## Implementation Patterns
+
+### Native HTML `<dialog>` Element
+
+The native `<dialog>` element provides built-in modal behavior including focus management and Escape key handling. This is the preferred approach when browser support allows it.
+
+```html
+<dialog id="confirm-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+  <div class="dialog-content">
+    <h2 id="dialog-title">Confirm Deletion</h2>
+    <p id="dialog-desc">Are you sure you want to delete this item? This action cannot be undone.</p>
+    <div class="dialog-actions">
+      <button type="button" id="confirm-btn">Delete</button>
+      <button type="button" id="cancel-btn">Cancel</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById('confirm-dialog');
+  const openBtn = document.getElementById('open-dialog-btn');
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  openBtn.addEventListener('click', () => {
+    dialog.showModal(); // Opens as a modal with backdrop and focus trap
+  });
+
+  cancelBtn.addEventListener('click', () => {
+    dialog.close(); // Focus returns to openBtn automatically
+  });
+
+  // Handle backdrop click to close
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) {
+      dialog.close();
+    }
+  });
+</script>
+
+<style>
+  dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 480px;
+    width: 90%;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .dialog-content {
+    padding: 1.5rem;
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+</style>
+```
+
+### Custom Modal with ARIA
+
+When using a custom modal implementation, you must manually handle focus trapping, Escape key behavior, and ARIA attributes.
+
+```html
+<div 
+  class="modal-overlay" 
+  id="modal-overlay" 
+  role="dialog" 
+  aria-modal="true" 
+  aria-labelledby="modal-title"
+  aria-describedby="modal-desc"
+  hidden
+>
+  <div class="modal" role="document">
+    <div class="modal-header">
+      <h2 id="modal-title">Settings</h2>
+      <button 
+        type="button" 
+        class="modal-close" 
+        aria-label="Close settings dialog"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p id="modal-desc">Adjust your account preferences below.</p>
+      <!-- Modal content here -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-save">Save Changes</button>
+      <button type="button" class="btn-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+```
+
+### Focus Trap JavaScript Implementation
+
+A focus trap ensures Tab and Shift+Tab cycle only through focusable elements within the modal.
+
+```javascript
+function createFocusTrap(container) {
+  const focusableSelectors = [
+    'a[href]',
+    'button:not([disabled])',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])'
+  ];
+
+  let previouslyFocusedElement = null;
+
+  function getFocusableElements() {
+    return Array.from(
+      container.querySelectorAll(focusableSelectors.join(','))
+    ).filter(el => el.offsetParent !== null); // Only visible elements
+  }
+
+  function activate() {
+    previouslyFocusedElement = document.activeElement;
+    const focusableElements = getFocusableElements();
+
+    // Move focus to the first focusable element (or the container itself)
+    if (focusableElements.length > 0) {
+      focusableElements[0].focus();
+    } else {
+      container.setAttribute('tabindex', '-1');
+      container.focus();
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('focusin', handleFocusIn);
+  }
+
+  function deactivate() {
+    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener('focusin', handleFocusIn);
+
+    // Restore focus to the element that opened the modal
+    if (previouslyFocusedElement) {
+      previouslyFocusedElement.focus();
+    }
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+      return;
+    }
+
+    if (e.key !== 'Tab') return;
+
+    const focusableElements = getFocusableElements();
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }
+
+  function handleFocusIn(e) {
+    if (!container.contains(e.target)) {
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length > 0) {
+        focusableElements[0].focus();
+      }
+    }
+  }
+
+  return { activate, deactivate };
+}
+```
+
+### Modal with Form
+
+Modals frequently contain forms. Ensure the form is fully accessible with proper labels, error handling, and submission feedback.
+
+```html
+<dialog id="feedback-dialog" aria-labelledby="feedback-title">
+  <form method="dialog" class="feedback-form">
+    <div class="dialog-header">
+      <h2 id="feedback-title">Send Feedback</h2>
+      <button type="button" class="close-btn" aria-label="Close feedback dialog">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="dialog-body">
+      <div class="form-group">
+        <label for="feedback-name">Your Name <span aria-hidden="true">*</span></label>
+        <input 
+          type="text" 
+          id="feedback-name" 
+          name="name" 
+          required 
+          aria-required="true"
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="feedback-message">Message <span aria-hidden="true">*</span></label>
+        <textarea 
+          id="feedback-message" 
+          name="message" 
+          rows="4" 
+          required 
+          aria-required="true"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="dialog-footer">
+      <button type="submit" class="btn-primary">Send</button>
+      <button type="button" class="btn-secondary" id="feedback-cancel">Cancel</button>
+    </div>
+  </form>
+</dialog>
+```
+
+### Stacking Dialogs
+
+When opening a dialog from within another dialog, each dialog must maintain its own focus trap. The most recent dialog receives focus, and closing it returns focus to the previous dialog.
+
+```javascript
+// Maintain a stack of active dialogs
+const dialogStack = [];
+
+function openDialog(dialogEl, triggerEl) {
+  dialogStack.push({ dialog: dialogEl, trigger: triggerEl });
+
+  // Mark previous dialog as inert if stacking
+  if (dialogStack.length > 1) {
+    const previousDialog = dialogStack[dialogStack.length - 2].dialog;
+    previousDialog.setAttribute('aria-hidden', 'true');
+    previousDialog.inert = true;
+  }
+
+  dialogEl.removeAttribute('hidden');
+  dialogEl.removeAttribute('aria-hidden');
+
+  // Move focus into the new dialog
+  const firstFocusable = dialogEl.querySelector(
+    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  );
+  if (firstFocusable) firstFocusable.focus();
+}
+
+function closeTopDialog() {
+  const entry = dialogStack.pop();
+  if (!entry) return;
+
+  entry.dialog.setAttribute('hidden', '');
+  entry.dialog.setAttribute('aria-hidden', 'true');
+
+  // Restore previous dialog
+  if (dialogStack.length > 0) {
+    const previousEntry = dialogStack[dialogStack.length - 1];
+    previousEntry.dialog.removeAttribute('aria-hidden');
+    previousEntry.dialog.inert = false;
+    const firstFocusable = previousEntry.dialog.querySelector(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (firstFocusable) firstFocusable.focus();
+  } else {
+    // No more dialogs — return focus to the original trigger
+    entry.trigger.focus();
+  }
+}
+```
+
+## Common Pitfalls
+
+### 1. No Focus Trap
+
+```html
+<!-- Bad: Focus can escape the modal -->
+<div class="modal" role="dialog" aria-modal="true">
+  <h2>Confirm Action</h2>
+  <button>OK</button>
+</div>
+<!-- User can Tab to elements behind the modal -->
+
+<!-- Good: Focus is trapped within the modal -->
+<div class="modal" role="dialog" aria-modal="true" id="trapped-modal">
+  <h2>Confirm Action</h2>
+  <button>OK</button>
+  <button>Cancel</button>
+</div>
+<!-- JavaScript focus trap ensures Tab cycles within modal -->
+```
+
+### 2. Focus Not Restored on Close
+
+```javascript
+// Bad: Focus disappears after closing
+function closeModal() {
+  modal.style.display = 'none';
+  // Focus is lost — user must Tab from the top of the page
+}
+
+// Good: Focus returns to the trigger element
+let triggerElement = null;
+
+function openModal(trigger) {
+  triggerElement = trigger;
+  modal.style.display = 'block';
+  modal.querySelector('button').focus();
+}
+
+function closeModal() {
+  modal.style.display = 'none';
+  if (triggerElement) {
+    triggerElement.focus();
+  }
+}
+```
+
+### 3. No Escape Key Handler
+
+```javascript
+// Bad: No way to close with Escape
+// User is stuck unless they find the close button
+
+// Good: Escape key closes the modal
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modal.hasAttribute('open')) {
+    closeModal();
+  }
+});
+```
+
+### 4. Background Still Scrollable
+
+```javascript
+// Bad: Page scrolls behind the modal
+function openModal() {
+  modal.show();
+}
+
+// Good: Prevent background scrolling
+function openModal() {
+  document.body.style.overflow = 'hidden';
+  modal.show();
+}
+
+function closeModal() {
+  document.body.style.overflow = '';
+  modal.close();
+}
+```
+
+### 5. Missing aria-modal Attribute
+
+```html
+<!-- Bad: Screen reader doesn't know content is modal -->
+<div class="modal-overlay">
+  <div class="modal">
+    <h2>Important Message</h2>
+    <p>Please read this carefully.</p>
+  </div>
+</div>
+
+<!-- Good: Screen reader announces modal context -->
+<div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="msg-title">
+  <div class="modal">
+    <h2 id="msg-title">Important Message</h2>
+    <p>Please read this carefully.</p>
+  </div>
+</div>
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Tab key cycles through all focusable elements within the modal
+- [ ] Shift+Tab cycles backward through focusable elements
+- [ ] Focus does not move to elements behind the modal
+- [ ] Escape key closes the modal
+- [ ] Focus returns to the triggering element after closing
+
+### Screen Reader Testing
+- [ ] Screen reader announces the modal's title when it opens
+- [ ] Screen reader identifies the element as a dialog
+- [ ] Content behind the modal is not announced (aria-modal is respected)
+- [ ] Close button has an accessible label
+- [ ] Form fields within the modal are properly announced with labels
+
+### Functional Testing
+- [ ] Backdrop click closes the modal (if implemented)
+- [ ] Background page does not scroll while modal is open
+- [ ] Multiple stacked dialogs maintain proper focus management
+- [ ] Modal closes and cleans up properly when form is submitted
+
+## Related Components
+
+- [Accessible Tabs](./tabs.mdx) - Tabbed interface patterns
+- [Accessible Accordions](./accordions.mdx) - Expandable content sections
+- [Form Accessibility Patterns](../patterns/form-patterns.mdx) - Form-related accessibility
+- [Accessible Inputs](../forms/accessible-inputs.mdx) - Form input accessibility
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Dialog Modal](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+- [MDN HTML Dialog Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+- [Scott O'Hara's Accessible Dialogs](https://www.scottohara.me/blog/2019/03/05/open-dialog.html)
+- [Hiding Content from Screen Readers with inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/inert)

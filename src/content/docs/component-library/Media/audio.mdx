@@ -1,0 +1,366 @@
+---
+title: "Accessible Audio"
+description: "Audio players, transcripts, and audio content accessibility"
+---
+
+# Accessible Audio
+
+Audio content must be accessible to all users, including those who cannot hear the audio, those who use assistive technologies, and those who need keyboard-operable controls. This requires transcripts, accessible player interfaces, and careful handling of auto-play behavior.
+
+## Overview
+
+Accessible audio ensures that spoken content, music, and sound effects are available through text alternatives and that audio players are operable by all users. Unlike video, audio-only content requires transcripts rather than captions, since there is no visual component to synchronize with.
+
+### Key Concepts
+
+- **Transcripts**: Full text versions of all spoken content and relevant sound information
+- **Accessible Player Controls**: Keyboard-operable playback, volume, and progress controls
+- **Auto-play Prevention**: Audio should never start playing without user consent
+- **Audio Alternatives**: Providing alternatives for audio content that conveys information
+
+## WCAG Requirements
+
+### Perceivable
+- **1.1.1 Non-text Content**: Audio content must have a text alternative that serves the equivalent purpose
+- **1.2.1 Audio-only and Video-only (Prerecorded)**: Prerecorded audio-only content must have a text transcript
+- **1.2.8 Media Alternative (Prerecorded)**: A text transcript must be provided for all prerecorded media (Level AAA)
+
+### Operable
+- **2.1.1 Keyboard**: All audio player controls must be keyboard accessible
+- **2.2.2 Pause, Stop, Hide**: Auto-playing audio must have a mechanism to pause, stop, or hide it
+- **1.4.2 Audio Control**: Auto-playing audio that lasts more than 3 seconds must have a pause, stop, or volume control mechanism
+
+## Implementation Patterns
+
+### Basic Audio Element with Controls
+
+The native `<audio>` element with the `controls` attribute provides built-in, keyboard-accessible playback controls.
+
+```html
+<figure>
+  <audio 
+    id="podcast-episode" 
+    controls
+    aria-describedby="audio-description"
+  >
+    <source src="episode-42.mp3" type="audio/mpeg">
+    <source src="episode-42.ogg" type="audio/ogg">
+    Your browser does not support the audio element.
+  </audio>
+  <figcaption id="audio-description">
+    Episode 42 of the Accessibility Matters podcast: 
+    "Understanding Screen Reader Navigation" — 12 minutes.
+  </figcaption>
+</figure>
+```
+
+### Transcript Markup
+
+Provide a complete transcript for all audio content. Use a `<details>` element to keep the page tidy while making the transcript easily accessible.
+
+```html
+<div class="audio-component" role="region" aria-label="Audio player with transcript">
+  <audio id="interview" controls>
+    <source src="interview.mp3" type="audio/mpeg">
+  </audio>
+
+  <details>
+    <summary>
+      <strong>Transcript: Interview with Accessibility Expert Dr. Chen</strong>
+    </summary>
+    <div class="transcript" role="region" aria-label="Audio transcript">
+      <p>
+        <strong>[0:00]</strong> 
+        <em>[Theme music plays briefly and fades out]</em>
+      </p>
+      <p>
+        <strong>Host:</strong> Welcome to today's interview. 
+        I'm joined by Dr. Sarah Chen, a leading researcher in 
+        web accessibility. Dr. Chen, thank you for being here.
+      </p>
+      <p>
+        <strong>[0:08]</strong> 
+        <strong>Dr. Chen:</strong> Thank you for having me. 
+        I'm excited to discuss how we can make the web more inclusive.
+      </p>
+      <p>
+        <strong>[0:14]</strong> 
+        <strong>Host:</strong> Let's start with the basics. 
+        What does accessibility mean in the context of web development?
+      </p>
+      <p>
+        <strong>[0:20]</strong> 
+        <strong>Dr. Chen:</strong> Web accessibility means that 
+        websites, tools, and technologies are designed and developed 
+        so that people with disabilities can use them. 
+        <em>[Pause]</em> More specifically, it means that people 
+        can perceive, understand, navigate, and interact with the web.
+      </p>
+      <p>
+        <strong>[0:35]</strong> 
+        <em>[Brief musical interlude]</em>
+      </p>
+    </div>
+  </details>
+</div>
+```
+
+### Accessible Custom Audio Player
+
+When building a custom audio player, ensure all controls are keyboard accessible and properly labeled.
+
+```html
+<div class="audio-player" role="region" aria-label="Audio player">
+  <audio id="audio-source" preload="metadata">
+    <source src="presentation.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="player-controls" role="toolbar" aria-label="Audio controls">
+    <button 
+      type="button" 
+      id="play-pause" 
+      aria-label="Play audio"
+      aria-pressed="false"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <polygon points="5,3 17,10 5,17" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button 
+      type="button" 
+      id="stop-btn" 
+      aria-label="Stop audio"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <rect x="3" y="3" width="14" height="14" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button 
+      type="button" 
+      id="rewind-btn" 
+      aria-label="Rewind 10 seconds"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <path d="M10 4 L2 10 L10 16 M18 4 L10 10 L18 16" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <button 
+      type="button" 
+      id="forward-btn" 
+      aria-label="Forward 10 seconds"
+    >
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+        <path d="M2 4 L10 10 L2 16 M10 4 L18 10 L10 16" fill="currentColor"/>
+      </svg>
+    </button>
+
+    <div class="volume-control" role="group" aria-label="Volume control">
+      <button 
+        type="button" 
+        id="mute-btn" 
+        aria-label="Mute audio"
+        aria-pressed="false"
+      >
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20">
+          <path d="M3 7h4l5-4v14l-5-4H3z" fill="currentColor"/>
+        </svg>
+      </button>
+      <label for="volume-slider" class="sr-only">Volume</label>
+      <input 
+        type="range" 
+        id="volume-slider" 
+        min="0" 
+        max="1" 
+        step="0.1" 
+        value="1"
+      >
+    </div>
+
+    <div class="progress-control" role="group" aria-label="Audio progress">
+      <label for="progress-slider" class="sr-only">Progress</label>
+      <input 
+        type="range" 
+        id="progress-slider" 
+        min="0" 
+        max="100" 
+        step="1" 
+        value="0"
+        aria-label="Audio progress percentage"
+      >
+    </div>
+
+    <span id="time-display" aria-live="off" aria-label="Current time">
+      0:00 / 12:30
+    </span>
+  </div>
+</div>
+```
+
+### Audio with Multiple Sources
+
+Provide audio in multiple formats for browser compatibility, and clearly label each source.
+
+```html
+<audio controls aria-label="Pronunciation guide: 'Accessibility'">
+  <source src="accessibility.mp3" type="audio/mpeg">
+  <source src="accessibility.ogg" type="audio/ogg">
+  <source src="accessibility.wav" type="audio/wav">
+  <p>
+    Your browser does not support the audio element. 
+    <a href="accessibility.mp3">Download the audio file</a>.
+  </p>
+</audio>
+```
+
+### Preventing Auto-play
+
+Audio should never start automatically. Always require user interaction to begin playback.
+
+```html
+<!-- Bad: Auto-playing audio -->
+<audio src="background-music.mp3" autoplay loop></audio>
+
+<!-- Good: User-initiated playback -->
+<audio id="podcast" controls preload="none">
+  <source src="podcast-episode.mp3" type="audio/mpeg">
+</audio>
+
+<!-- If audio must auto-play (e.g., notification), provide immediate stop -->
+<div class="notification-audio" role="alert">
+  <audio id="notification-sound" src="alert.mp3" autoplay></audio>
+  <button 
+    type="button" 
+    onclick="document.getElementById('notification-sound').pause()"
+    aria-label="Stop notification sound"
+  >
+    Stop sound
+  </button>
+</div>
+```
+
+## Common Pitfalls
+
+### 1. Auto-playing Audio Without Controls
+
+```html
+<!-- Bad: Auto-playing with no way to stop -->
+<audio src="music.mp3" autoplay loop></audio>
+
+<!-- Good: Provide controls and no auto-play -->
+<audio src="music.mp3" controls preload="metadata">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+```
+
+### 2. Missing Transcripts
+
+```html
+<!-- Bad: Audio with no text alternative -->
+<audio src="lecture.mp3" controls></audio>
+
+<!-- Good: Audio with transcript link or inline transcript -->
+<audio src="lecture.mp3" controls></audio>
+<details>
+  <summary>View transcript</summary>
+  <div class="transcript">
+    <p>Full transcript content here...</p>
+  </div>
+</details>
+```
+
+### 3. No Pause or Stop Control
+
+```html
+<!-- Bad: Short audio clip with no controls -->
+<audio src="notification.mp3" autoplay></audio>
+
+<!-- Good: Provide a way to stop the audio -->
+<button 
+  type="button" 
+  id="stop-notification"
+  aria-label="Stop notification sound"
+>
+  Stop
+</button>
+```
+
+### 4. Using Divs or Spans as Player Controls
+
+```html
+<!-- Bad: Non-semantic controls -->
+<div class="play" onclick="playAudio()">▶</div>
+<span class="stop" onclick="stopAudio()">⏹</span>
+
+<!-- Good: Button elements with accessible labels -->
+<button type="button" aria-label="Play audio" onclick="playAudio()">
+  <svg aria-hidden="true"><!-- play icon --></svg>
+</button>
+<button type="button" aria-label="Stop audio" onclick="stopAudio()">
+  <svg aria-hidden="true"><!-- stop icon --></svg>
+</button>
+```
+
+### 5. Missing Audio Description in Context
+
+Audio content embedded in a page should have surrounding context that explains what the audio is about, even before the user interacts with it.
+
+```html
+<!-- Bad: Audio with no context -->
+<audio src="interview.mp3" controls></audio>
+
+<!-- Good: Audio with descriptive context -->
+<div class="audio-section">
+  <h3>Interview: The Future of Web Standards</h3>
+  <p>A 15-minute conversation with W3C representative about upcoming changes to web standards.</p>
+  <audio src="interview.mp3" controls>
+    <source src="interview.mp3" type="audio/mpeg">
+  </audio>
+  <details>
+    <summary>Read transcript</summary>
+    <!-- Transcript content -->
+  </details>
+</div>
+```
+
+## Testing Checklist
+
+### Transcript Availability
+- [ ] A transcript is available for all prerecorded audio content
+- [ ] The transcript includes all spoken words
+- [ ] Speaker identification is included when multiple speakers are present
+- [ ] Relevant sound effects and music are noted in the transcript
+- [ ] Timestamps are provided for longer audio content
+- [ ] The transcript is easily discoverable (linked or inline)
+
+### Keyboard Control
+- [ ] Play/pause button is reachable via Tab
+- [ ] Stop button is reachable via Tab
+- [ ] Volume control is operable with arrow keys
+- [ ] Progress bar is operable with arrow keys
+- [ ] All controls have visible focus indicators
+- [ ] Space bar toggles play/pause when the player is focused
+
+### Screen Reader Compatibility
+- [ ] The audio player region is announced
+- [ ] Play/pause button announces its current state
+- [ ] Volume control announces its current value
+- [ ] Progress indicator announces current position
+- [ ] The transcript is accessible via screen reader navigation
+- [ ] Audio does not auto-play and interfere with screen reader output
+
+## Related Components
+
+- [Accessible Images](./images.mdx) - Image alt text and graphics
+- [Accessible Video](./video.mdx) - Video captions and audio descriptions
+- [Accessible Headings](../content/headings.mdx) - Content structure
+- [Accessible Lists](../content/lists.mdx) - List patterns for content
+
+## Resources
+
+- [W3C WAI Media Accessibility](https://www.w3.org/WAI/media/av/)
+- [MDN HTML Audio Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio)
+- [WebAIM Audio Accessibility](https://webaim.org/techniques/audio/)
+- [WCAG 1.2 Time-Based Media](https://www.w3.org/WAI/WCAG21/Understanding/time-based-media)

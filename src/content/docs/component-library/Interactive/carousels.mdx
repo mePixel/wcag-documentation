@@ -1,0 +1,506 @@
+---
+title: "Accessible Carousels"
+description: "Image sliders, galleries, and rotating content with accessibility controls"
+---
+
+# Accessible Carousels
+
+Carousels (also called sliders or image rotators) display a series of content items one at a time, often with auto-rotation. Making carousels accessible requires providing controls for navigation, pause functionality for auto-rotating content, and clear communication of slide changes to assistive technologies.
+
+## Overview
+
+Accessible carousels give users full control over content rotation. Users must be able to pause auto-advancing slides, navigate between slides with keyboard controls, and understand which slide is currently displayed. The `prefers-reduced-motion` media query should disable auto-rotation for users who have requested reduced motion.
+
+### Key Concepts
+
+- **Auto-rotation control**: Users must be able to start, stop, and pause automatic slide advancement
+- **Slide indicators**: Visual and programmatic indicators showing the current slide position
+- **Navigation controls**: Previous/next buttons and direct slide selection
+- **Live regions**: Announcing slide changes to screen reader users
+
+## WCAG Requirements
+
+### Perceivable
+- **1.2.2 Captions (Prerecorded)**: If slides contain video, captions must be provided
+
+### Operable
+- **2.1.1 Keyboard**: All carousel controls must be operable via keyboard
+- **2.2.1 Timing Adjustable**: Auto-rotating content must allow users to turn off, adjust, or extend the time limit
+- **2.2.2 Pause, Stop, Hide**: Auto-updating content must allow users to pause, stop, or hide it
+- **2.4.3 Focus Order**: Focus must follow a logical order through carousel controls and content
+
+### Robust
+- **4.1.2 Name, Role, Value**: Carousel controls must have accessible names and communicate their state
+
+## Implementation Patterns
+
+### Basic Carousel with Controls
+
+A basic accessible carousel provides previous/next buttons, a slide counter, and proper ARIA structure.
+
+```html
+<section 
+  class="carousel" 
+  aria-label="Featured articles"
+  aria-roledescription="carousel"
+>
+  <div class="carousel-controls-top">
+    <span class="slide-counter" aria-live="polite">
+      Slide <span id="current-slide">1</span> of <span id="total-slides">4</span>
+    </span>
+    <div class="carousel-actions">
+      <button 
+        type="button"
+        class="carousel-prev"
+        aria-label="Previous slide"
+      >
+        <span aria-hidden="true">◀</span>
+      </button>
+      <button 
+        type="button"
+        class="carousel-next"
+        aria-label="Next slide"
+      >
+        <span aria-hidden="true">▶</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="carousel-track" aria-live="off">
+    <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 4">
+      <img src="article-1.jpg" alt="Team collaborating on a whiteboard" width="800" height="450">
+      <div class="slide-content">
+        <h3>Building Accessible Products</h3>
+        <p>How our team integrates accessibility into every stage of development.</p>
+      </div>
+    </div>
+
+    <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="2 of 4" hidden>
+      <img src="article-2.jpg" alt="Laptop showing code editor with accessibility tests" width="800" height="450">
+      <div class="slide-content">
+        <h3>Testing for Accessibility</h3>
+        <p>A comprehensive guide to automated and manual accessibility testing.</p>
+      </div>
+    </div>
+
+    <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="3 of 4" hidden>
+      <img src="article-3.jpg" alt="Person using a screen reader on a mobile device" width="800" height="450">
+      <div class="slide-content">
+        <h3>Mobile Accessibility</h3>
+        <p>Best practices for creating accessible mobile web experiences.</p>
+      </div>
+    </div>
+
+    <div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="4 of 4" hidden>
+      <img src="article-4.jpg" alt="Color contrast checker showing passing ratios" width="800" height="450">
+      <div class="slide-content">
+        <h3>Color and Contrast</h3>
+        <p>Understanding color accessibility and contrast requirements.</p>
+      </div>
+    </div>
+  </div>
+</section>
+```
+
+### Carousel with Auto-Play and Pause
+
+Auto-rotating carousels must include a pause button and respect user preferences for reduced motion.
+
+```html
+<section 
+  class="carousel" 
+  aria-label="Product showcase"
+  aria-roledescription="carousel"
+>
+  <div class="carousel-controls">
+    <button 
+      type="button"
+      class="carousel-prev"
+      aria-label="Previous slide"
+    >
+      <span aria-hidden="true">◀ Previous</span>
+    </button>
+
+    <button 
+      type="button"
+      class="carousel-pause"
+      aria-label="Pause automatic slide rotation"
+      id="pause-btn"
+    >
+      <span aria-hidden="true">⏸</span>
+    </button>
+
+    <button 
+      type="button"
+      class="carousel-next"
+      aria-label="Next slide"
+    >
+      <span aria-hidden="true">Next ▶</span>
+    </button>
+  </div>
+
+  <div class="carousel-track" id="carousel-track" aria-live="off" aria-atomic="true">
+    <!-- Slides here -->
+  </div>
+
+  <!-- Slide indicators (dot navigation) -->
+  <div class="carousel-indicators" role="tablist" aria-label="Slide selection">
+    <button 
+      role="tab" 
+      aria-selected="true" 
+      aria-label="Go to slide 1"
+      class="indicator active"
+    ></button>
+    <button 
+      role="tab" 
+      aria-selected="false" 
+      aria-label="Go to slide 2"
+      class="indicator"
+    ></button>
+    <button 
+      role="tab" 
+      aria-selected="false" 
+      aria-label="Go to slide 3"
+      class="indicator"
+    ></button>
+    <button 
+      role="tab" 
+      aria-selected="false" 
+      aria-label="Go to slide 4"
+      class="indicator"
+    ></button>
+  </div>
+</section>
+
+<script>
+  const carousel = {
+    track: document.getElementById('carousel-track'),
+    pauseBtn: document.getElementById('pause-btn'),
+    slides: null,
+    indicators: null,
+    currentIndex: 0,
+    isPlaying: true,
+    interval: null,
+    rotationSpeed: 5000,
+
+    init() {
+      this.slides = this.track.querySelectorAll('.carousel-slide');
+      this.indicators = document.querySelectorAll('.indicator');
+
+      // Check for reduced motion preference
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.isPlaying = false;
+        this.updatePauseButton();
+      } else {
+        this.startAutoPlay();
+      }
+
+      this.pauseBtn.addEventListener('click', () => this.toggleAutoPlay());
+
+      // Pause on hover and focus
+      this.track.addEventListener('mouseenter', () => this.pause());
+      this.track.addEventListener('mouseleave', () => {
+        if (this.isPlaying) this.startAutoPlay();
+      });
+
+      // Pause when any element inside receives focus
+      this.track.addEventListener('focusin', () => this.pause());
+      this.track.addEventListener('focusout', () => {
+        if (this.isPlaying) this.startAutoPlay();
+      });
+
+      // Keyboard navigation
+      document.querySelector('.carousel-prev').addEventListener('click', () => this.prev());
+      document.querySelector('.carousel-next').addEventListener('click', () => this.next());
+
+      // Indicator clicks
+      this.indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => this.goToSlide(index));
+      });
+    },
+
+    toggleAutoPlay() {
+      this.isPlaying = !this.isPlaying;
+      if (this.isPlaying) {
+        this.startAutoPlay();
+      } else {
+        this.pause();
+      }
+      this.updatePauseButton();
+    },
+
+    startAutoPlay() {
+      this.pause();
+      this.interval = setInterval(() => this.next(), this.rotationSpeed);
+    },
+
+    pause() {
+      if (this.interval) {
+        clearInterval(this.interval);
+        this.interval = null;
+      }
+    },
+
+    updatePauseButton() {
+      if (this.isPlaying) {
+        this.pauseBtn.setAttribute('aria-label', 'Pause automatic slide rotation');
+        this.pauseBtn.querySelector('span').textContent = '⏸';
+      } else {
+        this.pauseBtn.setAttribute('aria-label', 'Start automatic slide rotation');
+        this.pauseBtn.querySelector('span').textContent = '▶';
+      }
+    },
+
+    goToSlide(index) {
+      this.slides[this.currentIndex].hidden = true;
+      this.indicators[this.currentIndex].setAttribute('aria-selected', 'false');
+
+      this.currentIndex = index;
+
+      this.slides[this.currentIndex].hidden = false;
+      this.indicators[this.currentIndex].setAttribute('aria-selected', 'true');
+
+      // Announce slide change
+      const liveRegion = this.track;
+      liveRegion.setAttribute('aria-live', 'polite');
+      setTimeout(() => {
+        liveRegion.setAttribute('aria-live', 'off');
+      }, 500);
+    },
+
+    next() {
+      const nextIndex = (this.currentIndex + 1) % this.slides.length;
+      this.goToSlide(nextIndex);
+    },
+
+    prev() {
+      const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+      this.goToSlide(prevIndex);
+    }
+  };
+
+  carousel.init();
+</script>
+```
+
+### Carousel with Dot Indicators
+
+Dot indicators provide direct navigation to specific slides. Each indicator must have an accessible label and communicate its selected state.
+
+```html
+<div class="carousel-dots" role="tablist" aria-label="Choose a slide">
+  <button 
+    role="tab" 
+    class="dot active" 
+    aria-selected="true" 
+    aria-label="Slide 1: Building Accessible Products"
+    tabindex="0"
+  ></button>
+  <button 
+    role="tab" 
+    class="dot" 
+    aria-selected="false" 
+    aria-label="Slide 2: Testing for Accessibility"
+    tabindex="-1"
+  ></button>
+  <button 
+    role="tab" 
+    class="dot" 
+    aria-selected="false" 
+    aria-label="Slide 3: Mobile Accessibility"
+    tabindex="-1"
+  ></button>
+  <button 
+    role="tab" 
+    class="dot" 
+    aria-selected="false" 
+    aria-label="Slide 4: Color and Contrast"
+    tabindex="-1"
+  ></button>
+</div>
+
+<style>
+  .carousel-dots {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    padding: 1rem 0;
+  }
+
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #005fcc;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .dot[aria-selected="true"] {
+    background: #005fcc;
+  }
+
+  .dot:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+  }
+</style>
+```
+
+### Announcing Slide Changes with aria-live
+
+When slides change, screen reader users need to be informed. Use a live region to announce the current slide information.
+
+```html
+<!-- Live region for slide announcements -->
+<div class="sr-only" aria-live="polite" aria-atomic="true" id="carousel-announce">
+  <!-- Content is dynamically updated -->
+</div>
+
+<script>
+  function announceSlide(slideElement, index, total) {
+    const title = slideElement.querySelector('h3')?.textContent || `Slide ${index + 1}`;
+    const announcer = document.getElementById('carousel-announce');
+    announcer.textContent = `Now showing slide ${index + 1} of ${total}: ${title}`;
+  }
+</script>
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+```
+
+## Common Pitfalls
+
+### 1. Auto-Rotating Without Pause Control
+
+```html
+<!-- Bad: No way to stop auto-rotation -->
+<div class="carousel" id="auto-carousel">
+  <!-- Slides rotate every 3 seconds with no pause button -->
+</div>
+
+<!-- Good: Visible pause/play button -->
+<button 
+  type="button"
+  class="carousel-pause"
+  aria-label="Pause slide rotation"
+>
+  <span aria-hidden="true">⏸</span>
+</button>
+```
+
+### 2. No Keyboard Controls
+
+```html
+<!-- Bad: Only swipe or click navigation -->
+<div class="carousel" ontouchstart="handleSwipe()">
+  <!-- No keyboard-accessible controls -->
+</div>
+
+<!-- Good: Button-based navigation works with keyboard -->
+<button type="button" aria-label="Previous slide">Previous</button>
+<button type="button" aria-label="Next slide">Next</button>
+```
+
+### 3. Moving Content Traps Focus
+
+```javascript
+// Bad: Auto-rotation moves focus, disrupting the user
+setInterval(() => {
+  nextSlide();
+  slides[currentIndex].focus(); // Forces focus to new slide
+}, 5000);
+
+// Good: Auto-rotation changes content but does not move focus
+setInterval(() => {
+  nextSlide();
+  // Focus stays where it is; live region announces the change
+  announceSlideChange();
+}, 5000);
+```
+
+### 4. No Indication of Total Slides
+
+```html
+<!-- Bad: User doesn't know how many slides exist -->
+<div class="carousel">
+  <div class="slide">Content 1</div>
+  <div class="slide">Content 2</div>
+  <div class="slide">Content 3</div>
+</div>
+
+<!-- Good: Each slide indicates its position -->
+<div class="carousel-slide" role="group" aria-roledescription="slide" aria-label="1 of 3">
+  Content 1
+</div>
+```
+
+### 5. Not Respecting prefers-reduced-motion
+
+```javascript
+// Bad: Always auto-rotates regardless of user preference
+setInterval(nextSlide, 5000);
+
+// Good: Check for reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+if (!prefersReducedMotion.matches) {
+  startAutoPlay();
+}
+// Also listen for changes
+prefersReducedMotion.addEventListener('change', (e) => {
+  if (e.matches) {
+    pause();
+  }
+});
+```
+
+## Testing Checklist
+
+### Keyboard Navigation
+- [ ] Previous/Next buttons are focusable and activated with Enter/Space
+- [ ] Dot indicators are focusable and navigate to the correct slide
+- [ ] Tab key moves through all controls in a logical order
+- [ ] Focus indicators are visible on all interactive elements
+- [ ] Arrow keys can navigate between dot indicators (if using tablist pattern)
+
+### Screen Reader Testing
+- [ ] Carousel container is announced with its label
+- [ ] Slide changes are announced via live region
+- [ ] Current slide position is communicated (e.g., "slide 2 of 4")
+- [ ] Pause/play button state is announced
+- [ ] Slide content (images, headings, text) is accessible
+
+### Functional Testing
+- [ ] Pause button stops auto-rotation
+- [ ] Play button resumes auto-rotation
+- [ ] Auto-rotation pauses on hover
+- [ ] Auto-rotation pauses when a control receives focus
+- [ ] `prefers-reduced-motion` disables auto-rotation
+- [ ] All slides are reachable via previous/next and dot indicators
+
+## Related Components
+
+- [Accessible Tabs](./tabs.mdx) - Tabbed interface patterns
+- [Accessible Images](../media/images.mdx) - Image alt text and accessibility
+- [Accessible Video](../media/video.mdx) - Video captions and descriptions
+- [Interactive Patterns](../patterns/interactive-patterns.mdx) - Dynamic content patterns
+
+## Resources
+
+- [WAI-ARIA Authoring Practices - Carousel](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
+- [W3C WAI Carousel Tutorial](https://www.w3.org/WAI/tutorials/carousels/)
+- [Inclusive Components: A Content Slider](https://inclusive-components.design/a-content-slider/)
+- [MDN prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)

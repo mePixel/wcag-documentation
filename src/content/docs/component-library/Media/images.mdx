@@ -1,0 +1,306 @@
+---
+title: "Accessible Images"
+description: "Implementing accessible images, alt text, and graphics"
+---
+
+# Accessible Images
+
+Images are a fundamental part of web content. Ensuring they are accessible means all users, including those using screen readers or with slow connections, can understand the content and purpose of every image on the page.
+
+## Overview
+
+Accessible images require thoughtful consideration of their purpose within the content. Some images convey critical information and need descriptive text alternatives, while others are purely decorative and should be hidden from assistive technologies. The key is understanding the function each image serves.
+
+### Types of Images
+
+- **Informative images**: Convey meaning or information that isn't available in surrounding text
+- **Decorative images**: Add visual interest but carry no meaning
+- **Functional images**: Act as links or buttons (e.g., icons in navigation)
+- **Complex images**: Contain substantial information like charts, graphs, or diagrams
+- **Images of text**: Display text in a visual format (avoid when possible)
+
+## WCAG Requirements
+
+### Perceivable
+- **1.1.1 Non-text Content**: All non-text content must have a text alternative that serves the equivalent purpose
+- **1.3.1 Info and Relationships**: Information conveyed through images must be available in text form
+- **1.4.5 Images of Text**: Use actual text rather than images of text (Level AA)
+
+### Robust
+- **4.1.2 Name, Role, Value**: Image elements must have accessible names when meaningful
+
+## Implementation Patterns
+
+### Basic Image with Alt Text
+
+Every informative image must have an `alt` attribute that describes its content or function.
+
+```html
+<img 
+  src="golden-gate-bridge.jpg" 
+  alt="Golden Gate Bridge at sunset with orange sky reflecting on the water"
+  width="800" 
+  height="600"
+>
+```
+
+The alt text should be concise yet descriptive. Think about what you would say if you were describing the image to someone over the phone.
+
+### Decorative Images
+
+Images that are purely decorative and add no informational value should use an empty `alt` attribute. This tells screen readers to skip them.
+
+```html
+<!-- Decorative background image -->
+<img 
+  src="decorative-border.png" 
+  alt=""
+  role="presentation"
+  width="200" 
+  height="50"
+>
+
+<!-- Decorative image via CSS (preferred) -->
+<div class="decorative-accent" aria-hidden="true"></div>
+
+<style>
+  .decorative-accent {
+    background-image: url('decorative-pattern.png');
+    width: 200px;
+    height: 50px;
+  }
+</style>
+```
+
+### Functional Images
+
+Images used as links or buttons need alt text that describes the action or destination, not the image content.
+
+```html
+<!-- Image as a link -->
+<a href="/home">
+  <img src="logo.png" alt="Go to homepage" width="120" height="40">
+</a>
+
+<!-- Image button -->
+<button type="submit">
+  <img src="search-icon.png" alt="Search" width="20" height="20">
+</button>
+
+<!-- Icon-only button with visible label -->
+<button type="button" aria-label="Print this page">
+  <img src="print-icon.svg" alt="" width="20" height="20">
+</button>
+```
+
+### Complex Images with Long Descriptions
+
+Charts, graphs, and diagrams often need more description than the `alt` attribute can reasonably provide. Use `aria-describedby` to link to a longer description.
+
+```html
+<figure>
+  <img 
+    src="sales-chart-2024.png" 
+    alt="Bar chart showing quarterly sales for 2024"
+    aria-describedby="chart-description"
+    width="600" 
+    height="400"
+  >
+  <figcaption id="chart-description">
+    <strong>Q1 2024 Sales:</strong> $1.2 million (15% increase from Q4 2023). 
+    <strong>Q2 2024 Sales:</strong> $1.5 million (25% increase). 
+    <strong>Q3 2024 Sales:</strong> $1.3 million (13% decrease). 
+    <strong>Q4 2024 Sales:</strong> $1.8 million (38% increase). 
+    Overall trend shows steady growth with a seasonal dip in Q3.
+  </figcaption>
+</figure>
+```
+
+### SVG Accessibility
+
+Inline SVGs need accessible names. Use `<title>` and `<desc>` elements for complex descriptions.
+
+```html
+<!-- Simple SVG with aria-label -->
+<svg 
+  role="img" 
+  aria-label="Warning icon: yellow triangle with exclamation mark"
+  width="24" 
+  height="24" 
+  viewBox="0 0 24 24"
+>
+  <path d="M12 2L1 21h22L12 2z" fill="#FFC107"/>
+  <text x="12" y="18" text-anchor="middle" fill="#000" font-size="12">!</text>
+</svg>
+
+<!-- Complex SVG with title and desc -->
+<svg 
+  role="img" 
+  aria-labelledby="chart-title chart-desc"
+  width="300" 
+  height="200"
+>
+  <title id="chart-title">Monthly Revenue Trend</title>
+  <desc id="chart-desc">
+    A line chart showing revenue increasing from $50K in January 
+    to $120K in December, with a dip to $40K in March.
+  </desc>
+  <!-- SVG content -->
+</svg>
+
+<!-- Decorative SVG -->
+<svg 
+  aria-hidden="true" 
+  width="24" 
+  height="24" 
+  viewBox="0 0 24 24"
+>
+  <circle cx="12" cy="12" r="10" fill="#e0e0e0"/>
+</svg>
+```
+
+### Figure and Figcaption
+
+Use `<figure>` and `<figcaption>` to associate images with their captions semantically.
+
+```html
+<figure>
+  <img 
+    src="team-photo.jpg" 
+    alt="Development team standing in front of the office building"
+    width="800" 
+    height="500"
+  >
+  <figcaption>
+    The 2024 development team outside the San Francisco headquarters. 
+    Photo by Jane Smith.
+  </figcaption>
+</figure>
+```
+
+### Responsive Images
+
+Use the `<picture>` element or `srcset` for responsive images. Ensure all sources share the same alt text since they represent the same content.
+
+```html
+<!-- Using srcset -->
+<img 
+  src="hero-800.jpg"
+  srcset="hero-400.jpg 400w, hero-800.jpg 800w, hero-1200.jpg 1200w"
+  sizes="(max-width: 600px) 400px, (max-width: 1000px) 800px, 1200px"
+  alt="Mountain landscape with a lake reflecting snow-capped peaks"
+  width="800"
+  height="500"
+>
+
+<!-- Using picture element -->
+<picture>
+  <source media="(max-width: 600px)" srcset="hero-mobile.webp" type="image/webp">
+  <source media="(max-width: 600px)" srcset="hero-mobile.jpg" type="image/jpeg">
+  <source media="(min-width: 601px)" srcset="hero-desktop.webp" type="image/webp">
+  <source media="(min-width: 601px)" srcset="hero-desktop.jpg" type="image/jpeg">
+  <img 
+    src="hero-desktop.jpg" 
+    alt="Mountain landscape with a lake reflecting snow-capped peaks"
+    width="800" 
+    height="500"
+  >
+</picture>
+```
+
+## Common Pitfalls
+
+### 1. Missing Alt Text
+
+```html
+<!-- Bad: No alt attribute -->
+<img src="photo.jpg">
+
+<!-- Good: Always include alt -->
+<img src="photo.jpg" alt="Descriptive text here">
+```
+
+### 2. Using "Image of" in Alt Text
+
+Screen readers already announce that an element is an image, so saying "image of" is redundant.
+
+```html
+<!-- Bad: Redundant phrasing -->
+<img src="dog.jpg" alt="Image of a dog playing fetch">
+
+<!-- Good: Direct description -->
+<img src="dog.jpg" alt="A golden retriever catching a frisbee in a park">
+```
+
+### 3. Using Alt for SEO Spam
+
+Alt text should describe the image, not stuff keywords.
+
+```html
+<!-- Bad: Keyword stuffing -->
+<img src="shoes.jpg" alt="buy shoes best price discount shoes cheap shoes online">
+
+<!-- Good: Honest description -->
+<img src="shoes.jpg" alt="Red running shoes with white soles on a wooden table">
+```
+
+### 4. Non-Empty Alt on Decorative Images
+
+```html
+<!-- Bad: Decorative image with alt text -->
+<img src="spacer.gif" alt="spacer image">
+
+<!-- Good: Empty alt for decorative images -->
+<img src="spacer.gif" alt="" role="presentation">
+```
+
+### 5. Using figure Without figcaption
+
+```html
+<!-- Bad: figure used as a styling wrapper -->
+<figure class="float-right">
+  <img src="photo.jpg" alt="A sunset">
+</figure>
+
+<!-- Good: Use figure only when a caption is present -->
+<figure>
+  <img src="photo.jpg" alt="A sunset over the ocean">
+  <figcaption>Sunset viewed from Malibu Beach, December 2024</figcaption>
+</figure>
+```
+
+## Testing Checklist
+
+### Screen Reader Verification
+- [ ] Informative images announce meaningful alt text
+- [ ] Decorative images are ignored (not announced)
+- [ ] Complex images have accessible long descriptions
+- [ ] SVG images announce their accessible names
+- [ ] Image links announce the destination or action
+
+### Image Inspection
+- [ ] Every `<img>` element has an `alt` attribute
+- [ ] Alt text is concise but descriptive (under ~150 characters)
+- [ ] Alt text doesn't start with "image of" or "picture of"
+- [ ] Decorative images use `alt=""` with `role="presentation"`
+- [ ] Functional images describe the action, not the appearance
+
+### Automated Alt Checks
+- [ ] Run an automated tool (e.g., axe, Lighthouse) to detect missing alt attributes
+- [ ] Verify no images have placeholder alt text like "alt", "image", or the filename
+- [ ] Check that `aria-describedby` references point to existing elements
+- [ ] Validate SVG elements have `role="img"` and accessible names
+
+## Related Components
+
+- [Accessible Video](./video.mdx) - Video captions and audio descriptions
+- [Accessible Audio](./audio.mdx) - Audio players and transcripts
+- [Accessible Headings](../content/headings.mdx) - Content structure with headings
+- [Skip Links](../navigation/skip-links/skip-link-basics.mdx) - Keyboard navigation patterns
+
+## Resources
+
+- [W3C WAI Images Tutorial](https://www.w3.org/WAI/tutorials/images/)
+- [MDN HTML Image Element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img)
+- [WebAIM Alternative Text](https://webaim.org/techniques/alttext/)
+- [SVG Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/img_role)

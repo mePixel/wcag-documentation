@@ -1,0 +1,310 @@
+---
+title: "Accessible Headings"
+description: "Proper heading hierarchy and structure for web content"
+---
+
+# Accessible Headings
+
+Headings provide the structural backbone of web content. When used correctly, they create a navigable outline that helps all users — especially those using screen readers — understand content organization and quickly find what they need.
+
+## Overview
+
+Accessible headings use semantic HTML heading elements (`<h1>` through `<h6>`) in a logical, hierarchical order. Headings communicate the structure and relationships between sections of content. Screen reader users can navigate by headings, making proper heading hierarchy essential for efficient content consumption.
+
+### Why Headings Matter
+
+- **Screen Reader Navigation**: Screen reader users can jump between headings using keyboard shortcuts (e.g., H key in NVDA/JAWS)
+- **Content Skimming**: All users benefit from a clear visual and structural hierarchy
+- **Document Outline**: Headings create a table of contents for the page
+- **Cognitive Accessibility**: Clear structure helps users with cognitive disabilities understand content organization
+- **SEO Benefits**: Search engines use heading structure to understand page content
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Information and relationships conveyed through heading hierarchy must be programmatically determinable
+
+### Operable
+- **2.4.1 Bypass Blocks**: A mechanism must be available to bypass blocks of content that are repeated on multiple pages (headings serve this purpose)
+- **2.4.6 Headings and Labels**: Headings and labels must describe the topic or purpose of the content
+- **2.4.10 Section Headings**: Section headings must be used to organize content (Level AAA)
+
+## Implementation Patterns
+
+### Proper Heading Hierarchy
+
+Headings must follow a logical, descending order without skipping levels. Start with a single `<h1>` as the page title, then use `<h2>` for major sections, `<h3>` for subsections, and so on.
+
+```html
+<h1>Website Accessibility Guidelines</h1>
+
+  <h2>Introduction</h2>
+    <p>An overview of web accessibility principles...</p>
+
+  <h2>Perceivable</h2>
+    <h3>Text Alternatives</h3>
+      <p>Provide text alternatives for all non-text content...</p>
+    <h3>Time-based Media</h3>
+      <p>Provide alternatives for time-based media...</p>
+    <h3>Adaptable</h3>
+      <p>Create content that can be presented in different ways...</p>
+
+  <h2>Operable</h2>
+    <h3>Keyboard Accessible</h3>
+      <p>Make all functionality available from a keyboard...</p>
+    <h3>Enough Time</h3>
+      <p>Provide users enough time to read and use content...</p>
+
+  <h2>Understandable</h2>
+    <p>Content must be readable and understandable...</p>
+
+  <h2>Robust</h2>
+    <p>Content must be compatible with current and future technologies...</p>
+```
+
+### Single H1 Per Page
+
+Each page should have exactly one `<h1>` element representing the main topic or title of the page.
+
+```html
+<!-- Good: Single h1 per page -->
+<body>
+  <header>
+    <nav aria-label="Main navigation">
+      <!-- Navigation items -->
+    </nav>
+  </header>
+
+  <main>
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you...</p>
+
+    <h2>General Inquiries</h2>
+    <p>For general questions...</p>
+
+    <h2>Technical Support</h2>
+    <p>For technical issues...</p>
+  </main>
+
+  <footer>
+    <!-- Footer content — no heading needed if it's simple -->
+  </footer>
+</body>
+
+<!-- Bad: Multiple h1 elements -->
+<h1>Welcome to Our Site</h1>
+<h1>Latest News</h1>
+<h1>Contact Information</h1>
+```
+
+### Using CSS for Visual Styling Without Changing Semantics
+
+Sometimes the visual design calls for a different size than the heading level implies. Use CSS to style headings visually while maintaining correct semantic hierarchy.
+
+```html
+<!-- Good: Semantic headings with custom styling -->
+<style>
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666;
+  }
+</style>
+
+<main>
+  <h1>Product Catalog</h1>
+
+  <h2 class="section-label">Featured Products</h2>
+    <h3 class="card-title">Wireless Headphones</h3>
+    <p>High-quality sound with noise cancellation...</p>
+
+    <h3 class="card-title">Bluetooth Speaker</h3>
+    <p>Portable speaker with 12-hour battery life...</p>
+
+  <h2 class="section-label">New Arrivals</h2>
+    <h3 class="card-title">Smart Watch</h3>
+    <p>Track fitness and stay connected...</p>
+</main>
+```
+
+### Headings in Complex Layouts
+
+When using landmarks and complex page layouts, headings should still form a coherent outline within each landmark.
+
+```html
+<body>
+  <header>
+    <!-- Site header — typically no h1 here -->
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>About Our Company</h1>
+    <p>Founded in 2020, we specialize in...</p>
+
+    <h2>Our Mission</h2>
+    <p>To make the web accessible to everyone...</p>
+
+    <h2>Our Team</h2>
+      <h3>Leadership</h3>
+        <h4>CEO: Jane Smith</h4>
+        <p>Jane has 15 years of experience...</p>
+        <h4>CTO: John Doe</h4>
+        <p>John leads our engineering team...</p>
+
+      <h3>Engineering</h3>
+      <p>Our engineering team builds...</p>
+  </main>
+
+  <aside aria-label="Related information">
+    <h2>Related Pages</h2>
+    <ul>
+      <li><a href="/careers">Careers</a></li>
+      <li><a href="/blog">Blog</a></li>
+    </ul>
+  </aside>
+
+  <footer>
+    <nav aria-label="Footer navigation">
+      <!-- Footer links -->
+    </nav>
+  </footer>
+</body>
+```
+
+### Heading Navigation by Screen Readers
+
+Screen readers provide shortcuts to navigate by headings. Understanding this helps you write better heading structures.
+
+| Screen Reader | Shortcut | Action |
+|---|---|---|
+| NVDA | `H` | Next heading |
+| NVDA | `1`–`6` | Next heading at that level |
+| JAWS | `H` | Next heading |
+| JAWS | `1`–`6` | Next heading at that level |
+| VoiceOver | `VO+Command+H` | Next heading |
+| VoiceOver | `VO+Command+1`–`6` | Next heading at that level |
+| TalkBack | Swipe up then down | Next heading |
+
+## Common Pitfalls
+
+### 1. Using Bold or Div Instead of Headings
+
+```html
+<!-- Bad: Styled text instead of headings -->
+<div class="section-title">Introduction</div>
+<p>Welcome to our guide...</p>
+
+<strong>Getting Started</strong>
+<p>First, you'll need to...</p>
+
+<!-- Good: Proper heading elements -->
+<h2>Introduction</h2>
+<p>Welcome to our guide...</p>
+
+<h2>Getting Started</h2>
+<p>First, you'll need to...</p>
+```
+
+### 2. Skipping Heading Levels
+
+```html
+<!-- Bad: Skipping from h2 to h4 -->
+<h1>Page Title</h1>
+<h2>Section One</h2>
+<h4>Subsection</h4>  <!-- Skipped h3! -->
+
+<!-- Good: Sequential heading levels -->
+<h1>Page Title</h1>
+<h2>Section One</h2>
+<h3>Subsection</h3>
+```
+
+### 3. Multiple H1 Elements
+
+```html
+<!-- Bad: Multiple h1 elements on one page -->
+<h1>Our Services</h1>
+<h1>Web Development</h1>
+<h1>Mobile Apps</h1>
+
+<!-- Good: One h1, proper hierarchy -->
+<h1>Our Services</h1>
+<h2>Web Development</h2>
+<h2>Mobile Apps</h2>
+```
+
+### 4. Using Headings for Visual Styling Only
+
+```html
+<!-- Bad: Using h3 just for larger text -->
+<p>Some paragraph text.</p>
+<h3>IMPORTANT NOTICE: Sale ends Friday!</h3>
+<p>More paragraph text.</p>
+
+<!-- Good: Use CSS for visual emphasis, headings for structure -->
+<p>Some paragraph text.</p>
+<p class="callout"><strong>IMPORTANT NOTICE:</strong> Sale ends Friday!</p>
+<p>More paragraph text.</p>
+```
+
+### 5. Empty Headings
+
+```html
+<!-- Bad: Empty heading for spacing -->
+<h2></h2>
+<h3>&nbsp;</h3>
+
+<!-- Good: Meaningful heading text or no heading -->
+<h2>Next Section Title</h2>
+```
+
+## Testing Checklist
+
+### Heading Outline Inspection
+- [ ] Page has exactly one `<h1>` element
+- [ ] Heading levels follow a logical, descending order
+- [ ] No heading levels are skipped (e.g., h2 to h4)
+- [ ] Every heading contains meaningful text
+- [ ] Headings accurately describe their section's content
+
+### Screen Reader Heading Navigation
+- [ ] Use heading navigation (H key) to move through all headings
+- [ ] The heading order makes sense when read sequentially
+- [ ] Each heading accurately describes the content that follows it
+- [ ] No unexpected headings appear (e.g., hidden text styled as headings)
+- [ ] The page outline conveys the full content structure
+
+### Automated Heading Order Checks
+- [ ] Run axe or Lighthouse to detect heading order violations
+- [ ] Verify no skipped heading levels
+- [ ] Confirm only one `<h1>` is present
+- [ ] Check that headings are not empty
+- [ ] Validate that visual heading sizes match semantic importance
+
+## Related Components
+
+- [Accessible Lists](./lists.mdx) - List patterns for structured content
+- [Accessible Tables](./tables.mdx) - Data table accessibility
+- [Skip Links](../navigation/skip-links/skip-link-basics.mdx) - Keyboard navigation patterns
+- [Accessible Images](../media/images.mdx) - Image alt text and graphics
+
+## Resources
+
+- [W3C WAI Headings Tutorial](https://www.w3.org/WAI/tutorials/page-structure/headings/)
+- [MDN HTML Heading Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements)
+- [WebAIM Heading Accessibility](https://webaim.org/techniques/structure/)
+- [W3C Heading Use in WCAG](https://www.w3.org/WAI/WCAG21/Understanding/headings-and-labels.html)

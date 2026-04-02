@@ -1,0 +1,689 @@
+---
+title: "Interactive Accessibility Patterns"
+description: "Common accessibility patterns for dynamic and interactive web content"
+---
+
+# Interactive Accessibility Patterns
+
+Dynamic web content — drag-and-drop interfaces, infinite scroll, tooltips, toggle buttons, and loading states — presents unique accessibility challenges. These patterns must convey state changes, support keyboard interaction, and announce updates to assistive technologies.
+
+## Overview
+
+Accessible interactive patterns ensure that all users can perceive dynamic content changes, operate controls via keyboard and assistive devices, and understand the results of their actions. Each pattern in this guide combines semantic HTML, ARIA attributes, and JavaScript to create inclusive interactions.
+
+### Patterns Covered
+
+- **Drag and drop alternatives**: Keyboard-accessible reordering and placement
+- **Infinite scroll with load more**: Respecting user control over content loading
+- **Tooltip pattern**: Contextual information on focus and hover
+- **Disclosure pattern**: Show/hide content with a button trigger
+- **Toggle buttons**: Communicating pressed state with `aria-pressed`
+- **Loading states**: Announcing loading progress with `aria-live`
+- **Content updates**: Communicating dynamic changes with live regions
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Dynamic content relationships must be programmatically determinable
+
+### Operable
+- **2.1.1 Keyboard**: All interactive functionality must be operable via keyboard
+- **2.4.3 Focus Order**: Focus must follow a logical order during and after dynamic updates
+
+### Robust
+- **4.1.2 Name, Role, Value**: Interactive elements must expose their role and state
+- **4.1.3 Status Messages**: Status messages must be available to assistive technologies
+
+## Implementation Patterns
+
+### Accessible Drag-and-Drop with Keyboard Alternative
+
+Drag-and-drop interfaces must provide a keyboard-accessible alternative. The following pattern uses buttons to move items up and down in a list.
+
+```html
+<ul class="sortable-list" role="list" aria-label="Task priority order">
+  <li class="sortable-item" role="listitem">
+    <span class="item-text">Review accessibility audit</span>
+    <div class="item-actions">
+      <button 
+        type="button"
+        class="move-up"
+        aria-label="Move 'Review accessibility audit' up"
+        disabled
+      >
+        <span aria-hidden="true">↑</span>
+      </button>
+      <button 
+        type="button"
+        class="move-down"
+        aria-label="Move 'Review accessibility audit' down"
+      >
+        <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+  </li>
+
+  <li class="sortable-item" role="listitem">
+    <span class="item-text">Fix color contrast issues</span>
+    <div class="item-actions">
+      <button 
+        type="button"
+        class="move-up"
+        aria-label="Move 'Fix color contrast issues' up"
+      >
+        <span aria-hidden="true">↑</span>
+      </button>
+      <button 
+        type="button"
+        class="move-down"
+        aria-label="Move 'Fix color contrast issues' down"
+      >
+        <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+  </li>
+
+  <li class="sortable-item" role="listitem">
+    <span class="item-text">Update ARIA labels</span>
+    <div class="item-actions">
+      <button 
+        type="button"
+        class="move-up"
+        aria-label="Move 'Update ARIA labels' up"
+      >
+        <span aria-hidden="true">↑</span>
+      </button>
+      <button 
+        type="button"
+        class="move-down"
+        aria-label="Move 'Update ARIA labels' down"
+        disabled
+      >
+        <span aria-hidden="true">↓</span>
+      </button>
+    </div>
+  </li>
+</ul>
+
+<!-- Live region to announce reorder changes -->
+<div class="sr-only" aria-live="polite" id="reorder-announce"></div>
+
+<script>
+  function initSortableList(listEl) {
+    const announceEl = document.getElementById('reorder-announce');
+
+    listEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+
+      const item = btn.closest('.sortable-item');
+      const items = Array.from(listEl.children);
+      const index = items.indexOf(item);
+
+      if (btn.classList.contains('move-up') && index > 0) {
+        listEl.insertBefore(item, items[index - 1]);
+        announceEl.textContent = `Moved "${item.querySelector('.item-text').textContent}" to position ${index}`;
+        btn.focus();
+      } else if (btn.classList.contains('move-down') && index < items.length - 1) {
+        listEl.insertBefore(item, items[index + 2] || null);
+        announceEl.textContent = `Moved "${item.querySelector('.item-text').textContent}" to position ${index + 2}`;
+        btn.focus();
+      }
+
+      updateButtonStates(listEl);
+    });
+  }
+
+  function updateButtonStates(listEl) {
+    const items = Array.from(listEl.children);
+    items.forEach((item, index) => {
+      const upBtn = item.querySelector('.move-up');
+      const downBtn = item.querySelector('.move-down');
+      upBtn.disabled = index === 0;
+      downBtn.disabled = index === items.length - 1;
+    });
+  }
+
+  initSortableList(document.querySelector('.sortable-list'));
+</script>
+
+<style>
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .sortable-list {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+  }
+
+  .sortable-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    margin-bottom: 0.25rem;
+  }
+
+  .item-actions {
+    display: flex;
+    gap: 0.25rem;
+  }
+</style>
+```
+
+### Tooltip with Proper ARIA
+
+Tooltips provide contextual information and must appear on both focus and hover, be dismissible, and use proper ARIA attributes.
+
+```html
+<div class="tooltip-container">
+  <button 
+    type="button"
+    class="tooltip-trigger"
+    aria-describedby="tooltip-password-info"
+  >
+    <span aria-hidden="true">ⓘ</span>
+    <span class="sr-only">Password requirements info</span>
+  </button>
+
+  <div 
+    class="tooltip" 
+    id="tooltip-password-info" 
+    role="tooltip"
+    hidden
+  >
+    Password must be at least 8 characters with one uppercase letter, 
+    one number, and one special character.
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tooltip-container').forEach((container) => {
+    const trigger = container.querySelector('.tooltip-trigger');
+    const tooltip = container.querySelector('.tooltip');
+
+    function showTooltip() {
+      tooltip.hidden = false;
+    }
+
+    function hideTooltip() {
+      tooltip.hidden = true;
+    }
+
+    // Show on hover
+    trigger.addEventListener('mouseenter', showTooltip);
+    trigger.addEventListener('mouseleave', hideTooltip);
+
+    // Show on focus, hide on blur
+    trigger.addEventListener('focus', showTooltip);
+    trigger.addEventListener('blur', hideTooltip);
+
+    // Dismiss on Escape
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideTooltip();
+      }
+    });
+  });
+</script>
+
+<style>
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    max-width: 250px;
+    white-space: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  .tooltip[hidden] {
+    display: none;
+  }
+</style>
+```
+
+### Toggle Button with aria-pressed
+
+Toggle buttons communicate their on/off state using `aria-pressed`. This is appropriate for actions that switch between two states without navigating or submitting.
+
+```html
+<div class="toolbar" role="toolbar" aria-label="Text formatting">
+  <button 
+    type="button"
+    class="toggle-btn"
+    aria-pressed="false"
+    aria-label="Bold"
+  >
+    <strong aria-hidden="true">B</strong>
+  </button>
+
+  <button 
+    type="button"
+    class="toggle-btn"
+    aria-pressed="false"
+    aria-label="Italic"
+  >
+    <em aria-hidden="true">I</em>
+  </button>
+
+  <button 
+    type="button"
+    class="toggle-btn"
+    aria-pressed="false"
+    aria-label="Underline"
+  >
+    <u aria-hidden="true">U</u>
+  </button>
+</div>
+
+<!-- Live region for state announcements -->
+<div class="sr-only" aria-live="polite" id="toggle-announce"></div>
+
+<script>
+  const announceEl = document.getElementById('toggle-announce');
+
+  document.querySelectorAll('.toggle-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const isPressed = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', String(!isPressed));
+
+      const label = btn.getAttribute('aria-label');
+      const state = !isPressed ? 'enabled' : 'disabled';
+      announceEl.textContent = `${label} ${state}`;
+    });
+  });
+</script>
+
+<style>
+  .toggle-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .toggle-btn[aria-pressed="true"] {
+    background: #005fcc;
+    color: white;
+    border-color: #005fcc;
+  }
+
+  .toggle-btn:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 0.25rem;
+  }
+</style>
+```
+
+### Loading State Announcement
+
+Loading states must be communicated to screen reader users. Use `aria-live` regions and `aria-busy` to announce when content is loading and when it has finished.
+
+```html
+<div class="data-section">
+  <h2 id="results-heading">Search Results</h2>
+  
+  <div 
+    id="results-container" 
+    aria-labelledby="results-heading"
+    aria-busy="false"
+    aria-live="polite"
+  >
+    <!-- Content loads here -->
+    <p>No results yet. Enter a search term to begin.</p>
+  </div>
+</div>
+
+<script>
+  async function loadResults(query) {
+    const container = document.getElementById('results-container');
+    
+    // Announce loading state
+    container.setAttribute('aria-busy', 'true');
+    container.innerHTML = '<p>Loading results...</p>';
+
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+      const data = await response.json();
+
+      // Clear loading state
+      container.setAttribute('aria-busy', 'false');
+
+      if (data.results.length === 0) {
+        container.innerHTML = '<p>No results found for your search.</p>';
+      } else {
+        container.innerHTML = `
+          <p>${data.results.length} results found.</p>
+          <ul>
+            ${data.results.map(r => `<li><a href="${r.url}">${r.title}</a></li>`).join('')}
+          </ul>
+        `;
+      }
+    } catch (error) {
+      container.setAttribute('aria-busy', 'false');
+      container.innerHTML = '<p role="alert">Failed to load results. Please try again.</p>';
+    }
+  }
+</script>
+```
+
+### Disclosure Pattern
+
+The disclosure pattern shows and hides content with a button trigger. It is simpler than an accordion and useful for single show/hide interactions.
+
+```html
+<div class="disclosure">
+  <button 
+    type="button"
+    class="disclosure-trigger"
+    aria-expanded="false"
+    aria-controls="advanced-settings"
+  >
+    Advanced Settings
+    <span class="disclosure-icon" aria-hidden="true">▶</span>
+  </button>
+
+  <div 
+    id="advanced-settings" 
+    class="disclosure-content"
+    hidden
+  >
+    <div class="form-group">
+      <label for="cache-ttl">Cache Duration (seconds)</label>
+      <input type="number" id="cache-ttl" name="cache_ttl" value="3600">
+    </div>
+
+    <div class="form-group">
+      <label for="max-retries">Max Retries</label>
+      <input type="number" id="max-retries" name="max_retries" value="3">
+    </div>
+
+    <button type="button" class="btn-save">Save Advanced Settings</button>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.disclosure-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      const expanded = trigger.getAttribute('aria-expanded') === 'true';
+      const panelId = trigger.getAttribute('aria-controls');
+      const panel = document.getElementById(panelId);
+
+      trigger.setAttribute('aria-expanded', String(!expanded));
+      panel.hidden = expanded;
+    });
+  });
+</script>
+
+<style>
+  .disclosure-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 0;
+    color: #005fcc;
+  }
+
+  .disclosure-trigger:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+  }
+
+  .disclosure-trigger[aria-expanded="true"] .disclosure-icon {
+    transform: rotate(90deg);
+  }
+
+  .disclosure-content {
+    padding: 1rem 0;
+  }
+</style>
+```
+
+### Infinite Scroll with Load More Option
+
+Auto-loading content can disorient users. Provide a manual "Load more" button as an alternative to infinite scroll, giving users control over when new content appears.
+
+```html
+<div class="feed" aria-label="Article feed">
+  <div id="feed-content">
+    <article>
+      <h3><a href="/article-1">Understanding ARIA Roles</a></h3>
+      <p>A deep dive into ARIA roles and how to use them correctly.</p>
+    </article>
+
+    <article>
+      <h3><a href="/article-2">Keyboard Navigation Patterns</a></h3>
+      <p>Essential keyboard patterns for web applications.</p>
+    </article>
+
+    <article>
+      <h3><a href="/article-3">Color Contrast Best Practices</a></h3>
+      <p>How to choose color combinations that work for everyone.</p>
+    </article>
+  </div>
+
+  <div class="feed-controls">
+    <button 
+      type="button"
+      id="load-more-btn"
+      aria-controls="feed-content"
+    >
+      Load more articles
+    </button>
+  </div>
+
+  <!-- Live region for load announcements -->
+  <div class="sr-only" aria-live="polite" id="feed-announce"></div>
+</div>
+
+<script>
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const feedContent = document.getElementById('feed-content');
+  const announceEl = document.getElementById('feed-announce');
+  let page = 1;
+
+  loadMoreBtn.addEventListener('click', async () => {
+    page++;
+    loadMoreBtn.textContent = 'Loading...';
+    loadMoreBtn.setAttribute('aria-busy', 'true');
+
+    try {
+      const newArticles = await fetchMoreArticles(page);
+
+      if (newArticles.length === 0) {
+        loadMoreBtn.textContent = 'No more articles';
+        loadMoreBtn.disabled = true;
+        announceEl.textContent = 'All articles have been loaded.';
+        return;
+      }
+
+      const fragment = document.createDocumentFragment();
+      newArticles.forEach((article) => {
+        const el = document.createElement('article');
+        el.innerHTML = `
+          <h3><a href="${article.url}">${article.title}</a></h3>
+          <p>${article.excerpt}</p>
+        `;
+        fragment.appendChild(el);
+      });
+
+      feedContent.appendChild(fragment);
+      loadMoreBtn.textContent = 'Load more articles';
+      loadMoreBtn.setAttribute('aria-busy', 'false');
+      announceEl.textContent = `${newArticles.length} more articles loaded. Showing page ${page}.`;
+
+      // Move focus to the first new article
+      const firstNewArticle = feedContent.querySelectorAll('article');
+      const lastBatch = firstNewArticle[firstNewArticle.length - newArticles.length];
+      if (lastBatch) {
+        lastBatch.querySelector('a').focus();
+      }
+    } catch (err) {
+      loadMoreBtn.textContent = 'Load more articles';
+      loadMoreBtn.setAttribute('aria-busy', 'false');
+      announceEl.textContent = 'Failed to load articles. Please try again.';
+    }
+  });
+
+  async function fetchMoreArticles(page) {
+    // Replace with actual API call
+    return [];
+  }
+</script>
+```
+
+## Common Pitfalls
+
+### 1. Drag-Only Interactions
+
+```html
+<!-- Bad: Only drag-and-drop, no keyboard alternative -->
+<div class="draggable" draggable="true">Item 1</div>
+<div class="draggable" draggable="true">Item 2</div>
+
+<!-- Good: Keyboard-accessible move buttons alongside drag -->
+<div class="sortable-item">
+  <span>Item 1</span>
+  <button aria-label="Move Item 1 up">↑</button>
+  <button aria-label="Move Item 1 down">↓</button>
+</div>
+```
+
+### 2. Tooltips Not Keyboard Accessible
+
+```html
+<!-- Bad: Tooltip only appears on hover -->
+<span class="has-tooltip" title="Additional information">
+  Hover for info
+</span>
+
+<!-- Good: Tooltip appears on focus and hover -->
+<button aria-describedby="tip-1">
+  Info
+</button>
+<div role="tooltip" id="tip-1">Additional information</div>
+```
+
+### 3. Loading States Not Announced
+
+```html
+<!-- Bad: Loading spinner with no screen reader text -->
+<div class="spinner"></div>
+
+<!-- Good: Live region announces loading state -->
+<div aria-live="polite" aria-busy="true">
+  <span class="sr-only">Loading content...</span>
+  <div class="spinner" aria-hidden="true"></div>
+</div>
+```
+
+### 4. Content Changes Not Communicated
+
+```javascript
+// Bad: Content updates silently
+function updateResults(data) {
+  resultsDiv.innerHTML = data.html;
+}
+
+// Good: Announce content changes
+function updateResults(data) {
+  resultsDiv.setAttribute('aria-busy', 'true');
+  resultsDiv.innerHTML = data.html;
+  resultsDiv.setAttribute('aria-busy', 'false');
+  liveRegion.textContent = `Results updated. ${data.count} items found.`;
+}
+```
+
+### 5. Toggle State Not Communicated
+
+```html
+<!-- Bad: No state indication -->
+<button class="mute-btn" onclick="toggleMute()">
+  🔇 Mute
+</button>
+
+<!-- Good: aria-pressed communicates state -->
+<button 
+  type="button"
+  class="mute-btn"
+  aria-pressed="false"
+  aria-label="Mute audio"
+>
+  <span aria-hidden="true">🔇</span>
+</button>
+```
+
+## Testing Checklist
+
+### Keyboard Interaction
+- [ ] All interactive elements are reachable via Tab
+- [ ] Buttons activate with Enter and Space
+- [ ] Drag-and-drop alternatives work with keyboard only
+- [ ] Tooltips appear on focus and dismiss on Escape
+- [ ] Toggle buttons communicate their pressed state
+- [ ] Load more button is keyboard accessible
+
+### Screen Reader Announcements
+- [ ] Dynamic content changes are announced via live regions
+- [ ] Loading states are communicated to screen readers
+- [ ] Toggle state changes (pressed/unpressed) are announced
+- [ ] Drag-and-drop reorder changes are announced
+- [ ] Tooltip content is available when trigger is focused
+
+### Functional Testing
+- [ ] Content updates do not move focus unexpectedly
+- [ ] Loading indicators appear and disappear correctly
+- [ ] Infinite scroll provides a manual load option
+- [ ] Disclosure panels expand and collapse correctly
+- [ ] All ARIA attributes update correctly on state changes
+
+## Related Components
+
+- [Accessible Modals](../interactive/modals.mdx) - Dialog and overlay patterns
+- [Accessible Tabs](../interactive/tabs.mdx) - Tabbed interface patterns
+- [Accessible Accordions](../interactive/accordions.mdx) - Expandable sections
+- [Form Patterns](./form-patterns.mdx) - Form accessibility patterns
+- [Navigation Patterns](./navigation-patterns.mdx) - Navigation accessibility
+
+## Resources
+
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
+- [MDN ARIA Live Regions](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions)
+- [Inclusive Components](https://inclusive-components.design/)
+- [WebAIM Dynamic Content](https://webaim.org/techniques/dynamic/)

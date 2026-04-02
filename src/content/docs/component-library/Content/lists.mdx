@@ -1,0 +1,380 @@
+---
+title: "Accessible Lists"
+description: "Ordered, unordered, and description list patterns for web content"
+---
+
+# Accessible Lists
+
+Lists are a fundamental building block of web content. Using proper semantic list elements ensures that screen readers can announce list structure, item counts, and nesting levels — giving all users a clear understanding of the content organization.
+
+## Overview
+
+Accessible lists use semantic HTML elements (`<ul>`, `<ol>`, `<dl>`) to convey the type and structure of listed content. Screen readers announce the number of items in a list, the current position within the list, and when nesting occurs. This contextual information is lost when lists are built with non-semantic elements like `<div>` or `<span>`.
+
+### List Types
+
+- **Unordered lists (`<ul>`)**: Items with no inherent order or sequence (e.g., navigation menus, bullet points)
+- **Ordered lists (`<ol>`)**: Items where sequence matters (e.g., step-by-step instructions, rankings)
+- **Description lists (`<dl>`)**: Term-description pairs (e.g., glossaries, metadata, FAQ entries)
+
+## WCAG Requirements
+
+### Perceivable
+- **1.3.1 Info and Relationships**: Information and relationships conveyed through list structure must be programmatically determinable
+
+### Understandable
+- **2.4.6 Headings and Labels**: Labels and list items must describe their content clearly
+
+## Implementation Patterns
+
+### Unordered List
+
+Use `<ul>` for items where the order doesn't matter. Screen readers announce "list" followed by the number of items.
+
+```html
+<h2>Required Skills</h2>
+<ul>
+  <li>HTML and CSS</li>
+  <li>JavaScript</li>
+  <li>Accessibility testing</li>
+  <li>Responsive design</li>
+  <li>Version control with Git</li>
+</ul>
+```
+
+A screen reader will announce: "List, 5 items. HTML and CSS. JavaScript. Accessibility testing. Responsive design. Version control with Git."
+
+### Ordered List
+
+Use `<ol>` when the sequence of items is important. Screen readers announce item numbers.
+
+```html
+<h2>How to Submit a Bug Report</h2>
+<ol>
+  <li>Navigate to the issue tracker</li>
+  <li>Click the "New Issue" button</li>
+  <li>Select the "Bug Report" template</li>
+  <li>Fill in the title and description</li>
+  <li>Add steps to reproduce the issue</li>
+  <li>Attach screenshots if applicable</li>
+  <li>Click "Submit Issue"</li>
+</ol>
+```
+
+The `start` and `reversed` attributes can modify numbering:
+
+```html
+<!-- Start numbering from a specific value -->
+<h2>Top 10 Features (continued)</h2>
+<ol start="6">
+  <li>Keyboard shortcuts</li>
+  <li>Custom themes</li>
+  <li>Export to PDF</li>
+  <li>Collaborative editing</li>
+  <li>Version history</li>
+</ol>
+
+<!-- Reverse numbering -->
+<h2>Countdown to Launch</h2>
+<ol reversed>
+  <li>Final testing</li>
+  <li>Deploy to staging</li>
+  <li>Stakeholder review</li>
+  <li>Deploy to production</li>
+</ol>
+```
+
+### Description List
+
+Use `<dl>` for term-description pairs. Each term (`<dt>`) can have one or more descriptions (`<dd>`).
+
+```html
+<h2>Glossary of Accessibility Terms</h2>
+<dl>
+  <dt>Alt text</dt>
+  <dd>A text alternative that describes the content or function of an image</dd>
+
+  <dt>ARIA</dt>
+  <dd>Accessible Rich Internet Applications — a set of attributes for enhancing accessibility</dd>
+
+  <dt>Screen reader</dt>
+  <dd>Assistive technology that reads on-screen content aloud or outputs it to a braille display</dd>
+
+  <dt>WCAG</dt>
+  <dd>Web Content Accessibility Guidelines — the international standard for web accessibility</dd>
+</dl>
+```
+
+A term can have multiple descriptions:
+
+```html
+<dl>
+  <dt>Focus</dt>
+  <dd>The element that currently receives keyboard input</dd>
+  <dd>The state of an element being targeted for user interaction</dd>
+</dl>
+```
+
+### Nested Lists
+
+Lists can be nested to represent hierarchical content. Screen readers announce the nesting level.
+
+```html
+<h2>Course Curriculum</h2>
+<ul>
+  <li>
+    Module 1: Introduction
+    <ul>
+      <li>What is accessibility?</li>
+      <li>Understanding disabilities</li>
+      <li>Legal requirements</li>
+    </ul>
+  </li>
+  <li>
+    Module 2: Technical Foundations
+    <ul>
+      <li>Semantic HTML</li>
+      <li>ARIA roles and properties</li>
+      <li>
+        Keyboard navigation
+        <ul>
+          <li>Tab order</li>
+          <li>Focus management</li>
+          <li>Keyboard shortcuts</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    Module 3: Testing
+    <ul>
+      <li>Automated testing tools</li>
+      <li>Manual testing procedures</li>
+      <li>Screen reader testing</li>
+    </ul>
+  </li>
+</ul>
+```
+
+### Navigation Menu List Pattern
+
+Navigation menus should use list elements to provide structural information to screen readers.
+
+```html
+<nav aria-label="Main navigation">
+  <ul role="menubar">
+    <li role="none">
+      <a href="/" role="menuitem">Home</a>
+    </li>
+    <li role="none">
+      <a href="/about" role="menuitem" aria-haspopup="true" aria-expanded="false">
+        About
+      </a>
+      <ul role="menu" aria-label="About submenu">
+        <li role="none">
+          <a href="/about/team" role="menuitem">Our Team</a>
+        </li>
+        <li role="none">
+          <a href="/about/history" role="menuitem">Our History</a>
+        </li>
+        <li role="none">
+          <a href="/about/values" role="menuitem">Our Values</a>
+        </li>
+      </ul>
+    </li>
+    <li role="none">
+      <a href="/services" role="menuitem">Services</a>
+    </li>
+    <li role="none">
+      <a href="/contact" role="menuitem">Contact</a>
+    </li>
+  </ul>
+</nav>
+```
+
+### Styling Lists Without Losing Semantics
+
+You can remove default list styling while keeping the semantic structure. Use CSS to customize appearance.
+
+```html
+<style>
+  /* Remove default bullets but keep semantics */
+  .custom-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .custom-list li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  /* Add custom markers */
+  .custom-list li::before {
+    content: "→";
+    margin-right: 0.5rem;
+    color: #005fcc;
+  }
+
+  /* Horizontal navigation list */
+  .nav-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+
+  .nav-list li {
+    border-bottom: none;
+  }
+</style>
+
+<h2>Key Takeaways</h2>
+<ul class="custom-list">
+  <li>Always use semantic list elements</li>
+  <li>Screen readers announce list item counts</li>
+  <li>Nested lists convey hierarchy</li>
+</ul>
+```
+
+## Common Pitfalls
+
+### 1. Using Divs or Spans Instead of List Elements
+
+```html
+<!-- Bad: Non-semantic list -->
+<div class="list">
+  <div class="item">First item</div>
+  <div class="item">Second item</div>
+  <div class="item">Third item</div>
+</div>
+
+<!-- Good: Semantic list -->
+<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>
+```
+
+### 2. Breaking List Semantics with CSS
+
+```html
+<!-- Bad: Using list-style: none can remove visual indicators -->
+<!-- but the semantics remain — this is fine for nav menus -->
+<!-- However, avoid display: none on list markers if content needs them -->
+
+<!-- Acceptable: Removing bullets for styled lists -->
+<style>
+  ul.custom { list-style: none; }
+</style>
+
+<ul class="custom">
+  <li>Item with custom styling</li>
+</ul>
+
+<!-- Bad: Using role="presentation" removes semantics -->
+<ul role="presentation">
+  <li>This list is no longer announced as a list</li>
+</ul>
+```
+
+### 3. Missing List Markers Without Replacement
+
+```html
+<!-- Bad: No visual indicator for list items -->
+<style>
+  ul { list-style: none; padding: 0; }
+  /* No replacement marker provided */
+</style>
+
+<!-- Good: Provide visual indicators -->
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul li {
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #005fcc;
+  }
+</style>
+```
+
+### 4. Incorrect Nesting
+
+```html
+<!-- Bad: Nested list outside of li element -->
+<ul>
+  <li>Item one</li>
+  <ul>
+    <li>Sub-item one</li>
+  </ul>
+</ul>
+
+<!-- Good: Nested list inside li element -->
+<ul>
+  <li>
+    Item one
+    <ul>
+      <li>Sub-item one</li>
+    </ul>
+  </li>
+</ul>
+```
+
+### 5. Using Lists for Non-List Content
+
+```html
+<!-- Bad: Using a list for a single item -->
+<ul>
+  <li>Only one item here</li>
+</ul>
+
+<!-- Good: Use a paragraph or other element for single items -->
+<p>There is only one point to make here.</p>
+```
+
+## Testing Checklist
+
+### Screen Reader List Announcement
+- [ ] Lists are announced as "list" with item count
+- [ ] Ordered lists announce item numbers
+- [ ] Nested lists are announced with nesting level
+- [ ] Description lists announce terms and descriptions correctly
+- [ ] List navigation works with screen reader shortcuts
+
+### List Item Count Verification
+- [ ] Screen reader announces the correct number of items
+- [ ] All list items are contained within proper `<li>` elements
+- [ ] No orphaned content exists between list items
+- [ ] Nested lists have correct parent-child relationships
+
+### Semantic Structure Check
+- [ ] `<ul>` is used for unordered content
+- [ ] `<ol>` is used for sequential content
+- [ ] `<dl>` is used for term-description pairs
+- [ ] No `<div>` or `<span>` used as list item containers
+- [ ] CSS styling does not break semantic announcements
+- [ ] Run automated tools (axe, Lighthouse) to detect list-related violations
+
+## Related Components
+
+- [Accessible Headings](./headings.mdx) - Heading hierarchy and structure
+- [Accessible Tables](./tables.mdx) - Data table accessibility
+- [Skip Links](../navigation/skip-links/skip-link-basics.mdx) - Keyboard navigation patterns
+- [Accessible Images](../media/images.mdx) - Image alt text and graphics
+
+## Resources
+
+- [MDN HTML List Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul)
+- [W3C WAI List Tutorial](https://www.w3.org/WAI/tutorials/page-structure/content/#lists)
+- [WebAIM List Accessibility](https://webaim.org/techniques/structure/#lists)
+- [MDN Description List](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dl)
