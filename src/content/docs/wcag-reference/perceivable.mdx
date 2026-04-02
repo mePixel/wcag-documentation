@@ -1,0 +1,193 @@
+---
+title: Perceivable
+description: "WCAG 2.2 Principle 1: Information and user interface components must be presentable to users in ways they can perceive."
+---
+
+## Principle 1: Perceivable
+
+Information and user interface components must be presentable to users in ways they can perceive.
+
+## Guideline 1.1 Text Alternatives
+
+Provide text alternatives for any non-text content so that it can be changed into other forms people need, such as large print, braille, speech, symbols or simpler language.
+
+### 1.1.1 Non-text Content (Level A)
+
+All non-text content presented to the user has a text alternative that serves the equivalent purpose. Specific exceptions apply:
+
+- **Controls and inputs**: Must have a name describing their purpose.
+- **Time-based media**: Must have a descriptive identification.
+- **Tests**: Must have a descriptive identification if a text alternative would invalidate the test.
+- **Sensory experiences**: Must have a descriptive identification.
+- **CAPTCHA**: Must include identification and description, with alternative output modes provided for different types of sensory perception.
+- **Decoration, formatting, and invisible content**: Must be implemented in a way that can be ignored by assistive technology.
+
+
+
+
+## Guideline 1.2 Time-based Media
+
+Provide alternatives for time-based media.
+
+### 1.2.1 Audio-only and Video-only (Prerecorded) (Level A)
+
+For prerecorded audio-only media, an alternative for time-based media presenting equivalent information is provided. For prerecorded video-only media, either an alternative for time-based media or an audio track presenting equivalent information is provided. This does not apply when the media is a media alternative for text that is clearly labeled as such.
+
+### 1.2.2 Captions (Prerecorded) (Level A)
+
+Captions are provided for all prerecorded audio content in synchronized media, except when the media is a media alternative for text that is clearly labeled as such.
+
+### 1.2.3 Audio Description or Media Alternative (Prerecorded) (Level A)
+
+An alternative for time-based media or audio description of the prerecorded video content is provided for synchronized media, except when the media is a media alternative for text that is clearly labeled as such.
+
+### 1.2.4 Captions (Live) (Level AA)
+
+Captions are provided for all live audio content in synchronized media.
+
+### 1.2.5 Audio Description (Prerecorded) (Level AA)
+
+Audio description is provided for all prerecorded video content in synchronized media.
+
+### 1.2.6 Sign Language (Prerecorded) (Level AAA)
+
+Sign language interpretation is provided for all prerecorded audio content in synchronized media.
+
+### 1.2.7 Extended Audio Description (Prerecorded) (Level AAA)
+
+Where pauses in foreground audio are insufficient, extended audio description is provided for all prerecorded video content in synchronized media.
+
+### 1.2.8 Media Alternative (Prerecorded) (Level AAA)
+
+An alternative for time-based media is provided for all prerecorded synchronized media and for all prerecorded video-only media.
+
+### 1.2.9 Audio-only (Live) (Level AAA)
+
+An alternative for time-based media presenting equivalent information for live audio-only content is provided.
+
+
+
+
+## Guideline 1.3 Adaptable
+
+Create content that can be presented in different ways (for example simpler layout) without losing information or structure.
+
+### 1.3.1 Info and Relationships (Level A)
+
+Information, structure, and relationships conveyed through presentation can be programmatically determined or are available in text.
+
+### 1.3.2 Meaningful Sequence (Level A)
+
+When the sequence in which content is presented affects its meaning, a correct reading sequence can be programmatically determined.
+
+### 1.3.3 Sensory Characteristics (Level A)
+
+Instructions provided for understanding and operating content do not rely solely on sensory characteristics of components such as shape, color, size, visual location, orientation, or sound.
+
+### 1.3.4 Orientation (Level AA)
+
+Content does not restrict its view and operation to a single display orientation, such as portrait or landscape, unless a specific display orientation is essential.
+
+### 1.3.5 Identify Input Purpose (Level AA)
+
+The purpose of each input field collecting information about the user can be programmatically determined when the input field serves a purpose identified in the Input Purposes for user interface components section and the content is implemented using technologies with support for identifying the expected meaning for form input data.
+
+### 1.3.6 Identify Purpose (Level AAA)
+
+In content implemented using markup languages, the purpose of user interface components, icons, and regions can be programmatically determined.
+
+
+
+
+## Guideline 1.4 Distinguishable
+
+Make it easier for users to see and hear content including separating foreground from background.
+
+### 1.4.1 Use of Color (Level A)
+
+Color is not used as the only visual means of conveying information, indicating an action, prompting a response, or distinguishing a visual element.
+
+### 1.4.2 Audio Control (Level A)
+
+If any audio on a web page plays automatically for more than 3 seconds, either a mechanism is available to pause or stop the audio, or a mechanism is available to control audio volume independently from the overall system volume level.
+
+### 1.4.3 Contrast (Minimum) (Level AA)
+
+The visual presentation of text and images of text has a contrast ratio of at least 4.5:1, except for large-scale text (3:1), incidental text (no requirement), and logotypes (no requirement).
+
+### 1.4.4 Resize Text (Level AA)
+
+Except for captions and images of text, text can be resized without assistive technology up to 200 percent without loss of content or functionality.
+
+### 1.4.5 Images of Text (Level AA)
+
+If the technologies being used can achieve the visual presentation, text is used to convey information rather than images of text, except for customizable images or where a particular presentation is essential.
+
+### 1.4.6 Contrast (Enhanced) (Level AAA)
+
+The visual presentation of text and images of text has a contrast ratio of at least 7:1, except for large-scale text (4.5:1), incidental text (no requirement), and logotypes (no requirement).
+
+### 1.4.7 Low or No Background Audio (Level AAA)
+
+For prerecorded audio-only content containing primarily speech, the audio has no background sounds, background sounds can be turned off, or background sounds are at least 20 decibels lower than foreground speech.
+
+### 1.4.8 Visual Presentation (Level AAA)
+
+For the visual presentation of blocks of text, a mechanism is available to achieve the following: user-selectable foreground and background colors, width no more than 80 characters (40 for CJK), text not justified, line spacing at least 1.5 within paragraphs, paragraph spacing at least 1.5 times line spacing, and text resizable to 200% without horizontal scrolling.
+
+### 1.4.9 Images of Text (No Exception) (Level AAA)
+
+Images of text are only used for pure decoration or where a particular presentation of text is essential.
+
+### 1.4.10 Reflow (Level AA)
+
+Content can be presented without loss of information or functionality, and without requiring scrolling in two dimensions for: vertical scrolling content at 320 CSS pixels width, and horizontal scrolling content at 256 CSS pixels height. An exception applies for parts of content that require two-dimensional layout.
+
+### 1.4.11 Non-text Contrast (Level AA)
+
+The visual presentation of user interface components (visual information required to identify components and states) and graphical objects (parts required to understand content) have a contrast ratio of at least 3:1 against adjacent colors.
+
+### 1.4.12 Text Spacing (Level AA)
+
+No loss of content or functionality occurs when setting line height to 1.5 times the font size, paragraph spacing to 2 times the font size, letter spacing to 0.12 times the font size, and word spacing to 0.16 times the font size. An exception applies for languages and scripts that do not use these properties.
+
+### 1.4.13 Content on Hover or Focus (Level AA)
+
+Where hover or focus triggers additional content, the additional content must be dismissible without moving hover or focus, hoverable (the pointer can be moved over it without it disappearing), and persistent (it remains visible until dismissed or no longer valid). An exception applies for content controlled by the user agent.
+
+
+
+
+## Summary Table
+
+| Number | Name | Level |
+|--------|------|-------|
+| 1.1.1 | Non-text Content | A |
+| 1.2.1 | Audio-only and Video-only (Prerecorded) | A |
+| 1.2.2 | Captions (Prerecorded) | A |
+| 1.2.3 | Audio Description or Media Alternative (Prerecorded) | A |
+| 1.2.4 | Captions (Live) | AA |
+| 1.2.5 | Audio Description (Prerecorded) | AA |
+| 1.2.6 | Sign Language (Prerecorded) | AAA |
+| 1.2.7 | Extended Audio Description (Prerecorded) | AAA |
+| 1.2.8 | Media Alternative (Prerecorded) | AAA |
+| 1.2.9 | Audio-only (Live) | AAA |
+| 1.3.1 | Info and Relationships | A |
+| 1.3.2 | Meaningful Sequence | A |
+| 1.3.3 | Sensory Characteristics | A |
+| 1.3.4 | Orientation | AA |
+| 1.3.5 | Identify Input Purpose | AA |
+| 1.3.6 | Identify Purpose | AAA |
+| 1.4.1 | Use of Color | A |
+| 1.4.2 | Audio Control | A |
+| 1.4.3 | Contrast (Minimum) | AA |
+| 1.4.4 | Resize Text | AA |
+| 1.4.5 | Images of Text | AA |
+| 1.4.6 | Contrast (Enhanced) | AAA |
+| 1.4.7 | Low or No Background Audio | AAA |
+| 1.4.8 | Visual Presentation | AAA |
+| 1.4.9 | Images of Text (No Exception) | AAA |
+| 1.4.10 | Reflow | AA |
+| 1.4.11 | Non-text Contrast | AA |
+| 1.4.12 | Text Spacing | AA |
+| 1.4.13 | Content on Hover or Focus | AA |
