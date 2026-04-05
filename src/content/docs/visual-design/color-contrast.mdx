@@ -1,6 +1,6 @@
 ---
 title: "Color Contrast"
-description: "Understanding and implementing WCAG 2.1 AA color contrast requirements"
+description: "Understanding and implementing WCAG 2.2 AAA color contrast requirements"
 ---
 
 # Color Contrast
@@ -9,7 +9,7 @@ Color contrast ensures text and graphical objects are readable for users with vi
 
 ## Overview
 
-WCAG 2.1 Level AA requires specific contrast ratios between text and its background. These requirements ensure content is readable for users with various visual abilities.
+WCAG 2.2 Level AAA requires specific contrast ratios between text and its background. These requirements ensure content is readable for users with various visual abilities.
 
 ### Why Color Contrast Matters
 
@@ -20,13 +20,15 @@ WCAG 2.1 Level AA requires specific contrast ratios between text and its backgro
 
 ## WCAG Requirements
 
-### 1.4.3 Contrast (Minimum) (Level AA)
+### 1.4.6 Contrast (Enhanced) (Level AAA)
 
-Text and images of text must have a contrast ratio of at least 4.5:1, except for:
+Text and images of text must have a contrast ratio of at least 7:1, except for:
 
-- **Large Text**: Contrast ratio of at least 3:1
+- **Large Text**: Contrast ratio of at least 4.5:1
 - **Incidental**: Text or images of text that are part of an inactive user interface component, pure decoration, or not visible to anyone
 - **Logotypes**: Text that is part of a logo or brand name
+
+> **Note:** SC 1.4.3 Contrast (Minimum) (Level AA) establishes baseline requirements of 4.5:1 for normal text and 3:1 for large text. SC 1.4.6 raises these thresholds to 7:1 and 4.5:1 respectively for enhanced readability.
 
 ### 1.4.11 Non-text Contrast (Level AA)
 
@@ -38,8 +40,8 @@ The visual presentation of user interface components and graphical objects must 
 
 | Text Type | Minimum Contrast | WCAG Level |
 |-----------|------------------|-------------|
-| Normal text (under 18pt or 14pt bold) | 4.5:1 | AA |
-| Large text (18pt and up, or 14pt bold and up) | 3:1 | AA |
+| Normal text (under 18pt or 14pt bold) | 7:1 | AAA |
+| Large text (18pt and up, or 14pt bold and up) | 4.5:1 | AAA |
 | Graphical objects | 3:1 | AA |
 | UI components | 3:1 | AA |
 
@@ -77,13 +79,13 @@ Where R, G, and B are:
 ### Good Contrast Examples
 
 ```css
-/* Good: High contrast (4.5:1 or higher) */
+/* Good: High contrast (7:1 or higher for AAA) */
 body {
   color: #333333;
   background-color: #ffffff;
 }
 
-/* Good: Large text with lower contrast (3:1 or higher) */
+/* Good: Large text with contrast (4.5:1 or higher for AAA) */
 h1 {
   color: #444444;
   font-size: 24px;
@@ -210,19 +212,27 @@ button:disabled {
 }
 ```
 
-### 4. Forgetting Large Text Exception
+### 4. Misapplying Large Text Contrast for AAA
+
+Under SC 1.4.6 (Level AAA), the large text exception is narrower than under AA. Large text still requires 4.5:1, not 3:1.
 
 ```css
-/* Bad: Using 4.5:1 for large text */
+/* Bad: Using 3:1 for large text — insufficient for AAA */
+h1 {
+  color: #666666;
+  font-size: 24px;
+}
+
+/* Good: Using 4.5:1 for large text (18pt+) — meets SC 1.4.6 */
 h1 {
   color: #444444;
   font-size: 24px;
 }
 
-/* Good: Using 3:1 for large text */
-h1 {
-  color: #666666;
-  font-size: 24px;
+/* Good: Using 7:1 for normal text — meets SC 1.4.6 */
+p {
+  color: #333333;
+  background-color: #ffffff;
 }
 ```
 
@@ -304,8 +314,8 @@ Use contrast checkers to verify compliance.
 ## Testing Checklist
 
 ### Visual Testing
-- [ ] All text meets minimum contrast requirements
-- [ ] Large text meets 3:1 contrast requirement
+- [ ] All normal text meets 7:1 contrast requirement (SC 1.4.6)
+- [ ] Large text meets 4.5:1 contrast requirement (SC 1.4.6)
 - [ ] UI components meet 3:1 contrast requirement
 - [ ] Graphical objects meet 3:1 contrast requirement
 - [ ] All states (hover, focus, active, disabled) meet requirements
@@ -321,8 +331,36 @@ Use contrast checkers to verify compliance.
 - [ ] Tested with users with color blindness
 - [ ] Tested in various lighting conditions
 
+## SC 1.4.8 Visual Presentation (Level AAA)
+
+SC 1.4.8 complements the contrast requirements by specifying additional typographic and layout properties that improve readability for users with low vision and cognitive disabilities.
+
+### Requirements
+
+- **Line height**: At least 1.5 times the font size for blocks of text
+- **Paragraph spacing**: At least 2em between paragraphs
+- **Line length**: No more than 80 characters per line
+- **Text alignment**: Text is not justified (aligned to both left and right margins)
+
+### CSS Example
+
+```css
+.readable-text {
+  line-height: 1.5;
+  margin-bottom: 2em;
+  max-width: 80ch; /* Limits line length to ~80 characters */
+  text-align: left; /* Avoid justified alignment */
+}
+
+.readable-text p + p {
+  margin-top: 2em; /* Paragraph spacing of at least 2em */
+}
+```
+
+> **Note:** These properties can be provided through user agent stylesheets, bookmarklets, or built-in page styles. They do not need to be the default, but must be achievable without requiring users to create custom stylesheets.
+
 ## Related Resources
 
-- [WCAG 2.1 Contrast Requirements](https://www.w3.org/WAI/WCAG21/quickref/#visual-audio-contrast)
+- [WCAG 2.2 Contrast Requirements](https://www.w3.org/WAI/WCAG22/quickref/#visual-audio-contrast-contrast-enhanced)
 - [WebAIM Color Contrast Checker](https://webaim.org/resources/contrastchecker/)
 - [MDN Color Contrast](https://developer.mozilla.org/en-US/docs/Web/Accessibility/Understanding_WCAG/Perceivable/Color_contrast)
