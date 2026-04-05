@@ -74,7 +74,7 @@ npm install -g pa11y
 pa11y https://example.com
 
 # Run with specific WCAG level
-pa11y --standard WCAG2AA https://example.com
+pa11y --standard WCAG22AAA https://example.com
 
 # Run with reporter
 pa11y --reporter json https://example.com
@@ -167,22 +167,26 @@ pipeline {
 | Empty links | 2.4.4 | `<a>` with no text content |
 | Empty buttons | 4.1.2 | `<button>` with no text content |
 | Missing form labels | 1.3.1 | `<input>` without associated label |
-| Low color contrast | 1.4.3 | Text with insufficient contrast |
-| Duplicate IDs | 4.1.1 | Multiple elements with same ID |
-| Invalid HTML | 4.1.1 | Malformed HTML structure |
+| Low color contrast | 1.4.6 | Text with insufficient contrast (below 7:1 for normal text) |
+| Duplicate IDs | Best practice | Multiple elements with same ID (SC 4.1.1 Parsing was removed in WCAG 2.2) |
+| Invalid HTML | Best practice | Malformed HTML structure (SC 4.1.1 Parsing was removed in WCAG 2.2) |
 | Missing document language | 3.1.1 | `<html>` without lang attribute |
 
 ### What Automated Testing Cannot Detect
 
-| Issue | Why Not Detected |
-|-------|------------------|
-| Alt text quality | Cannot determine if alt text is appropriate |
-| Heading structure | Cannot determine logical heading hierarchy |
-| Focus order | Cannot determine logical focus flow |
-| Keyboard accessibility | Cannot test keyboard navigation |
-| Screen reader compatibility | Cannot test with screen readers |
-| Context appropriateness | Cannot determine if content is appropriate |
-| Dynamic content updates | Cannot detect if updates are announced |
+| Issue | SC | Why Not Detected |
+|-------|----|------------------|
+| Alt text quality | — | Cannot determine if alt text is appropriate |
+| Heading structure | — | Cannot determine logical heading hierarchy |
+| Focus order | — | Cannot determine logical focus flow |
+| Keyboard accessibility | — | Cannot test keyboard navigation |
+| Screen reader compatibility | — | Cannot test with screen readers |
+| Context appropriateness | — | Cannot determine if content is appropriate |
+| Dynamic content updates | — | Cannot detect if updates are announced |
+| Focus Appearance | 2.4.12 | Visual measurement of focus indicator thickness (≥2px) and contrast (≥3:1) |
+| Target Size | 2.5.8 | Visual measurement of click target dimensions (44×44 CSS pixels for AAA) |
+| Reading Level | 3.1.5 | Requires human judgment of text complexity |
+| Visual Presentation | 1.4.8 | Requires visual inspection of line-height, spacing, width |
 
 ## Implementation Patterns
 
@@ -215,7 +219,7 @@ const customRule = {
   any: ['custom-check'],
   all: [],
   none: [],
-  tags: ['wcag2a', 'wcag2aa'],
+  tags: ['wcag2a', 'wcag2aa', 'wcag2aaa', 'wcag22aaa'],
   matches: function(node) {
     return node.hasAttribute('data-custom');
   }

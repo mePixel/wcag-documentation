@@ -5,7 +5,7 @@ description: "Accessible CSS styling techniques for WCAG 2.2 AAA compliance"
 
 # CSS & Styling
 
-This section covers CSS styling techniques for meeting WCAG 2.1 Level AA requirements. Proper CSS ensures content is perceivable, operable, and understandable for all users.
+This section covers CSS styling techniques for meeting WCAG 2.2 Level AAA requirements. Proper CSS ensures content is perceivable, operable, and understandable for all users.
 
 ## Overview
 
@@ -23,7 +23,7 @@ CSS styling plays a crucial role in web accessibility. From color contrast to fo
 
 ### Color Contrast
 
-Ensure text and background colors meet WCAG AA contrast requirements.
+Ensure text and background colors meet WCAG AAA contrast requirements.
 
 - [Color Contrast](./color-contrast.mdx) - Understanding and implementing contrast requirements
 
@@ -53,12 +53,14 @@ Ensure content works on all screen sizes.
 
 | Text Type | Minimum Contrast | WCAG Level |
 |-----------|------------------|-------------|
-| Normal text (under 18pt) | 4.5:1 | AA |
-| Large text (18pt and up) | 3:1 | AA |
+| Normal text (under 18pt) | 7:1 | AAA |
+| Large text (18pt and up) | 4.5:1 | AAA |
 | Graphical objects | 3:1 | AA |
 | UI components | 3:1 | AA |
 
 ### Focus Indicator Requirements
+
+Per SC 2.4.12 Focus Appearance (AAA): Focus indicators must be at least 2px solid with a 3:1 contrast ratio against adjacent colors and a minimum 1px offset from the component boundary.
 
 - Must be visible when element has focus
 - Must have sufficient contrast with background
@@ -115,7 +117,7 @@ h1 {
 Check color contrast ratios.
 
 ```css
-/* Good: Sufficient contrast (4.5:1 or higher) */
+/* Good: Sufficient contrast (7:1 or higher for AAA) */
 body {
   color: #333333;
   background-color: #ffffff;
@@ -255,8 +257,35 @@ body {
 - WAVE Browser Extension
 - Lighthouse
 
+## SC 1.4.8 Visual Presentation (AAA)
+
+SC 1.4.8 Visual Presentation sets specific requirements for text blocks that improve readability. These requirements are directly relevant to CSS styling:
+
+- **Line height**: At least 1.5 times the font size for blocks of text
+- **Paragraph spacing**: At least 2em between paragraphs
+- **Text width**: No more than 80 characters per line
+- **Text alignment**: Text is not justified (aligned to both left and right margins)
+
+```css
+/* Good: SC 1.4.8 Visual Presentation compliance */
+.text-block {
+  line-height: 1.5;
+  margin-bottom: 2em;
+  max-width: 80ch;
+  text-align: left; /* Avoid text-align: justify */
+}
+
+/* Bad: Violates SC 1.4.8 */
+.text-block {
+  line-height: 1.2;
+  margin-bottom: 0.5em;
+  max-width: 120ch;
+  text-align: justify;
+}
+```
+
 ## Related Resources
 
-- [WCAG 2.1 Visual Presentation](https://www.w3.org/WAI/WCAG21/quickref/#visual-audio-contrast)
+- [WCAG 2.2 Visual Presentation](https://www.w3.org/WAI/WCAG22/Understanding/visual-presentation)
 - [WebAIM Color Contrast Checker](https://webaim.org/resources/contrastchecker/)
 - [MDN CSS Accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Accessibility)

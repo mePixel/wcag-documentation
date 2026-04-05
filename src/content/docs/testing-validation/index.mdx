@@ -159,10 +159,10 @@ Test with users with disabilities.
 ```javascript
 // Test color contrast
 // 1. Use color contrast checker
-// 2. Verify normal text meets 4.5:1
-// 3. Verify large text meets 3:1
-// 4. Verify UI components meet 3:1
-// 5. Verify focus indicators have sufficient contrast
+// 2. Verify normal text meets 7:1 (SC 1.4.6 Contrast Enhanced)
+// 3. Verify large text meets 4.5:1 (SC 1.4.6 Contrast Enhanced)
+// 4. Verify UI components and graphical objects meet 3:1 (SC 1.4.11 Non-text Contrast)
+// 5. Verify focus indicators meet SC 2.4.12: at least 2px solid, 3:1 contrast against adjacent colors, minimum 1px offset
 ```
 
 ### Form Testing
@@ -174,6 +174,88 @@ Test with users with disabilities.
 // 3. Verify error messages are associated with inputs
 // 4. Verify validation is announced
 // 5. Verify form can be submitted with keyboard
+```
+
+### Focus Appearance Testing (SC 2.4.12)
+
+```javascript
+// Test focus appearance per SC 2.4.12 (AAA)
+// 1. Tab to each interactive element
+// 2. Measure focus indicator thickness — must be at least 2px solid
+// 3. Measure focus indicator contrast — must be at least 3:1 against adjacent colors
+// 4. Measure focus indicator offset — must have at least 1px offset from component boundary
+// 5. Verify the focus indicator has a contrast ratio of at least 3:1 against the screen
+//    where the page content is displayed (e.g., behind a modal overlay)
+```
+
+### Target Size Testing (SC 2.5.8)
+
+```javascript
+// Test target size per SC 2.5.8 (AAA)
+// 1. Identify all clickable/tappable elements (buttons, links, inputs, etc.)
+// 2. Measure each element's target area — must be at least 44×44 CSS pixels
+// 3. Check for exceptions: inline links, equivalent links on same page, user-agent controlled,
+//    or essential size (e.g., in a map or data visualization)
+// 4. Verify spacing between adjacent targets doesn't reduce effective target size
+```
+
+### Dragging Movements Testing (SC 2.5.7)
+
+```javascript
+// Test dragging movements per SC 2.5.7 (AAA)
+// 1. Identify all drag-and-drop interactions
+// 2. Verify a single-pointer alternative exists (e.g., click to select, click to place)
+// 3. Verify the alternative does not require a dragging motion
+// 4. Test the alternative with keyboard-only navigation
+// 5. Verify the alternative achieves the same result as the drag operation
+```
+
+### Accessible Authentication Testing (SC 3.3.8)
+
+```javascript
+// Test accessible authentication per SC 3.3.8 (AAA)
+// 1. Identify all authentication flows (login, password reset, MFA, etc.)
+// 2. Verify no cognitive function test is required (e.g., memorizing a password,
+//    solving a puzzle, transcribing text, performing calculations)
+// 3. Verify alternatives exist: password managers supported, biometric login available,
+//    or email/link-based authentication offered
+// 4. Verify copy-paste is not blocked in password fields
+// 5. Verify the authentication mechanism supports password manager autofill
+```
+
+### Redundant Entry Testing (SC 3.3.7)
+
+```javascript
+// Test redundant entry per SC 3.3.7 (AAA)
+// 1. Identify multi-step processes that collect the same information more than once
+// 2. Verify previously entered data is auto-populated or offered for selection
+// 3. Check forms that span multiple pages or steps
+// 4. Verify the user can review and correct auto-populated data before submission
+// 5. Exceptions: re-entering for security (e.g., password confirmation), essential new context
+```
+
+### Consistent Help Testing (SC 3.2.6)
+
+```javascript
+// Test consistent help per SC 3.2.6 (AAA)
+// 1. Identify the help mechanism (e.g., help link, chat widget, FAQ, contact form)
+// 2. Verify the help mechanism is in the same relative order on every page
+// 3. Navigate through at least 3 different pages and confirm consistent placement
+// 4. Verify the help mechanism is accessible via keyboard navigation
+// 5. Verify the help mechanism is announced by screen readers
+```
+
+### Timeout Testing (SC 2.2.6)
+
+```javascript
+// Test timeouts per SC 2.2.6 (AAA)
+// 1. Identify all pages and processes with time limits
+// 2. Verify the user is warned at least 20 seconds before the timeout expires
+// 3. Verify the user can extend the time limit with a simple action (e.g., "Extend session" button)
+// 4. Verify the warning is accessible (announced by screen readers, visible contrast)
+// 5. Verify the user can extend the time limit at least 10 times
+// 6. Exceptions: real-time events (e.g., auctions), essential time limits (e.g., security),
+//    time limits longer than 20 hours
 ```
 
 ## Best Practices

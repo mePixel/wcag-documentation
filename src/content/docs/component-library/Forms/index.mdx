@@ -25,18 +25,23 @@ Forms must meet several WCAG 2.2 AAA success criteria:
 
 ### Perceivable
 - **1.3.1 Info and Relationships**: Form structure must be programmatically determinable
-- **1.4.3 Contrast (Minimum)**: Form elements must have sufficient contrast
+- **1.4.6 Contrast (Enhanced)**: Form elements must have a contrast ratio of at least 7:1 for normal text and 4.5:1 for large text
 
 ### Operable
 - **2.1.1 Keyboard**: All form functionality must be keyboard accessible
 - **2.4.3 Focus Order**: Form elements must receive focus in logical order
-- **2.4.7 Focus Visible**: Focus indicators must be visible
+- **2.4.12 Focus Appearance**: Focus indicators must be at least 2px solid with a 3:1 contrast ratio against adjacent colors and a minimum 1px offset
+- **2.4.11 Focus Not Obscured (AA)**: When a component receives focus, it is not entirely hidden by author-created content
+- **2.5.8 Target Size (AAA)**: Form controls have a minimum target size of 44×44 CSS pixels
 
 ### Understandable
 - **3.3.1 Error Identification**: Errors must be identified and described
 - **3.3.2 Labels or Instructions**: All inputs must have labels or instructions
 - **3.3.3 Error Suggestion**: Provide suggestions for correcting errors
 - **3.3.4 Error Prevention**: For critical forms, provide review/confirmation
+- **3.2.6 Consistent Help (A)**: A help mechanism is available in a consistent location
+- **3.3.7 Redundant Entry (A)**: Previously entered data is auto-populated to avoid re-entry
+- **3.3.8 Accessible Authentication (AAA)**: Authentication does not require a cognitive function test, with no exceptions
 
 ### Robust
 - **4.1.2 Name, Role, Value**: Form controls must have proper name, role, and value
@@ -228,6 +233,7 @@ input:focus {
 
 /* Good: Visible focus */
 input:focus {
+  /* Meets SC 2.4.12: 3px ≥ 2px minimum, #005fcc has ≥ 3:1 contrast against most backgrounds, 2px offset ≥ 1px minimum */
   outline: 3px solid #005fcc;
   outline-offset: 2px;
 }
@@ -253,7 +259,7 @@ input:focus {
 - [ ] Focus indicators are visible
 - [ ] Error messages are clearly visible
 - [ ] Required fields are clearly marked
-- [ ] Color contrast is sufficient
+- [ ] Color contrast meets 7:1 for normal text (SC 1.4.6)
 
 ### Validation Testing
 - [ ] Client-side validation provides clear feedback

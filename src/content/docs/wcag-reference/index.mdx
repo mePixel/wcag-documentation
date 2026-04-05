@@ -5,7 +5,7 @@ description: "Complete WCAG 2.2 AAA success criteria reference, POUR principles,
 
 # WCAG 2.2 AAA Reference
 
-This section provides comprehensive reference information for WCAG 2.1 Level AA standards, including success criteria, techniques, and terminology.
+This section provides comprehensive reference information for WCAG 2.2 Level AAA standards, including success criteria, techniques, and terminology.
 
 ## Reference Contents
 
@@ -45,17 +45,34 @@ This reference section is designed for:
 
 ## Success Criteria Overview
 
-WCAG 2.1 includes 50 success criteria across the four principles:
+WCAG 2.2 includes 87 success criteria across the four principles:
 
 | Principle | Level A | Level AA | Level AAA | Total |
 |-----------|---------|----------|-----------|-------|
-| Perceivable | 6 | 7 | 5 | 18 |
-| Operable | 11 | 7 | 5 | 23 |
-| Understandable | 3 | 6 | 3 | 12 |
-| Robust | 4 | 0 | 0 | 4 |
-| **Total** | **24** | **20** | **13** | **57** |
+| Perceivable | 7 | 8 | 6 | 21 |
+| Operable | 13 | 9 | 8 | 30 |
+| Understandable | 5 | 7 | 6 | 18 |
+| Robust | 1 | 1 | 0 | 2 |
+| **Total** | **26** | **25** | **20** | **87** |
 
-**Note**: This documentation focuses on Level AA criteria (20 criteria), which is the most commonly adopted compliance level.
+**Note**: This documentation focuses on Level AAA criteria, the highest level of web accessibility conformance, covering all A, AA, and AAA success criteria in WCAG 2.2.
+
+## New in WCAG 2.2
+
+WCAG 2.2 introduced several new success criteria and removed one from WCAG 2.1:
+
+- **2.4.11 Focus Not Obscured (AA)** — Focus indicator must not be hidden by sticky headers or other content
+- **2.4.12 Focus Appearance (AAA)** — Focus indicator must be at least 2px solid with 3:1 contrast and 1px offset from the focused element
+- **2.4.13 Focus Appearance Minimum (AA)** — A focus indicator must exist with sufficient contrast against the background
+- **2.5.7 Dragging Movements (AA)** — Provide an alternative to dragging for all functionality that uses a dragging movement
+- **2.5.8 Target Size Minimum (AA)** — Interactive elements must be at least 24×24 CSS pixels
+- **2.5.8 Target Size (AAA)** — Interactive elements must be at least 44×44 CSS pixels
+- **3.2.6 Consistent Help (A)** — Help mechanism must be available in a consistent location across pages
+- **3.3.7 Redundant Entry (A)** — Previously entered data must be auto-populated to avoid re-entry
+- **3.3.8 Accessible Authentication (AAA)** — Authentication must not require cognitive function tests, with no exceptions
+- **2.2.6 Timeouts (AAA)** — Users must be warned at least 20 seconds before a session timeout
+
+> **Removed**: SC 4.1.1 Parsing was removed in WCAG 2.2, as modern browsers and assistive technologies no longer require it.
 
 ## Techniques Overview
 
@@ -95,10 +112,10 @@ WCAG techniques provide specific methods for meeting success criteria:
 
 ## Related Resources
 
-- [WCAG 2.1 Quick Reference](https://www.w3.org/WAI/WCAG21/quickref/)
-- [Understanding WCAG 2.1](https://www.w3.org/WAI/WCAG21/Understanding/)
-- [WCAG 2.1 Techniques](https://www.w3.org/WAI/WCAG21/Techniques/)
-- [WCAG 2.1 Failures](https://www.w3.org/WAI/WCAG21/Techniques/failures)
+- [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/)
+- [Understanding WCAG 2.2](https://www.w3.org/WAI/WCAG22/Understanding/)
+- [WCAG 2.2 Techniques](https://www.w3.org/WAI/WCAG22/Techniques/)
+- [WCAG 2.2 Failures](https://www.w3.org/WAI/WCAG22/Techniques/failures)
 
 ## Navigation Tips
 
