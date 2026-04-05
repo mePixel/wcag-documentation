@@ -46,7 +46,7 @@ export default defineConfig({
                     collapsed: true,
                 },
                 {
-                    label: 'Reference',
+                    label: 'Wcag Reference',
                     autogenerate: { directory: 'wcag-reference' },
                     collapsed: true,
                 },
